@@ -8,11 +8,10 @@ public class WedBars extends JavaPlugin {
 
 	public static boolean running = false;
 
-
 	public void onEnable() {
+		// test commit
 		getLogger().info("Github works!");
 		
-
 	}
 	
 	public void onDisable() {
