@@ -7,7 +7,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 public class WedBars extends JavaPlugin {
 
 	public static boolean running = false;
-
+	
 	public void onEnable() {
 		// test commit test
 		getLogger().info("Github works!");
@@ -16,14 +16,11 @@ public class WedBars extends JavaPlugin {
 	
 	public void onDisable() {
 
-		
 
 	}
 	
 	
 	public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
-		
-		
 
 		return true;
 

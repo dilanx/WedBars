@@ -5,7 +5,13 @@ import org.bukkit.entity.Player;
 public class Gamer {
 	
 	private Player player;
-	private String team;
+	private Team team;
+	
+	public Gamer() {
+		
+		
+		
+	}
 	
 	
 }

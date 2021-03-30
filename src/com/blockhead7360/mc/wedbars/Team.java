@@ -4,9 +4,8 @@ import org.bukkit.ChatColor;
 
 public enum Team {
 	
-	RED((short) 14, ChatColor.RED, "Red");
-	
-	
+	RED((short) 14, ChatColor.RED, "Red"),
+	GREEN((short) 5, ChatColor.GREEN, "Green");
 	
 	
 	private final short stackColor;
@@ -27,7 +26,7 @@ public enum Team {
 		
 	}
 	
-	public ChatColor getChat() {
+	public ChatColor getChatColor() {
 		
 		return chat;
 		
