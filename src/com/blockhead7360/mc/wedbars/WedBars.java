@@ -9,7 +9,7 @@ public class WedBars extends JavaPlugin {
 	public static boolean running = false;
 
 	public void onEnable() {
-		// test commit
+		// test commit test
 		getLogger().info("Github works!");
 		
 	}
