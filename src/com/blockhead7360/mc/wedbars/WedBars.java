@@ -15,6 +15,7 @@ public class WedBars extends JavaPlugin {
 		getLogger().info("Github works!");
 		
 		
+		getServer().getPluginManager().registerEvents(new BlockListeners(), this);
 		
 		instance = this;
 		
