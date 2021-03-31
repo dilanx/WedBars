@@ -1,11 +1,13 @@
 package com.blockhead7360.mc.wedbars;
 
+import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
 
+import java.awt.*;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -37,6 +39,7 @@ public class BlockListeners implements Listener {
         }
         if (!found) {
             event.setCancelled(true);
+            event.getPlayer().sendMessage(ChatColor.RED + "You can only break blocks placed by players!");
         }
     }
 
