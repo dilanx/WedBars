@@ -1,5 +1,8 @@
 package com.blockhead7360.mc.wedbars;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.event.EventHandler;
@@ -7,16 +10,12 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
 
-import java.awt.*;
-import java.util.LinkedList;
-import java.util.List;
-
 public class BlockListeners implements Listener {
 
     private List<Location> placedBlocks;
 
     public BlockListeners() {
-        placedBlocks = new LinkedList<>();
+        placedBlocks = new ArrayList<>();
     }
 
     public List<Location> getPlacedBlocks() {
@@ -26,14 +25,17 @@ public class BlockListeners implements Listener {
     @EventHandler
     public void blockPlaced(BlockPlaceEvent event) {
        placedBlocks.add(event.getBlock().getLocation());
+       System.out.println(placedBlocks.toString());
     }
 
     @EventHandler
     public void blockBreak(BlockBreakEvent event) {
         boolean found = false;
-        for (Location l : placedBlocks) {
-            if (event.getBlock().getLocation().equals(l)) {
+        for (int i = 0; i < placedBlocks.size(); i++) {
+            if (event.getBlock().getLocation().equals(placedBlocks.get(i))) {
                 found = true;
+                placedBlocks.remove(i);
+                System.out.println(placedBlocks.toString());
                 break;
             }
         }

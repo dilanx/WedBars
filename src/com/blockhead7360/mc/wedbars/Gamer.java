@@ -6,6 +6,9 @@ public class Gamer {
 	
 	private Player player;
 	private Team team;
+	private Status status;
+	private int respawningTimeLeft;
+	
 	
 	public Gamer() {
 		

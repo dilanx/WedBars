@@ -5,7 +5,15 @@ import org.bukkit.ChatColor;
 public enum Team {
 	
 	RED((short) 14, ChatColor.RED, "Red"),
-	GREEN((short) 5, ChatColor.GREEN, "Green");
+	GREEN((short) 5, ChatColor.GREEN, "Green"),
+	BLUE((short) 11, ChatColor.BLUE, "Blue"),
+	YELLOW((short) 4, ChatColor.YELLOW, "Yellow"),
+	AQUA((short) 9, ChatColor.DARK_AQUA, "Aqua"),
+	WHITE((short) 0, ChatColor.WHITE, "White"),
+	GRAY((short) 15, ChatColor.DARK_GRAY, "Gray"),
+	PINK((short) 6, ChatColor.LIGHT_PURPLE, "Pink");
+	
+	
 	
 	
 	private final short stackColor;
