@@ -11,13 +11,15 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityTargetEvent;
+import org.bukkit.potion.PotionEffect;
+import org.bukkit.potion.PotionEffectType;
+import org.bukkit.util.Vector;
 
 public class Powerups implements Listener {
 
     public static void launchFireball(Player player) {
-      // World w = player.getWorld();
-       //Fireball f = (Fireball)w.spawnEntity(player.getLocation(), EntityType.FIREBALL);
       Fireball f = player.launchProjectile(Fireball.class, player.getLocation().getDirection());
+      f.setVelocity(f.getVelocity().subtract(new Vector(3,3,3)));
 
     }
 
@@ -30,6 +32,7 @@ public class Powerups implements Listener {
 
     @EventHandler
     public void golemTargeting(EntityTargetEvent event) {
+        if (!WedBars.running) return;
         if (event.getEntity() instanceof IronGolem){
             IronGolem golem = (IronGolem)event.getEntity();
             World gw = golem.getWorld();
@@ -38,7 +41,7 @@ public class Powerups implements Listener {
                         WedBars.arena.getGamer(e.getName()).getTeam().getLabel())) {
                     golem.setTarget((LivingEntity) e);
                     Endermite trackingMob = (Endermite)gw.spawnEntity(e.getLocation(), EntityType.ENDERMITE);
-                  //  trackingMob.addPotionEffect(PotionEffect(PotionEffectType.INVISIBILITY, 9, 2, false, false));
+                  trackingMob.addPotionEffect(new PotionEffect(PotionEffectType.INVISIBILITY, 9, 2, false, false));
                 }
             }
         }
