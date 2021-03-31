@@ -10,7 +10,7 @@ import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
-import org.bukkit.event.entity.EntityTargetEvent;
+import org.bukkit.event.entity.CreatureSpawnEvent;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.util.Vector;
@@ -31,7 +31,7 @@ public class Powerups implements Listener {
     }
 
     @EventHandler
-    public void golemTargeting(EntityTargetEvent event) {
+    public void golemTargeting(CreatureSpawnEvent event) {
         if (!WedBars.running) return;
         if (event.getEntity() instanceof IronGolem){
             IronGolem golem = (IronGolem)event.getEntity();
