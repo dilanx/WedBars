@@ -9,15 +9,13 @@ public class Generator {
 	
 	private int curTimeLeft;
 	
-	
-	public Generator(Location location) {
+	public Generator(Location location, int speed) {
 		
 		this.location = location;
-		this.speed = 100;
+		this.speed = speed;
 		this.curTimeLeft = speed;
 		
 	}
-
 
 	public Location getLocation() {
 		return location;
@@ -38,6 +36,19 @@ public class Generator {
 		this.speed = speed;
 	}
 
+	public boolean passTime() {
+		
+		curTimeLeft--;
+		
+		if (curTimeLeft <= 0) {
+			
+			curTimeLeft = speed;
+			return true;
+			
+		}
+		
+		return false;
+	}
 
 	public int getCurTimeLeft() {
 		return curTimeLeft;

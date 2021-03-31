@@ -10,9 +10,12 @@ public class Gamer {
 	private int respawningTimeLeft;
 	
 	
-	public Gamer() {
+	public Gamer(Player player, Team team) {
 		
-		
+		this.player = player;
+		this.team = team;
+		this.status = Status.WAITING;
+		this.respawningTimeLeft = 0;
 		
 	}
 	
