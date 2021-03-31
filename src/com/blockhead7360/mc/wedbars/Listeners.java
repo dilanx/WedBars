@@ -113,7 +113,7 @@ public class Listeners implements Listener {
 		player.getInventory().clear();
 
 		player.getInventory().setArmorContents(armor);
-		player.getInventory().setItem(0, Utility.createItemStack(Material.WOOD_SWORD, 1, ChatColor.YELLOW + "Wooden Sword"));
+		player.getInventory().setItem(0, Utility.createUnbreakableItemStack(Material.WOOD_SWORD, 1, ChatColor.YELLOW + "Wooden Sword"));
 
 		// TODO give one tier down of tools
 

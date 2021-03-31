@@ -5,6 +5,7 @@ import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 
 public class WedBars extends JavaPlugin {
@@ -59,6 +60,10 @@ public class WedBars extends JavaPlugin {
 			sender.sendMessage(ChatColor.GRAY + getDescription().getDescription());
 			sender.sendMessage(ChatColor.GRAY + getDescription().getWebsite());
 			sender.sendMessage(" ");
+			
+			// LOL
+			
+			Powerups.launchFireball((Player) sender);
 			
 		}
 		
