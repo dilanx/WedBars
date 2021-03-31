@@ -1,6 +1,5 @@
 package com.blockhead7360.mc.wedbars;
 
-import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.command.Command;
@@ -22,7 +21,7 @@ public class WedBars extends JavaPlugin {
 		getLogger().info("Github works!");
 		
 		
-		getServer().getPluginManager().registerEvents(new BlockListeners(), this);
+		getServer().getPluginManager().registerEvents(new Listeners(), this);
 		
 		instance = this;
 		

@@ -15,11 +15,11 @@ import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
 
-public class BlockListeners implements Listener {
+public class Listeners implements Listener {
 
     private List<Location> placedBlocks;
 
-    public BlockListeners() {
+    public Listeners() {
         placedBlocks = new ArrayList<>();
     }
 
