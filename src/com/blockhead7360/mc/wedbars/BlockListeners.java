@@ -1,12 +1,13 @@
 package com.blockhead7360.mc.wedbars;
 
-import org.bukkit.Bukkit;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
+import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
@@ -48,37 +49,60 @@ public class BlockListeners implements Listener {
             event.getPlayer().sendMessage(ChatColor.RED + "You can only break blocks placed by players!");
         }
     }
+    
+    public void death(Player player) {
+    	
+    	//TODO: check if bed is alive, do first, if not do second
+        boolean testing = false;
+        
+    	player.getInventory().clear();
+
+        if (!testing) {
+        	
+            player.setHealth(20);
+            player.setGameMode(GameMode.SPECTATOR);
+            Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "title " + player.getName() +
+                    " times 0 100 20");
+            Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "title " + player.getName() +
+                    " subtitle {\"text\":\"You will respawn in 5 seconds...\",\"color\":\"grey\"}");
+            Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "title " + player.getName() +
+                    " title {\"text\":\"You died!\",\"color\":\"red\"}");
+            
+            Bukkit.broadcastMessage(player.getPlayerListName() + " was killed by " + player.getKiller() + ".");
+
+            //TODO: add respawn handlers and time thing
+        } else {
+        	
+            
+            player.setHealth(20);
+            player.setGameMode(GameMode.SPECTATOR);
+            //TODO: more game logic
+            
+            Bukkit.broadcastMessage(player.getPlayerListName() + " was killed by " +
+            	player.getKiller()+ ". " + ChatColor.AQUA + ChatColor.BOLD + "FINAL KILL!");
+            
+        }
+    	
+    }
 
     @EventHandler
     public void playerDeath(PlayerDeathEvent event) {
-        //TODO: check if bed is alive, do first, if not do second
-        boolean testing = false;
-        if (!testing) {
-            event.setDeathMessage(event.getEntity().getPlayerListName() + " was killed by " + event.getEntity().getKiller() + ".");
-            event.getEntity().setHealth(20);
-            event.getEntity().setGameMode(GameMode.SPECTATOR);
-            Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "title " + event.getEntity().getName() +
-                    " times 0 100 20");
-            Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "title " + event.getEntity().getName() +
-                    " subtitle {\"text\":\"You will respawn in 5 seconds...\",\"color\":\"grey\"}");
-            Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "title " + event.getEntity().getName() +
-                    " title {\"text\":\"You died!\",\"color\":\"red\"}");
-            //TODO: add respawn handlers and time thing
-        } else if (testing) {
-            event.setDeathMessage(event.getEntity().getPlayerListName() + " was killed by " +
-                    event.getEntity().getKiller()+ ". " + ChatColor.AQUA + ChatColor.BOLD + "FINAL KILL!");
-            event.getEntity().setHealth(20);
-            event.getEntity().setGameMode(GameMode.SPECTATOR);
-            //TODO: more game logic
-        }
+        
+    	event.setDeathMessage(null);
+    	death(event.getEntity());
+    	
     }
 
     @EventHandler
     public void playerEntersVoid(PlayerMoveEvent event) {
         if (!(event.getPlayer().getHealth() == 0) && event.getPlayer().getGameMode().equals(GameMode.SURVIVAL)) {
             if (event.getPlayer().getLocation().getY() <= 0) {
+            	
+            	
                 event.getPlayer().teleport(new Location(Bukkit.getWorld("world"), 0.0,100.0,0.0));
-                event.getPlayer().setHealth(0);
+                
+                death(event.getPlayer());
+                
             }
         }
     }
