@@ -40,6 +40,7 @@ public class WedBars extends JavaPlugin {
 		getLogger().info("Github works!");
 		
 		getServer().getPluginManager().registerEvents(new Listeners(), this);
+		getServer().getPluginManager().registerEvents(new Powerups(), this);
 		
 		instance = this;
 		
@@ -48,8 +49,6 @@ public class WedBars extends JavaPlugin {
 	public void onDisable() {
 
 	}
-	
-	
 	
 	public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
 		
@@ -92,7 +91,7 @@ public class WedBars extends JavaPlugin {
 					new Location(world, -72, 66, -33),
 					new Location(world, -77, 66, -32),
 					new Location[]{new Location(world, -65, 66, -33), new Location(world, -64, 66, -33)},
-					new Gamer[]{new Gamer(getServer().getPlayer("Blockhead736"), Team.GRAY)});
+					new Gamer[]{new Gamer(getServer().getPlayer("shark_pog"), Team.GRAY)});
 			
 			ArenaTeam green = new ArenaTeam(Team.GREEN,
 					new Location(world, 72, 66, -33),
