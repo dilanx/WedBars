@@ -11,7 +11,7 @@ public class WedBars extends JavaPlugin {
 	private static WedBars instance;
 		
 	public void onEnable() {
-		// test commit test
+		// test commit
 		getLogger().info("Github works!");
 		
 		
