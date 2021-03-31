@@ -4,6 +4,7 @@ main: com.blockhead7360.mc.wedbars.WedBars
 author: Blockhead7360
 description: It's like Bed Wars on Hypixel but better I swear
 website: https://github.com/dilanx/WedBars
+depend: [HolographicDisplays]
 
 commands:
   wedbars:

@@ -56,6 +56,8 @@ public class Shop implements Listener {
 		}
 
 		itemShop_inv(player, inv, ShopPage.QUICK_BUY);
+		
+		player.playSound(player.getLocation(), Sound.NOTE_PLING, 1, 1);
 
 		player.openInventory(inv);
 
@@ -394,6 +396,7 @@ public class Shop implements Listener {
 
 			if (slot < 8) {
 
+				player.playSound(player.getLocation(), Sound.NOTE_PLING, 1, 1.5f);
 				itemShop_inv(player, e.getInventory(), slot);
 				return;
 
@@ -469,7 +472,7 @@ public class Shop implements Listener {
 		}
 
 
-		// TODO check for types of item
+		// TODO check for types of item like armor and stuff
 
 		if (stack.getType().toString().endsWith("_PICKAXE")) {
 

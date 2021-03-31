@@ -15,6 +15,28 @@ import org.bukkit.inventory.meta.LeatherArmorMeta;
 public class Utility {
 
 
+	public static void sendWinTitle(Player player) {
+
+		Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "title " + player.getName() +
+				" times 0 100 20");
+		Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "title " + player.getName() +
+				" subtitle {\"text\":\"\",}");
+		Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "title " + player.getName() +
+				" title {\"text\":\"VICTORY\",\"color\":\"green\"}");
+
+	}
+
+	public static void sendLossTitle(Player player) {
+
+		Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "title " + player.getName() +
+				" times 0 100 20");
+		Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "title " + player.getName() +
+				" subtitle {\"text\":\"\",}");
+		Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "title " + player.getName() +
+				" title {\"text\":\"DEFEAT\",\"color\":\"red\"}");
+
+	}
+
 	// more messages
 
 	public static void sendDeathTitle(Player player, int time) {
@@ -59,7 +81,7 @@ public class Utility {
 	public static void sendBedBrokenTitle(Player player) {
 
 		Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "title " + player.getName() +
-				" times 0 100 20");
+				" times 0 60 20");
 		Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "title " + player.getName() +
 				" subtitle {\"text\":\"You won't respawn when you die.\",\"color\":\"gray\"}");
 		Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "title " + player.getName() +
@@ -92,9 +114,9 @@ public class Utility {
 		return stack;
 
 	}
-	
+
 	public static ItemStack createEnchantedItemStack(Material mat, int amount, String displayName, EnchantmentSet[] enchants, String... lore) {
-		
+
 		ItemStack stack = new ItemStack(mat, amount);
 		ItemMeta meta = stack.getItemMeta();
 		meta.setDisplayName(displayName);
@@ -106,14 +128,14 @@ public class Utility {
 		meta.addItemFlags(ItemFlag.HIDE_UNBREAKABLE);
 		stack.setItemMeta(meta);
 		return stack;
-		
+
 	}
-	
+
 	public static class EnchantmentSet {
-		
+
 		private Enchantment enchantment;
 		private int level;
-		
+
 		public EnchantmentSet(Enchantment enchantment, int level) {
 			this.enchantment = enchantment;
 			this.level = level;
@@ -126,7 +148,7 @@ public class Utility {
 		public int getLevel() {
 			return level;
 		}
-		
+
 	}
 
 	public static ItemStack createLeatherArmorPiece(Material mat, Color color, String displayName) {

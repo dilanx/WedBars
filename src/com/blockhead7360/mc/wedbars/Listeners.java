@@ -30,14 +30,25 @@ public class Listeners implements Listener {
 		return placedBlocks;
 	}
 
+	public Location removeFirstBlock() {
+
+		if (placedBlocks.isEmpty()) return null;
+
+		Location loc = placedBlocks.get(0);
+		placedBlocks.remove(0);
+		return loc;
+
+	}
+
 	@EventHandler
 	public void blockPlaced(BlockPlaceEvent event) {
 		placedBlocks.add(event.getBlock().getLocation());
-		System.out.println(placedBlocks.toString());
 	}
 
 	@EventHandler
 	public void blockBreak(BlockBreakEvent event) {
+
+		if (!WedBars.running) return;
 
 		// TODO switch this to bed when ready
 
@@ -67,7 +78,6 @@ public class Listeners implements Listener {
 			if (event.getBlock().getLocation().equals(placedBlocks.get(i))) {
 				found = true;
 				placedBlocks.remove(i);
-				System.out.println(placedBlocks.toString());
 				break;
 			}
 		}
@@ -94,9 +104,11 @@ public class Listeners implements Listener {
 		Team t = team.getTeam();
 
 		Bukkit.broadcastMessage(" ");
-		Bukkit.broadcastMessage(t.getChatColor() + "" + ChatColor.BOLD + "BED DESTROYED!");
-		Bukkit.broadcastMessage(t.getChatColor() + t.getLabel() + ChatColor.GRAY + " team's bed was destroyed by " + breaker.getTeam().getChatColor() + breaker.getPlayer().getName() + ChatColor.GRAY + ".");
+		Bukkit.broadcastMessage("     " + ChatColor.RED + ChatColor.BOLD + "BED DESTROYED!");
+		Bukkit.broadcastMessage("     " + t.getChatColor() + t.getLabel() + ChatColor.GRAY + " team's bed was destroyed by " + breaker.getTeam().getChatColor() + breaker.getPlayer().getName() + ChatColor.GRAY + ".");
 		Bukkit.broadcastMessage(" ");
+
+		GameScoreboard.updateTeam(team);
 
 
 
@@ -110,11 +122,14 @@ public class Listeners implements Listener {
 
 		ItemStack[] armor = player.getInventory().getArmorContents();
 
+		ItemStack[] contents = player.getInventory().getContents();
+
 		player.getInventory().clear();
 
 		player.getInventory().setArmorContents(armor);
 		player.getInventory().setItem(0, Utility.createUnbreakableItemStack(Material.WOOD_SWORD, 1, ChatColor.YELLOW + "Wooden Sword"));
-
+		
+		
 		// TODO give one tier down of tools
 
 		// i moved the death titles to the timer in Arena.java you'll see why
@@ -128,7 +143,7 @@ public class Listeners implements Listener {
 		boolean bedExists = WedBars.arena.getTeam(gamer.getTeam()).bedExists();
 
 		// TODO change messages
-		
+
 		Player killer = player.getKiller();
 
 		if (killer == null) {
@@ -143,19 +158,68 @@ public class Listeners implements Listener {
 			Bukkit.broadcastMessage(gamer.getTeam().getChatColor() + player.getName()
 			+ ChatColor.GRAY + " was killed by " + WedBars.arena.getGamer(killer.getName()).getTeam().getChatColor() + killer.getName() + ChatColor.GRAY + "."
 			+ (bedExists ? "" : ChatColor.RED + "" + ChatColor.BOLD + " FINAL KILL!"));
+			
+			// Give items to killer
+			
+			for (ItemStack is : contents) {
+				
+				if (is == null) continue;
+				
+				if (is.getType() == Material.IRON_INGOT || is.getType() == Material.GOLD_INGOT || is.getType() == Material.DIAMOND
+						|| is.getType() == Material.EMERALD) {
+					
+					if (killer.getInventory().firstEmpty() == -1) break;
+					
+					killer.getInventory().addItem(is);
+					
+				}
+				
+			}
+			
+			killer.updateInventory();
 
 		}
 
 		if (bedExists) {
-			
+
 			gamer.setStatus(Status.RESPAWNING);
 			Utility.sendDeathTitle(player, WedBars.RESPAWN_TIME);
-			
+
 		} else {
-			
+
 			gamer.setStatus(Status.DEAD);
-			Utility.sendDeathTitle(player, -1);
+			ArenaTeam team = WedBars.arena.getTeam(gamer.getTeam());
+			GameScoreboard.updateTeam(team);
+
+			int alive = 0;
+			for (Gamer g : team.getGamers()) {
+
+				if (g.getStatus() != Status.DEAD) {
+
+					alive++;
+
+				}
+
+			}
+
+			if (alive == 0) {
+				
+				Team t = team.getTeam();
+				Bukkit.broadcastMessage(" ");
+				Bukkit.broadcastMessage("     " + ChatColor.RED + ChatColor.BOLD + "TEAM ELIMINATED!");
+				Bukkit.broadcastMessage("     " + t.getChatColor() + t.getLabel() + ChatColor.GRAY + " team is gone now.");
+				Bukkit.broadcastMessage(" ");
+
+			}
 			
+			boolean end = WedBars.arena.checkForEndGame();
+			
+			if (!end) {
+				
+				Utility.sendDeathTitle(player, -1);
+				
+			}
+
 		}
 
 		/*

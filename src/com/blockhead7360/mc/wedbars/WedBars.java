@@ -8,12 +8,16 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import com.gmail.filoghost.holographicdisplays.api.Hologram;
+import com.gmail.filoghost.holographicdisplays.api.HologramsAPI;
+
 public class WedBars extends JavaPlugin {
 
 	// gamerTicks = 10 per second
 	
 	
 	public static boolean running = false;
+	public static boolean resetting = false;
 	public static Arena arena = null;
 	
 	
@@ -32,14 +36,20 @@ public class WedBars extends JavaPlugin {
 	
 	public static final int RESPAWN_TIME = 50;
 	
+	// not gamerTicks, this one is seconds
+	public static final int TIME_BETWEEN_END_AND_RESET = 10;
+	
 	
 	private static WedBars instance;
+	
+	private static Listeners listeners;
 		
 	public void onEnable() {
 		// test commit
 		getLogger().info("Github works!");
 		
-		getServer().getPluginManager().registerEvents(new Listeners(), this);
+		listeners = new Listeners();
+		getServer().getPluginManager().registerEvents(listeners, this);
 		getServer().getPluginManager().registerEvents(new Powerups(), this);
 		getServer().getPluginManager().registerEvents(new Shop(), this);
 		
@@ -99,6 +109,14 @@ public class WedBars extends JavaPlugin {
 					
 				}
 				
+				if (args[0].equalsIgnoreCase("hg")) {
+					
+					Hologram h = HologramsAPI.createHologram(this, new Location(getServer().getWorld("world"), 63, 68, -36));
+					h.appendTextLine("test");
+					
+					
+				}
+				
 			}
 			
 		}
@@ -126,6 +144,13 @@ public class WedBars extends JavaPlugin {
 		
 		if (cmd.getName().equalsIgnoreCase("start")) {
 			
+			if (resetting || running) {
+				
+				sender.sendMessage("No");
+				return true;
+				
+			}
+			
 			// TEMPORARY
 			
 			World world = getServer().getWorld("world");
@@ -149,7 +174,7 @@ public class WedBars extends JavaPlugin {
 					new Location(world, -72, 66, -33),
 					new Location(world, -77, 66, -32),
 					new Location[]{new Location(world, -65, 66, -33), new Location(world, -64, 66, -33)},
-					new Gamer[]{new Gamer(getServer().getPlayer("shark_pog"), Team.GRAY)});
+					new Gamer[]{new Gamer(getServer().getPlayer("Blockhead736"), Team.GRAY)});
 			
 			ArenaTeam green = new ArenaTeam(Team.GREEN,
 					new Location(world, 72, 66, -33),
@@ -169,6 +194,12 @@ public class WedBars extends JavaPlugin {
 	public static WedBars getInstance() {
 		
 		return instance;
+		
+	}
+	
+	public static Listeners getListeners() {
+		
+		return listeners;
 		
 	}
 
