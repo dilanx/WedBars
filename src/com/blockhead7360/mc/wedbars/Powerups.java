@@ -11,9 +11,9 @@ import org.bukkit.potion.PotionEffectType;
 public class Powerups implements Listener {
 
     public static void launchFireball(Player player) {
-       World w = player.getWorld();
-       Fireball f = (Fireball)w.spawnEntity(player.getLocation(), EntityType.FIREBALL);
-       f.setDirection(player.getLocation().getDirection());
+      // World w = player.getWorld();
+       //Fireball f = (Fireball)w.spawnEntity(player.getLocation(), EntityType.FIREBALL);
+      Fireball f = player.launchProjectile(Fireball.class, player.getLocation().getDirection());
 
     }
 
