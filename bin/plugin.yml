@@ -9,6 +9,12 @@ commands:
   wedbars:
     description: Information about Wed Bars
     aliases: [wb]
-    
+  test:
+    description: Test
   start:
     description: Start
+  itemshop:
+    description: ItemShop
+permissions:
+  wedbars.itemshop:
+    default: false

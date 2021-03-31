@@ -41,6 +41,9 @@ public class WedBars extends JavaPlugin {
 		
 		getServer().getPluginManager().registerEvents(new Listeners(), this);
 		getServer().getPluginManager().registerEvents(new Powerups(), this);
+		getServer().getPluginManager().registerEvents(new Shop(), this);
+		
+		Shop.init();
 		
 		instance = this;
 		
@@ -62,7 +65,62 @@ public class WedBars extends JavaPlugin {
 			
 			// LOL
 			
-			Powerups.launchFireball((Player) sender);
+			
+		}
+		
+		
+		if (cmd.getName().equalsIgnoreCase("test")) {
+			
+			if (args.length > 0) {
+				
+				if (args[0].equalsIgnoreCase("fb")) {
+					
+					Powerups.launchFireball((Player) sender);
+					return true;
+					
+				}
+				
+				if (args[0].equalsIgnoreCase("shop")) {
+					
+					Shop.openItemShop((Player) sender);
+					return true;
+					
+				}
+				
+				if (args[0].equalsIgnoreCase("golem")) {
+					
+					if (!running) {
+						sender.sendMessage("No");
+						return true;
+					}
+					
+					Powerups.spawnGolem(arena.getGamer(sender.getName()));
+					return true;
+					
+				}
+				
+			}
+			
+		}
+		
+		if (cmd.getName().equalsIgnoreCase("itemshop")) {
+			
+			if (!sender.hasPermission("wedbars.itemshop")) {
+				
+				sender.sendMessage(ChatColor.RED + "Use one of the shop NPCs to access the shop.");
+				return true;
+				
+			}
+			
+			if (!(sender instanceof Player)) {
+				
+				sender.sendMessage("Only players lol.");
+				return true;
+				
+			}
+			
+			Shop.openItemShop((Player) sender);
+			return true;
 			
 		}
 		
