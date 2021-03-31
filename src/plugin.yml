@@ -2,7 +2,13 @@ name: WedBars
 version: 1.0
 main: com.blockhead7360.mc.wedbars.WedBars
 author: Blockhead7360
+description: It's like Bed Wars on Hypixel but better I swear
+website: https://github.com/dilanx/WedBars
 
 commands:
+  wedbars:
+    description: Information about Wed Bars
+    aliases: [wb]
+    
   start:
     description: Start

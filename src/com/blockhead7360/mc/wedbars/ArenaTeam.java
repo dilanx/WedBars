@@ -5,17 +5,75 @@ import org.bukkit.Location;
 public class ArenaTeam {
 	
 	private Team team;
-	private Generator generator;
+	private Generator ironGenerator, goldGenerator, emeraldGenerator;
 	private boolean bedExists;
+	private Location spawnLoc;
+	private Location[] bedLoc;
 	
-	public ArenaTeam(Team team, Location generatorLoc) {
+	private Gamer[] gamers;
+	
+	public ArenaTeam(Team team, Location spawnLoc, Location generatorLoc, Location[] bedLoc, Gamer[] gamers) {
 		
 		this.team = team;
 		
-		this.generator = new Generator(generatorLoc, 500);
+		this.ironGenerator = new Generator(generatorLoc, WedBars.IRON1_SPEED);
+		this.goldGenerator = new Generator(generatorLoc, WedBars.GOLD1_SPEED);
+		this.emeraldGenerator = null;
+		
 		this.bedExists = true;
 		
+		this.spawnLoc = spawnLoc;
+		this.bedLoc = bedLoc;
+		this.gamers = gamers;
 		
+	}
+
+	public Generator getIronGenerator() {
+		return ironGenerator;
+	}
+
+	public void setIronGenerator(Generator ironGenerator) {
+		this.ironGenerator = ironGenerator;
+	}
+
+	public Generator getGoldGenerator() {
+		return goldGenerator;
+	}
+
+	public void setGoldGenerator(Generator goldGenerator) {
+		this.goldGenerator = goldGenerator;
+	}
+
+	public Generator getEmeraldGenerator() {
+		return emeraldGenerator;
+	}
+
+	public void setEmeraldGenerator(Generator emeraldGenerator) {
+		this.emeraldGenerator = emeraldGenerator;
+	}
+
+	public Gamer[] getGamers() {
+		return gamers;
+	}
+
+	public void setGamers(Gamer[] gamers) {
+		this.gamers = gamers;
+	}
+
+	public Location getSpawnLoc() {
+		return spawnLoc;
+	}
+
+	public void setSpawnLoc(Location spawnLoc) {
+		this.spawnLoc = spawnLoc;
+	}
+
+	public Location[] getBedLoc() {
+		return bedLoc;
+	}
+
+	public void setBedLoc(Location[] bedLoc) {
+		this.bedLoc = bedLoc;
 	}
 
 	public Team getTeam() {
@@ -26,15 +84,7 @@ public class ArenaTeam {
 		this.team = team;
 	}
 
-	public Generator getGenerator() {
-		return generator;
-	}
-
-	public void setGenerator(Generator generator) {
-		this.generator = generator;
-	}
-
-	public boolean isBedExists() {
+	public boolean bedExists() {
 		return bedExists;
 	}
 
