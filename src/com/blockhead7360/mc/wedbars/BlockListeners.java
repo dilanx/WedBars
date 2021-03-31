@@ -67,8 +67,8 @@ public class BlockListeners implements Listener {
                     " subtitle {\"text\":\"You will respawn in 5 seconds...\",\"color\":\"grey\"}");
             Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "title " + player.getName() +
                     " title {\"text\":\"You died!\",\"color\":\"red\"}");
-            
-            Bukkit.broadcastMessage(player.getPlayerListName() + " was killed by " + player.getKiller() + ".");
+            player.teleport(new Location(Bukkit.getWorld("world"), 0.0,100.0,0.0));
+            Bukkit.broadcastMessage(player.getPlayerListName() + " was killed by " + player.getKiller().getName() + ".");
 
             //TODO: add respawn handlers and time thing
         } else {
@@ -77,9 +77,9 @@ public class BlockListeners implements Listener {
             player.setHealth(20);
             player.setGameMode(GameMode.SPECTATOR);
             //TODO: more game logic
-            
+            player.teleport(new Location(Bukkit.getWorld("world"), 0.0,100.0,0.0));
             Bukkit.broadcastMessage(player.getPlayerListName() + " was killed by " +
-            	player.getKiller()+ ". " + ChatColor.AQUA + ChatColor.BOLD + "FINAL KILL!");
+            	player.getKiller().getName() + ". " + ChatColor.AQUA + ChatColor.BOLD + "FINAL KILL!");
             
         }
     	
