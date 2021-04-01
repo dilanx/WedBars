@@ -2,19 +2,17 @@ package com.blockhead7360.mc.wedbars;
 
 import java.util.List;
 
-import org.bukkit.Effect;
-import org.bukkit.Location;
-import org.bukkit.Material;
-import org.bukkit.World;
+import org.bukkit.*;
 import org.bukkit.block.Block;
 import org.bukkit.entity.*;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
-import org.bukkit.event.entity.CreatureSpawnEvent;
-import org.bukkit.event.entity.EntityExplodeEvent;
+import org.bukkit.event.entity.*;
 import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.event.player.PlayerTeleportEvent;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.material.Wool;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
@@ -88,8 +86,15 @@ public class Powerups implements Listener {
     	}
     	
     }
-    
-    
+
+    @EventHandler
+    public void onPlayerTeleport(PlayerTeleportEvent e) {
+       if (e.getCause() == PlayerTeleportEvent.TeleportCause.ENDER_PEARL) {
+            Location l = e.getTo();
+            l.getWorld().playSound(l, Sound.ENDERMAN_TELEPORT, 15, 1);
+            l.getWorld().playEffect(l, Effect.ENDER_SIGNAL, 3);
+        }
+    }
 
     @EventHandler
     public void golemTargeting(CreatureSpawnEvent event) {
