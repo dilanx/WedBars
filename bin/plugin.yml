@@ -17,5 +17,5 @@ commands:
 permissions:
   wedbars.itemshop:
     default: false
-  wedbars.debug:
+  wedbars.admin:
     default: op

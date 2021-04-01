@@ -12,12 +12,12 @@ public class ArenaTeam {
 	
 	private Gamer[] gamers;
 	
-	public ArenaTeam(Team team, Location spawnLoc, Location generatorLoc, Location[] bedLoc, Gamer[] gamers) {
+	public ArenaTeam(Team team, Location spawnLoc, Location generatorLoc, int ironspeed, int goldspeed, Location[] bedLoc, Gamer[] gamers) {
 		
 		this.team = team;
 		
-		this.ironGenerator = new Generator(generatorLoc, WedBars.IRON1_SPEED);
-		this.goldGenerator = new Generator(generatorLoc, WedBars.GOLD1_SPEED);
+		this.ironGenerator = new Generator(generatorLoc, ironspeed);
+		this.goldGenerator = new Generator(generatorLoc, goldspeed);
 		this.emeraldGenerator = null;
 		
 		this.bedExists = true;
