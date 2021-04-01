@@ -26,13 +26,13 @@ public class WedBars extends JavaPlugin {
 	public static final int MAX_EMERALDS_IN_GEN = 3;
 	public static final int MAX_DIAMONDS_IN_GEN = 3;
 	
-	public static final int EMERALD1_SPEED = 50;
-	public static final int DIAMOND1_SPEED = 20;
+	public static final int EMERALD1_SPEED = 300;
+	public static final int DIAMOND1_SPEED = 150;
 	
-	public static final int IRON1_SPEED = 20;
+	public static final int IRON1_SPEED = 14;
 	
 	
-	public static final int GOLD1_SPEED = 50;
+	public static final int GOLD1_SPEED = 60;
 	
 	public static final int RESPAWN_TIME = 50;
 	
@@ -81,6 +81,13 @@ public class WedBars extends JavaPlugin {
 		
 		if (cmd.getName().equalsIgnoreCase("test")) {
 			
+			if (!sender.hasPermission("wedbars.debug")) {
+				
+				sender.sendMessage("No lol");
+				return true;
+				
+			}
+			
 			if (args.length > 0) {
 				
 				if (args[0].equalsIgnoreCase("fb")) {
@@ -117,6 +124,63 @@ public class WedBars extends JavaPlugin {
 					
 				}
 				
+				if (args[0].equalsIgnoreCase("start")) {
+					
+					if (resetting || running) {
+						
+						sender.sendMessage("Already running or resetting");
+						return true;
+						
+					}
+					
+					// TEMPORARY
+					
+					World world = getServer().getWorld("world");
+					
+					Generator[] emeralds = {
+							new Generator(new Location(world, 12.5, 78, -11.5), EMERALD1_SPEED),
+							new Generator(new Location(world, -11.5, 78, -11.5), EMERALD1_SPEED),
+							new Generator(new Location(world, -11.5, 78, 12.5), EMERALD1_SPEED),
+							new Generator(new Location(world, 12.5, 78, 12.5), EMERALD1_SPEED)
+							
+					};
+					
+					Generator[] diamonds = {
+							new Generator(new Location(world, 0.5, 64, 52.5), DIAMOND1_SPEED),
+							new Generator(new Location(world, 52.5, 64, 0.5), DIAMOND1_SPEED),
+							new Generator(new Location(world, 0.5, 64, -51.5), DIAMOND1_SPEED),
+							new Generator(new Location(world, -51.5, 64, 0.5), DIAMOND1_SPEED)
+					};
+					
+					ArenaTeam gray = new ArenaTeam(Team.GRAY,
+							new Location(world, -72, 66, -33),
+							new Location(world, -77, 66, -32),
+							new Location[]{new Location(world, -65, 66, -33), new Location(world, -64, 66, -33)},
+							new Gamer[]{new Gamer(getServer().getPlayer("shark_pog"), Team.GRAY)});
+					
+					ArenaTeam green = new ArenaTeam(Team.GREEN,
+							new Location(world, 72, 66, -33),
+							new Location(world, 77, 66, -34),
+							new Location[]{new Location(world, 65, 66, -33), new Location(world, 64, 66, -33)},
+							new Gamer[]{new Gamer(getServer().getPlayer("ComputerCart"), Team.GREEN)});
+					
+					ArenaTeam yellow = new ArenaTeam(Team.YELLOW,
+							new Location(world, 72, 66, 33),
+							new Location(world, 77, 66, 32),
+							new Location[]{new Location(world, 65, 66, 33), new Location(world, 64, 66, 33)},
+							new Gamer[]{new Gamer(getServer().getPlayer("Faience"), Team.YELLOW)});
+					
+					ArenaTeam white = new ArenaTeam(Team.WHITE,
+							new Location(world, -33, 66, 72),
+							new Location(world, -32, 66, 77),
+							new Location[]{new Location(world, -33, 66, 65), new Location(world, -33, 66, 64)},
+							new Gamer[]{new Gamer(getServer().getPlayer("aromazx"), Team.WHITE)});
+					
+					Arena arena = new Arena(new ArenaTeam[] {gray, green, yellow, white}, diamonds, emeralds);
+					arena.start();
+					
+				}
+				
 			}
 			
 		}
@@ -139,51 +203,6 @@ public class WedBars extends JavaPlugin {
 			
 			Shop.openItemShop((Player) sender);
 			return true;
-			
-		}
-		
-		if (cmd.getName().equalsIgnoreCase("start")) {
-			
-			if (resetting || running) {
-				
-				sender.sendMessage("No");
-				return true;
-				
-			}
-			
-			// TEMPORARY
-			
-			World world = getServer().getWorld("world");
-			
-			Generator[] emeralds = {
-					new Generator(new Location(world, 12.5, 78, -11.5), EMERALD1_SPEED),
-					new Generator(new Location(world, -11.5, 78, -11.5), EMERALD1_SPEED),
-					new Generator(new Location(world, -11.5, 78, 12.5), EMERALD1_SPEED),
-					new Generator(new Location(world, 12.5, 78, 12.5), EMERALD1_SPEED)
-					
-			};
-			
-			Generator[] diamonds = {
-					new Generator(new Location(world, 0.5, 64, 52.5), DIAMOND1_SPEED),
-					new Generator(new Location(world, 52.5, 64, 0.5), DIAMOND1_SPEED),
-					new Generator(new Location(world, 0.5, 64, -51.5), DIAMOND1_SPEED),
-					new Generator(new Location(world, -51.5, 64, 0.5), DIAMOND1_SPEED)
-			};
-			
-			ArenaTeam gray = new ArenaTeam(Team.GRAY,
-					new Location(world, -72, 66, -33),
-					new Location(world, -77, 66, -32),
-					new Location[]{new Location(world, -65, 66, -33), new Location(world, -64, 66, -33)},
-					new Gamer[]{new Gamer(getServer().getPlayer("Blockhead736"), Team.GRAY)});
-			
-			ArenaTeam green = new ArenaTeam(Team.GREEN,
-					new Location(world, 72, 66, -33),
-					new Location(world, 77, 66, -34),
-					new Location[]{new Location(world, 65, 66, -33), new Location(world, 64, 66, -33)},
-					new Gamer[]{new Gamer(getServer().getPlayer("ComputerCart"), Team.GREEN)});
-			
-			Arena arena = new Arena(new ArenaTeam[] {gray, green}, diamonds, emeralds);
-			arena.start();
 			
 		}
 		

@@ -39,6 +39,12 @@ public class Listeners implements Listener {
 		return loc;
 
 	}
+	
+	public void removeBlock(int index) {
+		
+		placedBlocks.remove(index);
+		
+	}
 
 	@EventHandler
 	public void blockPlaced(BlockPlaceEvent event) {
