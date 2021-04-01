@@ -24,6 +24,8 @@ public class SetupWizard implements Listener {
 			String msg = e.getMessage();
 			Player player = e.getPlayer();
 			
+			// TODO finishing this later
+			
 			if (msg.equalsIgnoreCase("help") || msg.equalsIgnoreCase("?")) {
 				
 				
@@ -35,7 +37,13 @@ public class SetupWizard implements Listener {
 				player.sendMessage(ChatColor.WHITE + "ironspeed <speed>" + ChatColor.GRAY + " - set the initial iron generator speed (seconds * 10)");
 				player.sendMessage(ChatColor.WHITE + "goldspeed <speed>" + ChatColor.GRAY + " - set the initial gold generator speed (seconds * 10)");
 				player.sendMessage(ChatColor.WHITE + "personalemeraldspeed <speed>" + ChatColor.GRAY + " - set the island emerald generator speed (seconds * 10)");
+				player.sendMessage(ChatColor.WHITE + "save" + ChatColor.GRAY + " - save the arena data");
 				return;
+				
+			}
+			
+			if (msg.equalsIgnoreCase("team")) {
+				
 				
 				
 			}
@@ -43,6 +51,93 @@ public class SetupWizard implements Listener {
 			if (msg.equalsIgnoreCase("lobby")) {
 				
 				setup.setLobby(player.getLocation().clone());
+				player.sendMessage(ChatColor.GREEN + "Success!" + ChatColor.WHITE + " The arena lobby has been set to your current location.");
+				return;
+				
+			}
+			
+			if (msg.equalsIgnoreCase("diamondspeed")) {
+				
+				int number = getNumberArgument(msg);
+				
+				if (number == -1) {
+					
+					player.sendMessage(ChatColor.RED + "Fail!" + ChatColor.WHITE + " Make sure you provide an integer greater than 0.");
+					return;
+					
+				}
+				
+				setup.setDiamondSpeed(number);
+				player.sendMessage(ChatColor.GREEN + "Success!" + ChatColor.WHITE + " The diamond generator initial speed has been set to " + number + ".");
+				return;
+				
+			}
+			
+			if (msg.equalsIgnoreCase("emeraldspeed")) {
+				
+				int number = getNumberArgument(msg);
+				
+				if (number == -1) {
+					
+					player.sendMessage(ChatColor.RED + "Fail!" + ChatColor.WHITE + " Make sure you provide an integer greater than 0.");
+					return;
+					
+				}
+				
+				setup.setEmeraldSpeed(number);
+				player.sendMessage(ChatColor.GREEN + "Success!" + ChatColor.WHITE + " The emerald generator initial speed has been set to " + number + ".");
+				return;
+				
+			}
+			
+			if (msg.equalsIgnoreCase("ironspeed")) {
+				
+				int number = getNumberArgument(msg);
+				
+				if (number == -1) {
+					
+					player.sendMessage(ChatColor.RED + "Fail!" + ChatColor.WHITE + " Make sure you provide an integer greater than 0.");
+					return;
+					
+				}
+				
+				setup.setIronSpeed(number);
+				player.sendMessage(ChatColor.GREEN + "Success!" + ChatColor.WHITE + " The iron generator initial speed has been set to " + number + ".");
+				return;
+				
+			}
+			
+			if (msg.equalsIgnoreCase("goldspeed")) {
+				
+				int number = getNumberArgument(msg);
+				
+				if (number == -1) {
+					
+					player.sendMessage(ChatColor.RED + "Fail!" + ChatColor.WHITE + " Make sure you provide an integer greater than 0.");
+					return;
+					
+				}
+				
+				setup.setGoldSpeed(number);
+				player.sendMessage(ChatColor.GREEN + "Success!" + ChatColor.WHITE + " The gold generator initial speed has been set to " + number + ".");
+				return;
+				
+			}
+			
+			if (msg.equalsIgnoreCase("personalemeraldspeed")) {
+				
+				int number = getNumberArgument(msg);
+				
+				if (number == -1) {
+					
+					player.sendMessage(ChatColor.RED + "Fail!" + ChatColor.WHITE + " Make sure you provide an integer greater than 0.");
+					return;
+					
+				}
+				
+				setup.setPersonalEmeraldSpeed(number);
+				player.sendMessage(ChatColor.GREEN + "Success!" + ChatColor.WHITE + " The island emerald generator initial speed has been set to " + number + ".");
+				return;
 				
 			}
 			
@@ -118,6 +213,32 @@ public class SetupWizard implements Listener {
 				
 			}
 			
+			
+		}
+		
+	}
+	
+	public int getNumberArgument(String msg) {
+		
+		if (!msg.contains(" ")) {
+			
+			return -1;
+			
+		}
+		
+		String[] split = msg.split(" ");
+		
+		try {
+			
+			int i = Integer.parseInt(split[1]);
+			
+			if (i < 1) return -1;
+			
+			return i;
+			
+		} catch (NumberFormatException e) {
+			
+			return -1;
 			
 		}
 		
