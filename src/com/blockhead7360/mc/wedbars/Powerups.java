@@ -91,7 +91,7 @@ public class Powerups implements Listener {
     public void onPlayerTeleport(PlayerTeleportEvent e) {
        if (e.getCause() == PlayerTeleportEvent.TeleportCause.ENDER_PEARL) {
             Location l = e.getTo();
-            l.getWorld().playSound(l, Sound.ENDERMAN_TELEPORT, 15, 1);
+            l.getWorld().playSound(l, Sound.ENDERMAN_TELEPORT, 2, 1);
             l.getWorld().playEffect(l, Effect.ENDER_SIGNAL, 3);
         }
     }
