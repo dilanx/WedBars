@@ -8,9 +8,12 @@ public class ArenaTeamData {
 	private Location spawn, generator;
 	private Location[] bed;
 	
-	public ArenaTeamData() {
+	public ArenaTeamData(Team team) {
 		
-		
+		this.team = team;
+		this.spawn = null;
+		this.generator = null;
+		this.bed = new Location[2];
 		
 	}
 	
@@ -51,6 +54,24 @@ public class ArenaTeamData {
 
 	public void setBed(Location[] bed) {
 		this.bed = bed;
+	}
+	
+	public void setBed(int half, Location bedHalf) {
+		
+		this.bed[half] = bedHalf;
+		
+	}
+	
+	public boolean isBedSet() {
+		
+		return (bed[0] == null || bed[1] == null);
+		
+	}
+	
+	public ArenaTeamData clone() {
+		
+		return new ArenaTeamData(team, spawn, generator, bed);
+		
 	}
 	
 }

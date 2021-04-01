@@ -55,4 +55,20 @@ public enum Team {
 		
 	}
 	
+	public static Team getByLabel(String name) {
+		
+		for (Team t : values()) {
+			
+			if (t.getLabel().equalsIgnoreCase(name)) {
+				
+				return t;
+				
+			}
+			
+		}
+		
+		return null;
+		
+	}
+	
 }

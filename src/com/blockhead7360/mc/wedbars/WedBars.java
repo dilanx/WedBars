@@ -31,10 +31,10 @@ public class WedBars extends JavaPlugin {
 	// forge scales
 	// n times the initial speed as set by the arena
 	
-	public static final int FORGE_1_IRON = 2;
-	public static final int FORGE_2_GOLD = 2;
+	public static final double FORGE1 = 1.5;
+	public static final double FORGE2 = 2;
 	// forge 3 is emeralds
-	public static final int FORGE_4_IRON_AND_GOLD = 4;
+	public static final double FORGE4 = 4;
 	
 	
 	// gen scales
@@ -125,6 +125,59 @@ public class WedBars extends JavaPlugin {
 			
 			return true;
 
+		}
+		
+		if (cmd.getName().equalsIgnoreCase("setup")) {
+			
+			if (!sender.hasPermission("wedbars.admin")) {
+
+				sender.sendMessage("You do not have permission to use this command.");
+				return true;
+
+			}
+			
+			if (!(sender instanceof Player)) {
+				
+				sender.sendMessage("Only players can use this command.");
+				return true;
+				
+			}
+			
+			if (args.length == 0) {
+				
+				sender.sendMessage("Use '/setup <arena>' to either set up a new Wed Bars arena or edit an existing one.");
+				
+				return true;
+				
+			}
+			
+			if (SetupWizard.settingUp != null) {
+				
+				sender.sendMessage("Another administrator is setting up an arena, and only one person can do it at a time.");
+				return true;
+				
+			}
+			
+			SetupWizard.settingUp = (Player) sender;
+			
+			ArenaData data = ArenaLoader.loadArena(this, args[0]);
+			
+			if (data == null) {
+				
+				SetupWizard.setup = new ArenaData(args[0]);
+				
+				sender.sendMessage(ChatColor.YELLOW + "New arena setup!" + ChatColor.GRAY + " You're setting up a new arena named " + args[0] + "."
+						+ " Type 'help' into the chat to get started or 'cancel' to cancel.");
+				return true;
+				
+			}
+			
+			SetupWizard.setup = data;
+			
+			sender.sendMessage(ChatColor.YELLOW + "Existing arena setup!" + ChatColor.GRAY + " You're editing an existing arena named " + args[0] + "."
+					+ " Type 'help' into the chat to get started or 'cancel' to cancel.");
+			return true;
+			
 		}
 
 		if (cmd.getName().equalsIgnoreCase("test")) {
