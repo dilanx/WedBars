@@ -9,7 +9,9 @@ import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.Sound;
+import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
+import org.bukkit.entity.TNTPrimed;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
@@ -48,6 +50,14 @@ public class Listeners implements Listener {
 
 	@EventHandler
 	public void blockPlaced(BlockPlaceEvent event) {
+
+		if (event.getBlock().getType() == Material.TNT) {
+			event.getBlock().setType(Material.AIR);
+			TNTPrimed tp = (TNTPrimed)event.getBlock().getWorld().spawnEntity(event.getBlock().getLocation(), EntityType.PRIMED_TNT);
+			tp.setFuseTicks(60);
+			return;
+		}
+
 		placedBlocks.add(event.getBlock().getLocation());
 	}
 

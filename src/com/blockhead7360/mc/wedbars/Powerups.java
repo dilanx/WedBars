@@ -2,17 +2,12 @@ package com.blockhead7360.mc.wedbars;
 
 import java.util.List;
 
+import org.bukkit.Effect;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.block.Block;
-import org.bukkit.entity.Endermite;
-import org.bukkit.entity.Entity;
-import org.bukkit.entity.EntityType;
-import org.bukkit.entity.Fireball;
-import org.bukkit.entity.IronGolem;
-import org.bukkit.entity.LivingEntity;
-import org.bukkit.entity.Player;
+import org.bukkit.entity.*;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
@@ -53,8 +48,8 @@ public class Powerups implements Listener {
     				
     				if (hand.getAmount() > 1) hand.setAmount(hand.getAmount() - 1);
     				else e.getPlayer().setItemInHand(null);
-    				
-    			}
+
+                }
     			
     		}
     		
@@ -65,12 +60,14 @@ public class Powerups implements Listener {
     @EventHandler
     public void onEntityExplode(EntityExplodeEvent e) {
     	
-    	if (e.getEntity() instanceof Fireball) {
+    	if (e.getEntity() instanceof Fireball || e.getEntity() instanceof TNTPrimed) {
     		
     		e.setCancelled(true);
+
+    		e.getLocation().getWorld().playEffect(e.getLocation(), Effect.EXPLOSION_LARGE, 1);
     		
     		List<Block> blocks = e.blockList();
-    		
+    		//TODO: fix behavior with glass and bed
     		for (Block b : blocks) {
     			
     			List<Location> locs = WedBars.getListeners().getPlacedBlocks();
