@@ -51,10 +51,18 @@ public class Listeners implements Listener {
 	@EventHandler
 	public void blockPlaced(BlockPlaceEvent event) {
 
+		//if (!WedBars.running) return;
+
+		if (event.getBlock().getLocation().getY() >= WedBars.getInstance().getConfig().getInt("maxBuildHeight")) {
+			event.setCancelled(true);
+			event.getPlayer().sendMessage(ChatColor.RED + "You can't build any higher!");
+			return;
+		}
+
 		if (event.getBlock().getType() == Material.TNT) {
 			event.getBlock().setType(Material.AIR);
 			TNTPrimed tp = (TNTPrimed)event.getBlock().getWorld().spawnEntity(event.getBlock().getLocation(), EntityType.PRIMED_TNT);
-			tp.setFuseTicks(60);
+			tp.setFuseTicks(WedBars.getInstance().getConfig().getInt("tntFuse"));
 			return;
 		}
 

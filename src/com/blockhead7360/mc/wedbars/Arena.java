@@ -100,6 +100,7 @@ public class Arena {
 
 	public void start() {
 
+
 		WedBars.running = true;
 		WedBars.arena = this;
 
@@ -371,6 +372,7 @@ public class Arena {
 	public Gamer getGamer(String name) {
 		return gamers.get(name);
 	}
+	public Map<String, Gamer> getGamers() { return gamers; }
 	
 	public void deleteGamer(Gamer gamer) {
 		
@@ -382,6 +384,7 @@ public class Arena {
 	public ArenaTeam getTeam(Team team) {
 		return teams.get(team);
 	}
+	public Map<Team, ArenaTeam> getTeams() { return teams;}
 
 	public boolean checkForEndGame() {
 

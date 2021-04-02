@@ -82,6 +82,8 @@ public class WedBars extends JavaPlugin {
 
 		instance = this;
 
+		saveDefaultConfig();
+
 	}
 
 	public void onDisable() {
@@ -131,6 +133,14 @@ public class WedBars extends JavaPlugin {
 			}
 			
 			Arena arena = new Arena(loadedArena, teamAssignments);
+
+			if (loadedArena.getAllTeams().size() <= 1 || arena.getTeams().size() <= 1) {
+
+				sender.sendMessage("You must have two or more teams/players in order to start a game.");
+				return true;
+
+			}
+
 			arena.start();
 			
 			return true;

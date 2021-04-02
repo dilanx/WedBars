@@ -1,26 +1,18 @@
 package com.blockhead7360.mc.wedbars;
 
+import java.text.DecimalFormat;
 import java.util.List;
 
-import org.bukkit.Effect;
-import org.bukkit.Location;
-import org.bukkit.Material;
-import org.bukkit.Sound;
-import org.bukkit.World;
+import org.bukkit.*;
 import org.bukkit.block.Block;
-import org.bukkit.entity.Endermite;
-import org.bukkit.entity.Entity;
-import org.bukkit.entity.EntityType;
-import org.bukkit.entity.Fireball;
-import org.bukkit.entity.IronGolem;
-import org.bukkit.entity.LivingEntity;
-import org.bukkit.entity.Player;
-import org.bukkit.entity.TNTPrimed;
+import org.bukkit.entity.*;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.entity.CreatureSpawnEvent;
+import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityExplodeEvent;
+import org.bukkit.event.entity.ProjectileHitEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerTeleportEvent;
 import org.bukkit.inventory.ItemStack;
@@ -40,6 +32,21 @@ public class Powerups implements Listener {
         IronGolem golem = (IronGolem)w.spawnEntity(gamer.getPlayer().getLocation(), EntityType.IRON_GOLEM);
         golem.setCustomName("" + gamer.getTeam().getLabel() + "'s \"Dream\" Defender");
 
+    }
+
+    public static void spawnSilverfish(ProjectileHitEvent e) {
+        Player p = (Player)e.getEntity().getShooter();
+        Gamer g = WedBars.arena.getGamer(p.getName());
+        World w = e.getEntity().getLocation().getWorld();
+        Silverfish s = (Silverfish)w.spawnEntity(e.getEntity().getLocation(), EntityType.SILVERFISH);
+        s.setCustomName("" + g.getTeam().getLabel() + "'s Bed Bug");
+        for (Entity gm : w.getNearbyEntities(s.getLocation(), 10, 10 ,10)) {
+            if (gm instanceof Player && !s.getCustomName().contains(
+                    WedBars.arena.getGamer(p.getName()).getTeam().getLabel())) {
+                s.setTarget((LivingEntity) e);
+                p.sendMessage("TARGETING " + gm.getName());
+            }
+        }
     }
     
     @EventHandler
@@ -121,6 +128,30 @@ public class Powerups implements Listener {
                   trackingMob.addPotionEffect(new PotionEffect(PotionEffectType.INVISIBILITY, 9, 2, false, false));
                 }
             }
+        }
+    }
+
+
+    //TODO: Make silverfish target teams, fix execption for casting shooters as players
+    @EventHandler
+    public void onProjectileHit(ProjectileHitEvent e) {
+        if (!WedBars.running) return;
+        if (e.getEntityType() == EntityType.SNOWBALL) {
+            spawnSilverfish(e);
+        }
+
+    }
+
+    @EventHandler
+    public void entityDamageEntity(EntityDamageByEntityEvent e) {
+
+        if (e.getDamager() instanceof Arrow && e.getEntity() instanceof Player) {
+            Arrow a = (Arrow)e.getDamager();
+            World w = e.getEntity().getLocation().getWorld();
+            Player p = (Player)a.getShooter();
+            DecimalFormat round = new DecimalFormat("##.#");
+            w.playSound(p.getLocation(), Sound.ORB_PICKUP, 1, 1);
+            p.sendMessage(((Player) e.getEntity()).getPlayer().getDisplayName() + ChatColor.YELLOW + " is now at " + ChatColor.RED + round.format((((Player) e.getEntity()).getHealth() - e.getFinalDamage())) + " HP" );
         }
     }
 }
