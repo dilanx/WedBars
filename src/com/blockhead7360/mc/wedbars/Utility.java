@@ -22,7 +22,7 @@ public class Utility {
 		Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "title " + player.getName() +
 				" times 0 100 20");
 		Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "title " + player.getName() +
-				" subtitle {\"text\":\"\",}");
+				" subtitle {\"text\":\"\"}");
 		Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "title " + player.getName() +
 				" title {\"text\":\"VICTORY\",\"color\":\"green\"}");
 
@@ -33,7 +33,7 @@ public class Utility {
 		Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "title " + player.getName() +
 				" times 0 100 20");
 		Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "title " + player.getName() +
-				" subtitle {\"text\":\"\",}");
+				" subtitle {\"text\":\"\"}");
 		Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "title " + player.getName() +
 				" title {\"text\":\"DEFEAT\",\"color\":\"red\"}");
 

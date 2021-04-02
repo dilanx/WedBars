@@ -1,6 +1,7 @@
 package com.blockhead7360.mc.wedbars;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -35,6 +36,7 @@ public class ArenaData {
 		this.lobby = lobby;
 		this.diamondGen = new ArrayList<>();
 		this.emeraldGen = new ArrayList<>();
+		this.teams = new HashMap<>();
 		
 		this.diamondSpeed = diamondSpeed;
 		this.emeraldSpeed = emeraldSpeed;

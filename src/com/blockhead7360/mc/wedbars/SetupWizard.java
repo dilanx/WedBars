@@ -18,6 +18,8 @@ public class SetupWizard implements Listener {
 	@EventHandler
 	public void onAsyncPlayerChat(AsyncPlayerChatEvent e) {
 
+		if (settingUp == null) return;
+		
 		if (e.getPlayer().getName().equals(settingUp.getName())) {
 
 			e.setCancelled(true);
@@ -30,6 +32,8 @@ public class SetupWizard implements Listener {
 
 				if (msg.equalsIgnoreCase("help") || msg.equalsIgnoreCase("?")) {
 
+					player.sendMessage(" ");
+					player.sendMessage(ChatColor.YELLOW + "----- Arena Team Setup Help -----");
 					player.sendMessage(ChatColor.WHITE + "checklist | cl" + ChatColor.GRAY + " - see everything you've set up so far for the team");
 					player.sendMessage(ChatColor.WHITE + "spawn" + ChatColor.GRAY + " - set the spawn to your current location");
 					player.sendMessage(ChatColor.WHITE + "generator | gen" + ChatColor.GRAY + " - set the generator to your current location");
@@ -65,10 +69,11 @@ public class SetupWizard implements Listener {
 
 					}
 
+					String label = teamSetup.getTeam().getLabel();
 					setup.setTeamData(teamSetup.getTeam(), teamSetup.clone());
 					teamSetup = null;
 
-					player.sendMessage(ChatColor.GREEN + "Success!" + ChatColor.WHITE + " The " + teamSetup.getTeam().getLabel() + " team is now set up."
+					player.sendMessage(ChatColor.GREEN + "Success!" + ChatColor.WHITE + " The " + label + " team is now set up."
 							+ " Use 'checklist' to see what you've done so far for this arena.");
 					return;
 
@@ -159,7 +164,8 @@ public class SetupWizard implements Listener {
 
 			if (msg.equalsIgnoreCase("help") || msg.equalsIgnoreCase("?")) {
 
-
+				player.sendMessage(" ");
+				player.sendMessage(ChatColor.YELLOW + "----- Arena Setup Help -----");
 				player.sendMessage(ChatColor.WHITE + "checklist | cl" + ChatColor.GRAY + " - see everything you've set up so far");
 				player.sendMessage(ChatColor.WHITE + "team <team>" + ChatColor.GRAY + " - setup a team island");
 				player.sendMessage(ChatColor.WHITE + "lobby" + ChatColor.GRAY + " - set the lobby to your current location");
@@ -238,7 +244,7 @@ public class SetupWizard implements Listener {
 
 			}
 
-			if (msg.equalsIgnoreCase("team")) {
+			if (msg.startsWith("team")) {
 
 				if (!msg.contains(" ")) {
 
@@ -299,7 +305,7 @@ public class SetupWizard implements Listener {
 				
 			}
 
-			if (msg.equalsIgnoreCase("diamondspeed")) {
+			if (msg.startsWith("diamondspeed")) {
 
 				int number = getNumberArgument(msg);
 
@@ -316,7 +322,7 @@ public class SetupWizard implements Listener {
 
 			}
 
-			if (msg.equalsIgnoreCase("emeraldspeed")) {
+			if (msg.startsWith("emeraldspeed")) {
 
 				int number = getNumberArgument(msg);
 
@@ -333,7 +339,7 @@ public class SetupWizard implements Listener {
 
 			}
 
-			if (msg.equalsIgnoreCase("ironspeed")) {
+			if (msg.startsWith("ironspeed")) {
 
 				int number = getNumberArgument(msg);
 
@@ -350,7 +356,7 @@ public class SetupWizard implements Listener {
 
 			}
 
-			if (msg.equalsIgnoreCase("goldspeed")) {
+			if (msg.startsWith("goldspeed")) {
 
 				int number = getNumberArgument(msg);
 
@@ -367,7 +373,7 @@ public class SetupWizard implements Listener {
 
 			}
 
-			if (msg.equalsIgnoreCase("personalemeraldspeed")) {
+			if (msg.startsWith("personalemeraldspeed")) {
 
 				int number = getNumberArgument(msg);
 
@@ -473,6 +479,8 @@ public class SetupWizard implements Listener {
 	@EventHandler
 	public void onPlayerQuit(PlayerQuitEvent e) {
 
+		if (settingUp == null) return;
+		
 		if (settingUp.getName().equals(e.getPlayer().getName())) {
 
 			settingUp = null;

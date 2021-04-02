@@ -64,7 +64,7 @@ public class ArenaTeamData {
 	
 	public boolean isBedSet() {
 		
-		return (bed[0] == null || bed[1] == null);
+		return !(bed[0] == null || bed[1] == null);
 		
 	}
 	

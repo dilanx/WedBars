@@ -1,5 +1,9 @@
 package com.blockhead7360.mc.wedbars;
 
+import java.util.List;
+import java.util.Map;
+
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.command.Command;
@@ -20,31 +24,32 @@ public class WedBars extends JavaPlugin {
 	public static Arena arena = null;
 
 	public static ArenaData loadedArena = null;
+	public static TeamAssignments teamAssignments = new TeamAssignments();
 
 
 	// speeds (interval between spawns in 10*seconds)
 
 	public static final int MAX_EMERALDS_IN_GEN = 3;
 	public static final int MAX_DIAMONDS_IN_GEN = 3;
-	
-	
+
+
 	// forge scales
 	// n times the initial speed as set by the arena
-	
+
 	public static final double FORGE1 = 1.5;
 	public static final double FORGE2 = 2;
 	// forge 3 is emeralds
 	public static final double FORGE4 = 4;
-	
-	
+
+
 	// gen scales
 	// n times the initial speed as set by the arena
-	
+
 	public static final int GEN_DIAMOND2 = 2;
 	public static final int GEN_DIAMOND3 = 4;
 	public static final int GEN_EMERALD2 = 2;
 	public static final int GEN_EMERALD3 = 4;
-	
+
 
 	//public static final int EMERALD1_SPEED = 300;
 	//public static final int DIAMOND1_SPEED = 150;
@@ -71,6 +76,7 @@ public class WedBars extends JavaPlugin {
 		getServer().getPluginManager().registerEvents(new Powerups(), this);
 		getServer().getPluginManager().registerEvents(new Shop(), this);
 		getServer().getPluginManager().registerEvents(new SetupWizard(), this);
+		getServer().getPluginManager().registerEvents(new ConnectionListener(), this);
 
 		Shop.init();
 
@@ -93,6 +99,43 @@ public class WedBars extends JavaPlugin {
 			sender.sendMessage(" ");
 
 		}
+		
+		if (cmd.getName().equalsIgnoreCase("start")) {
+			
+			if (!sender.hasPermission("wedbars.admin")) {
+
+				sender.sendMessage("You do not have permission to use this command.");
+				return true;
+
+			}
+			
+			if (loadedArena == null) {
+				
+				sender.sendMessage("Load an arena first with /load, then assign teams with /team.");
+				return true;
+				
+			}
+			
+			if (running) {
+				
+				sender.sendMessage("The game is already running.");
+				return true;
+				
+			}
+			
+			if (resetting) {
+				
+				sender.sendMessage("The map is resetting.");
+				return true;
+				
+			}
+			
+			Arena arena = new Arena(loadedArena, teamAssignments);
+			arena.start();
+			
+			return true;
+			
+		}
 
 		if (cmd.getName().equalsIgnoreCase("load")) {
 
@@ -102,82 +145,187 @@ public class WedBars extends JavaPlugin {
 				return true;
 
 			}
-			
+
 			if (args.length == 0) {
-				
+
 				sender.sendMessage("Use '/load <arena>' to load a Wed Bars arena (unloading any previously loaded one).");
 				return true;
-				
+
 			}
-			
+
 			ArenaData data = ArenaLoader.loadArena(this, args[0]);
-			
+
 			if (data == null) {
-				
+
 				sender.sendMessage("Unable to find a saved arena with that name.");
 				return true;
-				
+
 			}
-			
+
 			loadedArena = data;
-			
-			sender.sendMessage("Successfully loaded the arena data for " + args[0] + ".");
-			
+			teamAssignments.clear();
+
+			sender.sendMessage("Successfully loaded the arena data for " + args[0] + " (any team assignments were reset).");
+
 			return true;
 
 		}
-		
-		if (cmd.getName().equalsIgnoreCase("setup")) {
+
+		if (cmd.getName().equalsIgnoreCase("team")) {
+
+			if (!sender.hasPermission("wedbars.admin")) {
+
+				sender.sendMessage("You can't assign yourself a team yet, sorry! An admin will do it for you.");
+				return true;
+
+			}
+
+			if (loadedArena == null) {
+
+				sender.sendMessage("Load an arena first with /load.");
+				return true;
+
+			}
+
+			if (args.length == 0) {
+
+				sender.sendMessage("/team <team> <player>");
+				sender.sendMessage("/team show");
+				return true;
+
+			}
+
+			if (args[0].equalsIgnoreCase("show")) {
+
+				Bukkit.broadcastMessage(" ");
+				Bukkit.broadcastMessage(ChatColor.WHITE + "" + ChatColor.BOLD + "Team assignments for the next game");
+
+				Map<Team, List<String>> ta = teamAssignments.getTeamAssignments();
+				
+				if (ta.keySet().size() == 0) {
+
+					Bukkit.broadcastMessage(ChatColor.GRAY + "No teams set");
+
+				} else {
+
+					for (Team team : ta.keySet()) {
+
+						List<String> players = ta.get(team);
+
+						String text = team.getChatColor() + team.getLabel() + " (" + players.size() + "): " + ChatColor.WHITE + players.get(0);
+
+						for (int i = 1; i < players.size(); i++) {
+
+							text += ", " + players.get(i);
+
+						}
+
+						Bukkit.broadcastMessage(text);
+
+					}
+
+				}
+
+				Bukkit.broadcastMessage(" ");
+
+				return true;
+
+			}
+
+			if (args.length < 2) {
+
+				sender.sendMessage("/team <team> <player>");
+				sender.sendMessage("/team show");
+				return true;
+
+			}
+
+			Team team = Team.getByLabel(args[0]);
+
+			if (team == null) {
+
+				sender.sendMessage("Unknown team: " + args[0]);
+				return true;
+
+			}
 			
+			if (!loadedArena.getAllTeams().contains(team)) {
+				
+				sender.sendMessage("This arena doesn't support the " + team.getLabel() + " team.");
+				return true;
+				
+			}
+
+			Player player = getServer().getPlayer(args[1]);
+
+			if (player == null) {
+
+				sender.sendMessage("Unknown or offline player: " + args[1]);
+				return true;
+
+			}
+
+			teamAssignments.assign(player, team);
+
+			Bukkit.broadcastMessage(team.getChatColor() + player.getName() + ChatColor.GRAY + " is now a member of the "
+					+ team.getChatColor() + ChatColor.BOLD + team.getLabel() + ChatColor.GRAY + " team.");
+
+			return true;
+
+
+		}
+
+		if (cmd.getName().equalsIgnoreCase("setup")) {
+
 			if (!sender.hasPermission("wedbars.admin")) {
 
 				sender.sendMessage("You do not have permission to use this command.");
 				return true;
 
 			}
-			
+
 			if (!(sender instanceof Player)) {
-				
+
 				sender.sendMessage("Only players can use this command.");
 				return true;
-				
+
 			}
-			
+
 			if (args.length == 0) {
-				
+
 				sender.sendMessage("Use '/setup <arena>' to either set up a new Wed Bars arena or edit an existing one.");
-				
+
 				return true;
-				
+
 			}
-			
+
 			if (SetupWizard.settingUp != null) {
-				
+
 				sender.sendMessage("Another administrator is setting up an arena, and only one person can do it at a time.");
 				return true;
-				
+
 			}
-			
+
 			SetupWizard.settingUp = (Player) sender;
-			
+
 			ArenaData data = ArenaLoader.loadArena(this, args[0]);
-			
+
 			if (data == null) {
-				
+
 				SetupWizard.setup = new ArenaData(args[0]);
-				
+
 				sender.sendMessage(ChatColor.YELLOW + "New arena setup!" + ChatColor.GRAY + " You're setting up a new arena named " + args[0] + "."
 						+ " Type 'help' into the chat to get started or 'cancel' to cancel.");
 				return true;
-				
+
 			}
-			
+
 			SetupWizard.setup = data;
-			
+
 			sender.sendMessage(ChatColor.YELLOW + "Existing arena setup!" + ChatColor.GRAY + " You're editing an existing arena named " + args[0] + "."
 					+ " Type 'help' into the chat to get started or 'cancel' to cancel.");
 			return true;
-			
+
 		}
 
 		if (cmd.getName().equalsIgnoreCase("test")) {
@@ -236,53 +384,53 @@ public class WedBars extends JavaPlugin {
 
 					// TEMPORARY
 
-//					World world = getServer().getWorld("world");
-//
-//					Generator[] emeralds = {
-//							new Generator(new Location(world, 12.5, 78, -11.5), EMERALD1_SPEED),
-//							new Generator(new Location(world, -11.5, 78, -11.5), EMERALD1_SPEED),
-//							new Generator(new Location(world, -11.5, 78, 12.5), EMERALD1_SPEED),
-//							new Generator(new Location(world, 12.5, 78, 12.5), EMERALD1_SPEED)
-//
-//					};
-//
-//					Generator[] diamonds = {
-//							new Generator(new Location(world, 0.5, 64, 52.5), DIAMOND1_SPEED),
-//							new Generator(new Location(world, 52.5, 64, 0.5), DIAMOND1_SPEED),
-//							new Generator(new Location(world, 0.5, 64, -51.5), DIAMOND1_SPEED),
-//							new Generator(new Location(world, -51.5, 64, 0.5), DIAMOND1_SPEED)
-//					};
-//
-//					ArenaTeam gray = new ArenaTeam(Team.GRAY,
-//							new Location(world, -72, 66, -33),
-//							new Location(world, -77, 66, -32),
-//							1, 1,
-//							new Location[]{new Location(world, -65, 66, -33), new Location(world, -64, 66, -33)},
-//							new Gamer[]{new Gamer(getServer().getPlayer("shark_pog"), Team.GRAY)});
-//
-//					ArenaTeam green = new ArenaTeam(Team.GREEN,
-//							new Location(world, 72, 66, -33),
-//							new Location(world, 77, 66, -34),
-//							1, 1,
-//							new Location[]{new Location(world, 65, 66, -33), new Location(world, 64, 66, -33)},
-//							new Gamer[]{new Gamer(getServer().getPlayer("ComputerCart"), Team.GREEN)});
-//
-//					ArenaTeam yellow = new ArenaTeam(Team.YELLOW,
-//							new Location(world, 72, 66, 33),
-//							new Location(world, 77, 66, 32),
-//							1, 1,
-//							new Location[]{new Location(world, 65, 66, 33), new Location(world, 64, 66, 33)},
-//							new Gamer[]{new Gamer(getServer().getPlayer("Faience"), Team.YELLOW)});
-//
-//					ArenaTeam white = new ArenaTeam(Team.WHITE,
-//							new Location(world, -33, 66, 72),
-//							new Location(world, -32, 66, 77),
-//							1, 1,
-//							new Location[]{new Location(world, -33, 66, 65), new Location(world, -33, 66, 64)},
-//							new Gamer[]{new Gamer(getServer().getPlayer("aromazx"), Team.WHITE)});
-//
-//					Arena arena = new Arena(new ArenaTeam[] {gray, green, yellow, white}, diamonds, emeralds);
-//					arena.start();
+					//					World world = getServer().getWorld("world");
+					//
+					//					Generator[] emeralds = {
+					//							new Generator(new Location(world, 12.5, 78, -11.5), EMERALD1_SPEED),
+					//							new Generator(new Location(world, -11.5, 78, -11.5), EMERALD1_SPEED),
+					//							new Generator(new Location(world, -11.5, 78, 12.5), EMERALD1_SPEED),
+					//							new Generator(new Location(world, 12.5, 78, 12.5), EMERALD1_SPEED)
+					//
+					//					};
+					//
+					//					Generator[] diamonds = {
+					//							new Generator(new Location(world, 0.5, 64, 52.5), DIAMOND1_SPEED),
+					//							new Generator(new Location(world, 52.5, 64, 0.5), DIAMOND1_SPEED),
+					//							new Generator(new Location(world, 0.5, 64, -51.5), DIAMOND1_SPEED),
+					//							new Generator(new Location(world, -51.5, 64, 0.5), DIAMOND1_SPEED)
+					//					};
+					//
+					//					ArenaTeam gray = new ArenaTeam(Team.GRAY,
+					//							new Location(world, -72, 66, -33),
+					//							new Location(world, -77, 66, -32),
+					//							1, 1,
+					//							new Location[]{new Location(world, -65, 66, -33), new Location(world, -64, 66, -33)},
+					//							new Gamer[]{new Gamer(getServer().getPlayer("shark_pog"), Team.GRAY)});
+					//
+					//					ArenaTeam green = new ArenaTeam(Team.GREEN,
+					//							new Location(world, 72, 66, -33),
+					//							new Location(world, 77, 66, -34),
+					//							1, 1,
+					//							new Location[]{new Location(world, 65, 66, -33), new Location(world, 64, 66, -33)},
+					//							new Gamer[]{new Gamer(getServer().getPlayer("ComputerCart"), Team.GREEN)});
+					//
+					//					ArenaTeam yellow = new ArenaTeam(Team.YELLOW,
+					//							new Location(world, 72, 66, 33),
+					//							new Location(world, 77, 66, 32),
+					//							1, 1,
+					//							new Location[]{new Location(world, 65, 66, 33), new Location(world, 64, 66, 33)},
+					//							new Gamer[]{new Gamer(getServer().getPlayer("Faience"), Team.YELLOW)});
+					//
+					//					ArenaTeam white = new ArenaTeam(Team.WHITE,
+					//							new Location(world, -33, 66, 72),
+					//							new Location(world, -32, 66, 77),
+					//							1, 1,
+					//							new Location[]{new Location(world, -33, 66, 65), new Location(world, -33, 66, 64)},
+					//							new Gamer[]{new Gamer(getServer().getPlayer("aromazx"), Team.WHITE)});
+					//
+					//					Arena arena = new Arena(new ArenaTeam[] {gray, green, yellow, white}, diamonds, emeralds);
+					//					arena.start();
 
 				}
 

@@ -104,27 +104,25 @@ public class GameScoreboard {
 		
 		if (tsd.getTeamData() != null) sb.resetScores(tsd.getTeamData());
 		
+		int alive = 0;
 		
+		for (Gamer gamer : team.getGamers()) {
+			
+			if (gamer.getStatus() != Status.DEAD) {
+				
+				alive++;
+				
+			}
+			
+		}
 		
 		String indicator;
 		
-		if (team.bedExists()) {
+		if (team.bedExists() && alive > 0) {
 			
 			indicator = ChatColor.GREEN + "" + ChatColor.BOLD + "✓";
 			
 		} else {
-			
-			int alive = 0;
-			
-			for (Gamer gamer : team.getGamers()) {
-				
-				if (gamer.getStatus() != Status.DEAD) {
-					
-					alive++;
-					
-				}
-				
-			}
 			
 			if (alive > 0) {
 				
