@@ -10,6 +10,14 @@ commands:
   wedbars:
     description: Information about Wed Bars
     aliases: [wb]
+  load:
+    description: Load
+  setup:
+    description: Setup
+  team:
+    description: Team
+  start:
+    description: Start
   test:
     description: Test
   itemshop:
@@ -17,5 +25,5 @@ commands:
 permissions:
   wedbars.itemshop:
     default: false
-  wedbars.debug:
+  wedbars.admin:
     default: op

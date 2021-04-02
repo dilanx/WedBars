@@ -5,12 +5,14 @@ import java.util.Arrays;
 import org.bukkit.Bukkit;
 import org.bukkit.Color;
 import org.bukkit.Material;
+import org.bukkit.block.Block;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.LeatherArmorMeta;
+import org.bukkit.util.BlockIterator;
 
 public class Utility {
 
@@ -20,7 +22,7 @@ public class Utility {
 		Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "title " + player.getName() +
 				" times 0 100 20");
 		Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "title " + player.getName() +
-				" subtitle {\"text\":\"\",}");
+				" subtitle {\"text\":\"\"}");
 		Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "title " + player.getName() +
 				" title {\"text\":\"VICTORY\",\"color\":\"green\"}");
 
@@ -31,7 +33,7 @@ public class Utility {
 		Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "title " + player.getName() +
 				" times 0 100 20");
 		Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "title " + player.getName() +
-				" subtitle {\"text\":\"\",}");
+				" subtitle {\"text\":\"\"}");
 		Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "title " + player.getName() +
 				" title {\"text\":\"DEFEAT\",\"color\":\"red\"}");
 
@@ -190,6 +192,31 @@ public class Utility {
 		return stack;
 
 	}
+	
+	// i found this online LMAO
+	public static Block getTargetBlock(Player player) {
+		
+		BlockIterator iter = new BlockIterator(player, 5);
+		
+        Block lastBlock = iter.next();
+        
+        while (iter.hasNext()) {
+        	
+            lastBlock = iter.next();
+            
+            if (lastBlock.getType() == Material.AIR) {
+            	
+                continue;
+                
+            }
+            
+            break;
+            
+        }
+        
+        return lastBlock;
+		
+	}
 
 	public static String timeFormat(int gamerTicks) {
 
@@ -200,6 +227,5 @@ public class Utility {
 		return minutes + ":" + (seconds < 10 ? "0" + seconds : seconds);
 
 	}
-
 
 }

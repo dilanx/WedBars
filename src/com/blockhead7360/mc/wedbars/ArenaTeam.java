@@ -5,6 +5,8 @@ import org.bukkit.Location;
 public class ArenaTeam {
 	
 	private Team team;
+	private Location generatorLoc;
+	private int emeraldspeed;
 	private Generator ironGenerator, goldGenerator, emeraldGenerator;
 	private boolean bedExists;
 	private Location spawnLoc;
@@ -12,19 +14,27 @@ public class ArenaTeam {
 	
 	private Gamer[] gamers;
 	
-	public ArenaTeam(Team team, Location spawnLoc, Location generatorLoc, Location[] bedLoc, Gamer[] gamers) {
+	public ArenaTeam(Team team, Location spawnLoc, Location generatorLoc, int ironspeed, int goldspeed, int personalemeraldspeed, Location[] bedLoc, Gamer[] gamers) {
 		
 		this.team = team;
 		
-		this.ironGenerator = new Generator(generatorLoc, WedBars.IRON1_SPEED);
-		this.goldGenerator = new Generator(generatorLoc, WedBars.GOLD1_SPEED);
+		this.generatorLoc = generatorLoc;
+		this.ironGenerator = new Generator(generatorLoc, ironspeed);
+		this.goldGenerator = new Generator(generatorLoc, goldspeed);
 		this.emeraldGenerator = null;
+		this.emeraldspeed = personalemeraldspeed;
 		
 		this.bedExists = true;
 		
 		this.spawnLoc = spawnLoc;
 		this.bedLoc = bedLoc;
 		this.gamers = gamers;
+		
+	}
+	
+	public void createEmeraldGenerator() {
+		
+		this.emeraldGenerator = new Generator(generatorLoc, emeraldspeed);
 		
 	}
 
@@ -58,6 +68,25 @@ public class ArenaTeam {
 
 	public void setGamers(Gamer[] gamers) {
 		this.gamers = gamers;
+	}
+	
+	public void removeGamer(Gamer gamer) {
+		
+		Gamer[] now = new Gamer[gamers.length - 1];
+		
+		int setIndex = 0;
+		
+		for (int i = 0; i < gamers.length; i++) {
+			
+			if (!gamers[i].getPlayer().getName().equals(gamer.getPlayer().getName())) {
+				
+				now[setIndex] = gamers[setIndex];
+				setIndex++;
+				
+			}
+			
+		}
+		
 	}
 
 	public Location getSpawnLoc() {
