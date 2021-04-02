@@ -1,0 +1,5 @@
+#Sets the max build height for players during the game (int, in blocks)
+maxBuildHeight: 90
+
+#Sets the fuse time for tnt once placed (int, in ticks)
+tntFuse: 60

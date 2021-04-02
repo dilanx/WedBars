@@ -29,8 +29,6 @@ public class WedBars extends JavaPlugin {
 
 	// speeds (interval between spawns in 10*seconds)
 
-	public static final int MAX_EMERALDS_IN_GEN = 3;
-	public static final int MAX_DIAMONDS_IN_GEN = 3;
 
 
 	// forge scales
@@ -59,13 +57,12 @@ public class WedBars extends JavaPlugin {
 
 	//public static final int GOLD1_SPEED = 60;
 
-	public static final int RESPAWN_TIME = 50;
 
 	// not gamerTicks, this one is seconds
-	public static final int TIME_BETWEEN_END_AND_RESET = 10;
+	public static int TIME_BETWEEN_END_AND_RESET = 0, MAX_DIAMONDS_IN_GEN = 0, MAX_EMERALDS_IN_GEN = 0;
 	
 	
-	public static int MAX_BUILD_HEIGHT = 0, TNT_FUSE = 0;
+	public static int MAX_BUILD_HEIGHT = 0, TNT_FUSE = 0, RESPAWN_TIME = 0, VOID_LEVEL = 0;
 
 
 	private static WedBars instance;
@@ -89,7 +86,11 @@ public class WedBars extends JavaPlugin {
 		
 		MAX_BUILD_HEIGHT = getConfig().getInt("maxBuildHeight");
 		TNT_FUSE = getConfig().getInt("tntFuse");
-		
+		TIME_BETWEEN_END_AND_RESET = getConfig().getInt("timeBeforeReset");
+		MAX_DIAMONDS_IN_GEN = getConfig().getInt("maxDiamondsInGen");
+		MAX_EMERALDS_IN_GEN = getConfig().getInt("maxEmeraldsInGen");
+		VOID_LEVEL = getConfig().getInt("voidLevel");
+		RESPAWN_TIME = getConfig().getInt("respawnTime");
 
 	}
 

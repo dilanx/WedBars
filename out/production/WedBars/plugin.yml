@@ -1,0 +1,29 @@
+name: WedBars
+version: 1.0
+main: com.blockhead7360.mc.wedbars.WedBars
+author: Blockhead7360
+description: It's like Bed Wars on Hypixel but better I swear
+website: https://github.com/dilanx/WedBars
+depend: [HolographicDisplays]
+
+commands:
+  wedbars:
+    description: Information about Wed Bars
+    aliases: [wb]
+  load:
+    description: Load
+  setup:
+    description: Setup
+  team:
+    description: Team
+  start:
+    description: Start
+  test:
+    description: Test
+  itemshop:
+    description: ItemShop
+permissions:
+  wedbars.itemshop:
+    default: false
+  wedbars.admin:
+    default: op
