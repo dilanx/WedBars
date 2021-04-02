@@ -63,6 +63,9 @@ public class WedBars extends JavaPlugin {
 
 	// not gamerTicks, this one is seconds
 	public static final int TIME_BETWEEN_END_AND_RESET = 10;
+	
+	
+	public static int MAX_BUILD_HEIGHT = 0, TNT_FUSE = 0;
 
 
 	private static WedBars instance;
@@ -83,6 +86,10 @@ public class WedBars extends JavaPlugin {
 		instance = this;
 
 		saveDefaultConfig();
+		
+		MAX_BUILD_HEIGHT = getConfig().getInt("maxBuildHeight");
+		TNT_FUSE = getConfig().getInt("tntFuse");
+		
 
 	}
 
@@ -134,9 +141,9 @@ public class WedBars extends JavaPlugin {
 			
 			Arena arena = new Arena(loadedArena, teamAssignments);
 
-			if (loadedArena.getAllTeams().size() <= 1 || arena.getTeams().size() <= 1) {
+			if (arena.getTeams().size() < 2) {
 
-				sender.sendMessage("You must have two or more teams/players in order to start a game.");
+				sender.sendMessage("You must have two or more teams in order to start a game.");
 				return true;
 
 			}

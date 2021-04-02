@@ -34,64 +34,64 @@ public class Arena {
 	private Generator[] emeralds;
 
 	public Arena(ArenaData data, TeamAssignments teamAssignments) {
-		
+
 		this.lobby = data.getLobby();
-		
+
 		List<Location> dg = data.getDiamondGen();
 		int ds = data.getDiamondSpeed();
-		
+
 		diamonds = new Generator[dg.size()];
-		
+
 		for (int i = 0; i < dg.size(); i++) {
-			
+
 			diamonds[i] = new Generator(dg.get(i), ds);
-			
+
 		}
-		
-		
+
+
 		List<Location> eg = data.getEmeraldGen();
 		int es = data.getEmeraldSpeed();
-		
+
 		emeralds = new Generator[eg.size()];
-		
+
 		for (int i = 0; i < eg.size(); i++) {
-			
+
 			emeralds[i] = new Generator(eg.get(i), es);
-			
+
 		}
 
 		this.world = diamonds[0].getLocation().getWorld();
-		
+
 		this.teams = new HashMap<Team, ArenaTeam>();
 		this.gamers = new HashMap<String, Gamer>();
-		
+
 		Map<Team, List<String>> ta = teamAssignments.getTeamAssignments();
-		
+
 		for (Team team : ta.keySet()) {
-			
+
 			ArenaTeamData atd = data.getTeamData(team);
 			List<String> players = ta.get(team);
-			
+
 			Gamer[] g = new Gamer[players.size()];
-			
+
 			for (int i = 0; i < players.size(); i++) {
-				
+
 				Gamer gamer = new Gamer(Bukkit.getPlayer(players.get(i)), team);
 				g[i] = gamer;
-				
+
 				gamers.put(players.get(i), gamer);
-				
+
 			}
-			
-			
+
+
 			ArenaTeam at = new ArenaTeam(team, atd.getSpawn(), atd.getGenerator(),
 					data.getIronSpeed(), data.getGoldSpeed(), data.getPersonalEmeraldSpeed(),
 					atd.getBed(), g);
-			
+
 			teams.put(team, at);
-			
-			
-			
+
+
+
 		}
 
 	}
@@ -372,19 +372,20 @@ public class Arena {
 	public Gamer getGamer(String name) {
 		return gamers.get(name);
 	}
-	public Map<String, Gamer> getGamers() { return gamers; }
-	
+
 	public void deleteGamer(Gamer gamer) {
-		
+
 		getTeam(gamer.getTeam()).removeGamer(gamer);
 		gamers.remove(gamer.getPlayer().getName());
-		
+
 	}
 
 	public ArenaTeam getTeam(Team team) {
 		return teams.get(team);
 	}
-	public Map<Team, ArenaTeam> getTeams() { return teams;}
+	public Map<Team, ArenaTeam> getTeams() {
+		return teams;
+	}
 
 	public boolean checkForEndGame() {
 
@@ -464,15 +465,15 @@ public class Arena {
 					if (time <= 0) {
 
 						cancel();
-						
+
 						for (Player player : Bukkit.getOnlinePlayers()) {
-							
+
 							player.teleport(lobby);
 							player.setGameMode(GameMode.SURVIVAL);
 							WedBars.arena = null;
-							
+
 						}
-						
+
 						resetBlocks();
 
 					}
@@ -482,11 +483,11 @@ public class Arena {
 				}
 
 			}.runTaskTimer(WedBars.getInstance(), 0, 20L);
-			
+
 			return true;
 
 		}
-		
+
 		return false;
 
 	}
@@ -494,7 +495,7 @@ public class Arena {
 	public void resetBlocks() {
 
 		WedBars.resetting = true;
-		
+
 		Bukkit.broadcastMessage(" ");
 		Bukkit.broadcastMessage(ChatColor.GRAY + "The map is resetting...");
 		Bukkit.broadcastMessage(" ");
