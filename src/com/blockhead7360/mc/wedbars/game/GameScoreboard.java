@@ -57,6 +57,10 @@ public class GameScoreboard {
 		Objective o = sb.registerNewObjective("health", "health");
 		o.setDisplayName(ChatColor.RED + "HP");
 		o.setDisplaySlot(DisplaySlot.BELOW_NAME);
+		
+		Objective o1 = sb.registerNewObjective("health1", "health");
+		o1.setDisplaySlot(DisplaySlot.PLAYER_LIST);
+		
 		obj = sb.registerNewObjective("game", "dummy");
 		obj.setDisplayName(ChatColor.YELLOW + "" + ChatColor.BOLD + "WED BARS");
 		obj.setDisplaySlot(DisplaySlot.SIDEBAR);

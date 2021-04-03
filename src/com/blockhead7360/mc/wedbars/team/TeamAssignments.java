@@ -76,6 +76,8 @@ public class TeamAssignments {
 			ta.get(team).add(player.getName());
 
 		}
+		
+		player.setPlayerListName(team.getChatColor() + player.getName());
 
 	}
 
