@@ -40,9 +40,131 @@ public class Shop implements Listener {
 		selected = Utility.createIconItemStack(Material.STAINED_GLASS_PANE, 1, (short) 14, ChatColor.GRAY + "Selected");
 		unselected = Utility.createIconItemStack(Material.STAINED_GLASS_PANE, 1, (short) 15, " ");
 
+	}
 
+	public static void openTeamUpgrades(Player player) {
 
+		if (WedBars.arena == null) return;
 
+		Inventory inv = Bukkit.createInventory(null, 54, ChatColor.BOLD + "Team Upgrades");
+
+		teamUpgrades_inv(player, inv);
+
+		player.playSound(player.getLocation(), Sound.NOTE_PLING, 1, 1);
+
+		player.openInventory(inv);
+
+	}
+
+	public static void teamUpgrades_inv(Player player, Inventory inv) {
+
+		inv.clear();
+
+		ArenaTeam team = WedBars.arena.getTeam(WedBars.arena.getGamer(player.getName()).getTeam());
+
+		EnchantmentSet[] sel = {new EnchantmentSet(Enchantment.DURABILITY, 1)};
+		EnchantmentSet[] unsel = new EnchantmentSet[0];
+		ItemStack locked = Utility.createIconItemStack(Material.BARRIER, 1, ChatColor.RED + "Locked",
+				ChatColor.GRAY + "Purchase the upgrade above to", ChatColor.GRAY + "unlock this one.");
+
+		boolean[] has = team.getUpgrades();		
+
+		// sharpened swords
+
+		inv.setItem(10, Utility.createHiddenEnchantedItemStack(Material.DIAMOND_SWORD, 1, ChatColor.GREEN + "Sharpened Swords",
+				(has[TeamUpgrade.SWORDS] ? sel : unsel),
+				ChatColor.GRAY + "Receive permanent Sharpness I", ChatColor.GRAY + "on all swords.", "",
+				ChatColor.GRAY + "Price: " + ChatColor.AQUA + "4 diamond", (has[TeamUpgrade.SWORDS] ? ChatColor.GREEN + "ACTIVE" : "")));
+
+		// heal pool
+
+		inv.setItem(19, Utility.createHiddenEnchantedItemStack(Material.APPLE, 1, ChatColor.GREEN + "Heal Pool",
+				(has[TeamUpgrade.HEAL] ? sel : unsel),
+				ChatColor.GRAY + "Get a regeneration effect when you", ChatColor.GRAY + "or your team members are at your base.", "",
+				ChatColor.GRAY + "Price: " + ChatColor.AQUA + "1 diamond", (has[TeamUpgrade.HEAL] ? ChatColor.GREEN + "ACTIVE" : "")));
+
+		// armor
+
+		inv.setItem(3, Utility.createHiddenEnchantedItemStack(Material.CHAINMAIL_CHESTPLATE, 1, ChatColor.YELLOW + "Average Armor",
+				(has[TeamUpgrade.ARMOR1] ? sel : unsel),
+				ChatColor.GRAY + "Receive permanent Protection I", ChatColor.GRAY + "on all armor pieces.", "",
+				ChatColor.GRAY + "Price: " + ChatColor.AQUA + "2 diamond", (has[TeamUpgrade.ARMOR1] ? ChatColor.GREEN + "ACTIVE" : "")));
+
+		if (has[TeamUpgrade.ARMOR1])
+			inv.setItem(12, Utility.createHiddenEnchantedItemStack(Material.IRON_CHESTPLATE, 1, ChatColor.YELLOW + "Nice Armor",
+					(has[TeamUpgrade.ARMOR2] ? sel : unsel),
+					ChatColor.GRAY + "Receive permanent Protection II", ChatColor.GRAY + "on all armor pieces.", "",
+					ChatColor.GRAY + "Price: " + ChatColor.AQUA + "4 diamond", (has[TeamUpgrade.ARMOR2] ? ChatColor.GREEN + "ACTIVE" : "")));
+		else
+			inv.setItem(12, locked);
+
+		if (has[TeamUpgrade.ARMOR2])
+			inv.setItem(21, Utility.createHiddenEnchantedItemStack(Material.GOLD_CHESTPLATE, 1, ChatColor.YELLOW + "Gamer Armor (cool kids only)",
+					(has[TeamUpgrade.ARMOR3] ? sel : unsel),
+					ChatColor.GRAY + "Receive permanent Protection III", ChatColor.GRAY + "on all armor pieces.", "",
+					ChatColor.GRAY + "Price: " + ChatColor.AQUA + "8 diamond", (has[TeamUpgrade.ARMOR3] ? ChatColor.GREEN + "ACTIVE" : "")));
+		else
+			inv.setItem(21, locked);
+
+		if (has[TeamUpgrade.ARMOR3])
+			inv.setItem(30, Utility.createHiddenEnchantedItemStack(Material.DIAMOND_CHESTPLATE, 1, ChatColor.YELLOW + "THIS ARMOR IS CRACKED AT MC MY GUY",
+					(has[TeamUpgrade.ARMOR4] ? sel : unsel),
+					ChatColor.GRAY + "Receive permanent Protection IV", ChatColor.GRAY + "on all armor pieces.", "",
+					ChatColor.GRAY + "Price: " + ChatColor.AQUA + "16 diamond", (has[TeamUpgrade.ARMOR4] ? ChatColor.GREEN + "ACTIVE" : "")));
+		else
+			inv.setItem(30, locked);
+
+		// mine
+
+		inv.setItem(14, Utility.createHiddenEnchantedItemStack(Material.IRON_PICKAXE, 1, ChatColor.YELLOW + "Pog Miner 1",
+				(has[TeamUpgrade.MINE1] ? sel : unsel),
+				ChatColor.GRAY + "Receive permanent Haste I", ChatColor.GRAY + "", "",
+				ChatColor.GRAY + "Price: " + ChatColor.AQUA + "2 diamond", (has[TeamUpgrade.MINE1] ? ChatColor.GREEN + "ACTIVE" : "")));
+
+		if (has[TeamUpgrade.MINE1])
+			inv.setItem(23, Utility.createHiddenEnchantedItemStack(Material.GOLD_PICKAXE, 1, ChatColor.YELLOW + "Pog Miner 2",
+					(has[TeamUpgrade.MINE2] ? sel : unsel),
+					ChatColor.GRAY + "Receive permanent Haste II", ChatColor.GRAY + "", "",
+					ChatColor.GRAY + "Price: " + ChatColor.AQUA + "4 diamond", (has[TeamUpgrade.MINE2] ? ChatColor.GREEN + "ACTIVE" : "")));
+		else
+			inv.setItem(23, locked);
+
+		// forge
+
+		inv.setItem(7, Utility.createHiddenEnchantedItemStack(Material.CHAINMAIL_CHESTPLATE, 1, ChatColor.YELLOW + "Average Armor",
+				(has[TeamUpgrade.FORGE1] ? sel : unsel),
+				ChatColor.GRAY + "Vroom vroom generator go faster", ChatColor.GRAY + "", "",
+				ChatColor.GRAY + "Price: " + ChatColor.AQUA + "2 diamond", (has[TeamUpgrade.FORGE1] ? ChatColor.GREEN + "ACTIVE" : "")));
+
+		if (has[TeamUpgrade.FORGE1])
+			inv.setItem(16, Utility.createHiddenEnchantedItemStack(Material.IRON_CHESTPLATE, 1, ChatColor.YELLOW + "Nice Armor",
+					(has[TeamUpgrade.FORGE2] ? sel : unsel),
+					ChatColor.GRAY + "Vroom vroom generator go even faster", ChatColor.GRAY + "", "",
+					ChatColor.GRAY + "Price: " + ChatColor.AQUA + "4 diamond", (has[TeamUpgrade.FORGE2] ? ChatColor.GREEN + "ACTIVE" : "")));
+		else
+			inv.setItem(16, locked);
+
+		if (has[TeamUpgrade.FORGE2])
+			inv.setItem(25, Utility.createHiddenEnchantedItemStack(Material.GOLD_CHESTPLATE, 1, ChatColor.YELLOW + "Gamer Armor (cool kids only)",
+					(has[TeamUpgrade.FORGE3] ? sel : unsel),
+					ChatColor.GRAY + "Vroom vroom generator go EVEN faster", ChatColor.GRAY + "", "",
+					ChatColor.GRAY + "Price: " + ChatColor.AQUA + "6 diamond", (has[TeamUpgrade.FORGE3] ? ChatColor.GREEN + "ACTIVE" : "")));
+		else
+			inv.setItem(25, locked);
+
+		if (has[TeamUpgrade.FORGE3])
+			inv.setItem(34, Utility.createHiddenEnchantedItemStack(Material.DIAMOND_CHESTPLATE, 1, ChatColor.YELLOW + "THIS ARMOR IS CRACKED AT MC MY GUY",
+					(has[TeamUpgrade.FORGE4] ? sel : unsel),
+					ChatColor.GRAY + "OMG vroom vroom generator go so fast omg", ChatColor.GRAY + "", "",
+					ChatColor.GRAY + "Price: " + ChatColor.AQUA + "8 diamond", (has[TeamUpgrade.FORGE4] ? ChatColor.GREEN + "ACTIVE" : "")));
+		else
+			inv.setItem(34, locked);
+
+		// trap
+
+		inv.setItem(49, Utility.createIconItemStack(Material.STAINED_GLASS, 1, (short) 7, ChatColor.GRAY + "Traps coming soon"));
+
+		return;
 	}
 
 	public static void openItemShop(Player player) {
@@ -56,7 +178,7 @@ public class Shop implements Listener {
 		}
 
 		itemShop_inv(player, inv, ShopPage.QUICK_BUY);
-		
+
 		player.playSound(player.getLocation(), Sound.NOTE_PLING, 1, 1);
 
 		player.openInventory(inv);
@@ -232,10 +354,10 @@ public class Shop implements Listener {
 						ChatColor.GRAY + "Price: " + ChatColor.GOLD + "6 iron");
 
 			} else if (player.getInventory().contains(Material.DIAMOND_PICKAXE)) {
-				
+
 				nextPick = Utility.createEnchantedItemStack(Material.DIAMOND_PICKAXE, 1, ChatColor.YELLOW + "Diamond Pickaxe",
 						new EnchantmentSet[] {new EnchantmentSet(Enchantment.DIG_SPEED, 1)});
-				
+
 			} else {
 
 				nextPick = Utility.createEnchantedItemStack(Material.WOOD_PICKAXE, 1, ChatColor.YELLOW + "Wooden Pickaxe",
@@ -268,7 +390,7 @@ public class Shop implements Listener {
 
 				nextAxe = Utility.createEnchantedItemStack(Material.DIAMOND_AXE, 1, ChatColor.YELLOW + "Diamond Axe",
 						new EnchantmentSet[] {new EnchantmentSet(Enchantment.DIG_SPEED, 1)});
-				
+
 			}else {
 
 				nextAxe = Utility.createEnchantedItemStack(Material.WOOD_AXE, 1, ChatColor.YELLOW + "Wooden Axe",
@@ -384,11 +506,134 @@ public class Shop implements Listener {
 	@EventHandler
 	public void onInventoryClick(InventoryClickEvent e) {
 
+		if (e.getView().getTitle().equals(ChatColor.BOLD + "Team Upgrades")) {
+
+			e.setCancelled(true);
+
+			if (e.getCurrentItem() == null || e.getCurrentItem().getType() == Material.AIR) return;
+
+			if (e.getRawSlot() > 53) return;
+
+			Player player = (Player) e.getWhoClicked();
+
+			ItemStack item = e.getCurrentItem();
+
+			if (item.hasItemMeta()) {
+
+				ItemMeta meta = item.getItemMeta();
+
+				if (meta.hasLore()) {
+
+					List<String> lore = meta.getLore();
+
+					if (lore.size() > 0) {
+
+						String active = lore.get(lore.size() - 1);
+
+						if (!ChatColor.stripColor(active).equals("ACTIVE")) {
+							
+							int upgrade = -1;
+							
+							switch (item.getType()) {
+							
+							case DIAMOND_SWORD:
+								upgrade = TeamUpgrade.SWORDS;
+								break;
+								
+							case APPLE:
+								upgrade = TeamUpgrade.HEAL;
+								break;
+								
+							case CHAINMAIL_CHESTPLATE:
+								upgrade = TeamUpgrade.ARMOR1;
+								break;
+								
+							case IRON_CHESTPLATE:
+								upgrade = TeamUpgrade.ARMOR2;
+								break;
+								
+							case GOLD_CHESTPLATE:
+								upgrade = TeamUpgrade.ARMOR3;
+								break;
+								
+							case DIAMOND_CHESTPLATE:
+								upgrade = TeamUpgrade.ARMOR4;
+								break;
+								
+							case IRON_PICKAXE:
+								upgrade = TeamUpgrade.MINE1;
+								break;
+								
+							case GOLD_PICKAXE:
+								upgrade = TeamUpgrade.MINE2;
+								break;
+								
+							case IRON_INGOT:
+								upgrade = TeamUpgrade.FORGE1;
+								break;
+								
+							case GOLD_INGOT:
+								upgrade = TeamUpgrade.FORGE2;
+								break;
+								
+							case EMERALD:
+								upgrade = TeamUpgrade.FORGE3;
+								break;
+								
+							case GOLD_BLOCK:
+								upgrade = TeamUpgrade.FORGE4;
+								break;
+								
+							default:
+								break;
+							
+							} 
+							
+							if (upgrade < 0) {
+								
+								player.sendMessage(ChatColor.RED + "Error");
+								return;
+								
+							}
+							
+							String[] price = ChatColor.stripColor(lore.get(3)).split(" ");
+
+							int number = Integer.parseInt(price[1]);
+
+							Material type = txt2mat(price[2]);
+
+							boolean success = purchaseUpgrade(player, TeamUpgrade.ARMOR1, number, type);
+							
+							if (success) {
+								
+								player.playSound(player.getLocation(), Sound.NOTE_PLING, 1, 2);
+								teamUpgrades_inv(player, e.getInventory());
+								return;
+								
+							}
+
+						}
+
+					}
+
+
+				}
+
+			}
+
+			player.playSound(player.getLocation(), Sound.ANVIL_LAND, 1, 1);
+			return;
+
+
+		}
+
 		if (e.getView().getTitle().equals(ChatColor.BOLD + "Item Store")) {
 
 			e.setCancelled(true);
 
-			if (e.getCurrentItem() == null) return;
+			if (e.getCurrentItem() == null || e.getCurrentItem().getType() == Material.AIR) return;
+
+
 
 			Player player = (Player) e.getWhoClicked();
 
@@ -421,9 +666,9 @@ public class Shop implements Listener {
 						boolean success = purchaseItem(player, stack, number, type);
 
 						if (success) {
-							
+
 							player.playSound(player.getLocation(), Sound.NOTE_PLING, 1, 2);
-							
+
 							int page = 0;
 
 							for (int i = 0; i < 8; i++) {
@@ -444,12 +689,41 @@ public class Shop implements Listener {
 					}
 
 				}
-				
+
 				player.playSound(player.getLocation(), Sound.ANVIL_LAND, 1, 1);
 
 			}
 
 		}
+
+	}
+
+	public boolean purchaseUpgrade(Player player, int upgrade, int cost, Material type) {
+
+		Gamer gamer = WedBars.arena.getGamer(player.getName());
+		ArenaTeam team = WedBars.arena.getTeam(gamer.getTeam());
+		
+		boolean has = player.getInventory().contains(type, cost);
+
+		if (!has) {
+
+			player.sendMessage(ChatColor.RED + "Not enough resources!");
+			return false;
+
+		}
+		
+		switch (upgrade) {
+		
+		case TeamUpgrade.SWORDS:
+			
+			
+			
+		
+		
+		
+		}
+		
+		return true;
 
 	}
 
@@ -482,18 +756,33 @@ public class Shop implements Listener {
 			player.getInventory().remove(Material.DIAMOND_PICKAXE);
 
 		}
-		
+
 		if (stack.getType().toString().endsWith("_AXE")) {
-			
+
 			player.getInventory().remove(Material.WOOD_AXE);
 			player.getInventory().remove(Material.STONE_AXE);
 			player.getInventory().remove(Material.IRON_AXE);
 			player.getInventory().remove(Material.DIAMOND_AXE);
-			
+
 		}
 
 		ItemStack item = stack.clone();
 		ItemMeta meta = item.getItemMeta();
+		
+		if (stack.getType().toString().endsWith("_SWORD")) {
+			
+			if (WedBars.arena != null) {
+				
+				if (WedBars.arena.getTeam(WedBars.arena.getGamer(player.getName()).getTeam()).hasUpgrade(TeamUpgrade.SWORDS)) {
+					
+					meta.addEnchant(Enchantment.DAMAGE_ALL, 1, true);
+					
+				}
+				
+			}
+			
+		}
+		
 		meta.setLore(null);
 		item.setItemMeta(meta);
 

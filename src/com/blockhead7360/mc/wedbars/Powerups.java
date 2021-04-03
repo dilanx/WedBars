@@ -142,16 +142,4 @@ public class Powerups implements Listener {
 
     }
 
-    @EventHandler
-    public void entityDamageEntity(EntityDamageByEntityEvent e) {
-
-        if (e.getDamager() instanceof Arrow && e.getEntity() instanceof Player) {
-            Arrow a = (Arrow)e.getDamager();
-           // World w = e.getEntity().getLocation().getWorld();
-            Player p = (Player)a.getShooter();
-            DecimalFormat round = new DecimalFormat("##.#");
-          //  w.playSound(p.getLocation(), Sound.ORB_PICKUP, 1, 1);
-            p.sendMessage(((Player) e.getEntity()).getPlayer().getDisplayName() + ChatColor.GRAY + " is now at " + ChatColor.RED + round.format((((Player) e.getEntity()).getHealth() - e.getFinalDamage())) + " HP" );
-        }
-    }
 }

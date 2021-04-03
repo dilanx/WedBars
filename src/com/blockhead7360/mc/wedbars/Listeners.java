@@ -1,5 +1,6 @@
 package com.blockhead7360.mc.wedbars;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -9,6 +10,8 @@ import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.Sound;
+import org.bukkit.World;
+import org.bukkit.entity.Arrow;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.TNTPrimed;
@@ -16,6 +19,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
+import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.inventory.ItemStack;
@@ -47,6 +51,18 @@ public class Listeners implements Listener {
 		placedBlocks.remove(index);
 
 	}
+	
+    @EventHandler
+    public void entityDamageEntity(EntityDamageByEntityEvent e) {
+
+        if (e.getDamager() instanceof Arrow && e.getEntity() instanceof Player) {
+            Arrow a = (Arrow)e.getDamager();
+            Player p = (Player)a.getShooter();
+            DecimalFormat round = new DecimalFormat("##.#");
+            p.sendMessage(((Player) e.getEntity()).getPlayer().getDisplayName() + ChatColor.GRAY + " is now at " + ChatColor.RED + round.format((((Player) e.getEntity()).getHealth() - e.getFinalDamage())) + " HP" );
+        }
+        
+    }
 
 	@EventHandler
 	public void blockPlaced(BlockPlaceEvent event) {

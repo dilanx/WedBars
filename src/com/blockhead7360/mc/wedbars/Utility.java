@@ -132,6 +132,22 @@ public class Utility {
 		return stack;
 
 	}
+	
+	public static ItemStack createHiddenEnchantedItemStack(Material mat, int amount, String displayName, EnchantmentSet[] enchants, String... lore) {
+
+		ItemStack stack = new ItemStack(mat, amount);
+		ItemMeta meta = stack.getItemMeta();
+		meta.setDisplayName(displayName);
+		if (lore != null) meta.setLore(Arrays.asList(lore));
+		for (EnchantmentSet e : enchants) {
+			meta.addEnchant(e.getEnchantment(), e.getLevel(), true);
+		}
+		meta.spigot().setUnbreakable(true);
+		meta.addItemFlags(ItemFlag.HIDE_UNBREAKABLE, ItemFlag.HIDE_ENCHANTS);
+		stack.setItemMeta(meta);
+		return stack;
+
+	}
 
 	public static class EnchantmentSet {
 

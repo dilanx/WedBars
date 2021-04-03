@@ -11,17 +11,17 @@ commands:
     description: Information about Wed Bars
     aliases: [wb]
   load:
-    description: Load
+    description: Loads a given arena.
   setup:
-    description: Setup
+    description: Enter the arena setup wizard.
   team:
-    description: Team
+    description: Assign a player to a team.
   start:
-    description: Start
+    description: Starts the game.
   test:
-    description: Test
+    description: Test?
   itemshop:
-    description: ItemShop
+    description: Opens the itemshop, for use with NPCs.
 permissions:
   wedbars.itemshop:
     default: false

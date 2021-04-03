@@ -48,6 +48,9 @@ public class GameScoreboard {
 	public static void start(ArenaTeam[] teams) {
 		
 		sb = Bukkit.getScoreboardManager().getNewScoreboard();
+		Objective o = sb.registerNewObjective("health", "health");
+		o.setDisplayName(ChatColor.RED + "HP");
+		o.setDisplaySlot(DisplaySlot.BELOW_NAME);
 		obj = sb.registerNewObjective("game", "dummy");
 		obj.setDisplayName(ChatColor.YELLOW + "" + ChatColor.BOLD + "WED BARS");
 		obj.setDisplaySlot(DisplaySlot.SIDEBAR);

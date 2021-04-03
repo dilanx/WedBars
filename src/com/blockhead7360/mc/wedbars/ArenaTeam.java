@@ -14,6 +14,8 @@ public class ArenaTeam {
 	
 	private Gamer[] gamers;
 	
+	private boolean[] upgrades;
+	
 	public ArenaTeam(Team team, Location spawnLoc, Location generatorLoc, int ironspeed, int goldspeed, int personalemeraldspeed, Location[] bedLoc, Gamer[] gamers) {
 		
 		this.team = team;
@@ -29,6 +31,8 @@ public class ArenaTeam {
 		this.spawnLoc = spawnLoc;
 		this.bedLoc = bedLoc;
 		this.gamers = gamers;
+		
+		this.upgrades = new boolean[TeamUpgrade.SIZE];
 		
 	}
 	
@@ -119,6 +123,18 @@ public class ArenaTeam {
 
 	public void setBedExists(boolean bedExists) {
 		this.bedExists = bedExists;
+	}
+	
+	public boolean hasUpgrade(int upgrade) {
+		return upgrades[upgrade];
+	}
+	
+	public void addUpgrade(int upgrade) {
+		upgrades[upgrade] = true;
+	}
+	
+	public boolean[] getUpgrades() {
+		return upgrades;
 	}
 	
 	
