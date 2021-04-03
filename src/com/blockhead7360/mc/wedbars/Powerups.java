@@ -147,11 +147,11 @@ public class Powerups implements Listener {
 
         if (e.getDamager() instanceof Arrow && e.getEntity() instanceof Player) {
             Arrow a = (Arrow)e.getDamager();
-            World w = e.getEntity().getLocation().getWorld();
+           // World w = e.getEntity().getLocation().getWorld();
             Player p = (Player)a.getShooter();
             DecimalFormat round = new DecimalFormat("##.#");
-            w.playSound(p.getLocation(), Sound.ORB_PICKUP, 1, 1);
-            p.sendMessage(((Player) e.getEntity()).getPlayer().getDisplayName() + ChatColor.YELLOW + " is now at " + ChatColor.RED + round.format((((Player) e.getEntity()).getHealth() - e.getFinalDamage())) + " HP" );
+          //  w.playSound(p.getLocation(), Sound.ORB_PICKUP, 1, 1);
+            p.sendMessage(((Player) e.getEntity()).getPlayer().getDisplayName() + ChatColor.GRAY + " is now at " + ChatColor.RED + round.format((((Player) e.getEntity()).getHealth() - e.getFinalDamage())) + " HP" );
         }
     }
 }

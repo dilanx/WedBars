@@ -9,8 +9,8 @@ tntFuse: 60
 voidLevel: 0
 
 # How many diamonds that have yet to be picked up can sit in a generator at once.
-# (int, number of diamonds) default: 6
-maxDiamondsInGen: 6
+# (int, number of diamonds) default: 8
+maxDiamondsInGen: 8
 
 # How many emeralds that have yet to be picked up can sit in a generator at once.
 # (int, number of emeralds) default: 6
