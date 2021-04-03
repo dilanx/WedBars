@@ -1,5 +1,5 @@
 name: WedBars
-version: 1.0
+version: 1.0_beta1
 main: com.blockhead7360.mc.wedbars.WedBars
 author: Blockhead7360
 description: It's like Bed Wars on Hypixel but better I swear
@@ -21,7 +21,9 @@ commands:
   test:
     description: Test?
   itemshop:
-    description: Opens the itemshop, for use with NPCs.
+    description: Opens the item shop, for use with NPCs.
+  teamshop:
+    description: Opens the team shop, for use with NPCs.
 permissions:
   wedbars.itemshop:
     default: false

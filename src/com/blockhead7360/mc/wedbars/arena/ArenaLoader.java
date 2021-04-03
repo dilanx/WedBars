@@ -1,4 +1,4 @@
-package com.blockhead7360.mc.wedbars;
+package com.blockhead7360.mc.wedbars.arena;
 
 import java.io.File;
 import java.io.IOException;
@@ -8,6 +8,10 @@ import org.bukkit.Location;
 import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
+
+import com.blockhead7360.mc.wedbars.WedBars;
+import com.blockhead7360.mc.wedbars.team.ArenaTeamData;
+import com.blockhead7360.mc.wedbars.team.Team;
 
 public class ArenaLoader {
 

@@ -1,4 +1,4 @@
-package com.blockhead7360.mc.wedbars;
+package com.blockhead7360.mc.wedbars.arena;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -17,8 +17,19 @@ import org.bukkit.entity.Entity;
 import org.bukkit.entity.Item;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitRunnable;
 
+import com.blockhead7360.mc.wedbars.Utility;
+import com.blockhead7360.mc.wedbars.WedBars;
+import com.blockhead7360.mc.wedbars.game.GameScoreboard;
+import com.blockhead7360.mc.wedbars.game.Generator;
+import com.blockhead7360.mc.wedbars.player.Gamer;
+import com.blockhead7360.mc.wedbars.player.Status;
+import com.blockhead7360.mc.wedbars.team.ArenaTeam;
+import com.blockhead7360.mc.wedbars.team.ArenaTeamData;
+import com.blockhead7360.mc.wedbars.team.Team;
+import com.blockhead7360.mc.wedbars.team.TeamAssignments;
 import com.gmail.filoghost.holographicdisplays.api.Hologram;
 import com.gmail.filoghost.holographicdisplays.api.HologramsAPI;
 import com.gmail.filoghost.holographicdisplays.api.placeholder.PlaceholderReplacer;
@@ -116,8 +127,11 @@ public class Arena {
 			p.getInventory().clear();
 			p.setHealth(20);
 			p.setGameMode(GameMode.SURVIVAL);
+			p.removePotionEffect(PotionEffectType.FAST_DIGGING);
 
 			p.teleport(at.getSpawnLoc());
+			p.playSound(p.getLocation(), Sound.NOTE_PLING, 1, 1);
+			Utility.sendStartTitle(p, team);
 
 			p.getInventory().setHelmet(Utility.createLeatherArmorPiece(Material.LEATHER_HELMET, team.getColor(), ChatColor.YELLOW + "Leather Helmet"));
 			p.getInventory().setChestplate(Utility.createLeatherArmorPiece(Material.LEATHER_CHESTPLATE, team.getColor(), ChatColor.YELLOW + "Leather Chestplate"));
@@ -130,7 +144,7 @@ public class Arena {
 
 
 		GameScoreboard.start(teams.values().toArray(new ArenaTeam[0]));
-		GameScoreboard.updateStatus(ChatColor.AQUA + "" + ChatColor.BOLD + "not implemented yet");
+		GameScoreboard.updateStatus(ChatColor.AQUA + "nothing yet lol");
 
 		// reset team stuff
 
@@ -165,7 +179,7 @@ public class Arena {
 			Hologram h = HologramsAPI.createHologram(WedBars.getInstance(), d.getLocation().clone().add(0, 3, 0));
 			h.setAllowPlaceholders(true);
 			h.appendTextLine(ChatColor.AQUA + "" + ChatColor.BOLD + "DIAMOND GENERATOR");
-			h.appendTextLine(ChatColor.WHITE + "spawning in " + ChatColor.RED + "{diamond" + i + "}");
+			h.appendTextLine(ChatColor.WHITE + "Spawning in " + ChatColor.RED + "{diamond" + i + "}");
 
 		}
 
@@ -188,14 +202,14 @@ public class Arena {
 
 			h.setAllowPlaceholders(true);
 			h.appendTextLine(ChatColor.GREEN + "" + ChatColor.BOLD + "EMERALD GENERATOR");
-			h.appendTextLine(ChatColor.WHITE + "spawning in " + ChatColor.RED + "{emerald" + i + "}");
+			h.appendTextLine(ChatColor.WHITE + "Spawning in " + ChatColor.RED + "{emerald" + i + "}");
 		}
 
 		// start game
 
 		new BukkitRunnable() {
 
-			int totalTestTime = 6000;
+			int totalTestTime = 36000;
 
 			public void run() {
 
@@ -470,6 +484,7 @@ public class Arena {
 
 							player.teleport(lobby);
 							player.setGameMode(GameMode.SURVIVAL);
+							player.removePotionEffect(PotionEffectType.FAST_DIGGING);
 							WedBars.arena = null;
 
 						}

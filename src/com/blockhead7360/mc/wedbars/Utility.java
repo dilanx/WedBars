@@ -14,9 +14,22 @@ import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.LeatherArmorMeta;
 import org.bukkit.util.BlockIterator;
 
+import com.blockhead7360.mc.wedbars.team.Team;
+
 public class Utility {
 
+	public static void sendStartTitle(Player player, Team team) {
 
+		Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "title " + player.getName() +
+				" times 0 100 20");
+		Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "title " + player.getName() +
+				" subtitle {\"text\":\"" + team.getLabel().toUpperCase() + " TEAM\",\"color\":\""
+				+ team.getChatColor().name().toLowerCase() + "\",\"bold\":true}");
+		Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "title " + player.getName() +
+				" title {\"text\":\"WED BARS\",\"color\":\"yellow\",\"bold\":true}");
+
+	}
+	
 	public static void sendWinTitle(Player player) {
 
 		Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "title " + player.getName() +
@@ -61,7 +74,7 @@ public class Utility {
 			Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "title " + player.getName() +
 					" times 0 100 20");
 			Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "title " + player.getName() +
-					" subtitle {\"text\":\"permanently\",\"color\":\"gray\"}");
+					" subtitle {\"text\":\"PERMANENTLY\",\"color\":\"gray\"}");
 			Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "title " + player.getName() +
 					" title {\"text\":\"YOU DIED!\",\"color\":\"red\"}");
 
@@ -72,9 +85,9 @@ public class Utility {
 		Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "title " + player.getName() +
 				" times 0 30 10");
 		Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "title " + player.getName() +
-				" subtitle [{\"text\":\"respawning in \",\"color\":\"gray\"},{\"text\":\"" + ((time / 10)) + "\",\"color\":\"white\"}]");
+				" subtitle [{\"text\":\"Respawning in \",\"color\":\"gray\"},{\"text\":\"" + ((time / 10)) + "\",\"color\":\"white\"}]");
 		Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "title " + player.getName() +
-				" title {\"text\":\"You died!\",\"color\":\"red\"}");
+				" title {\"text\":\"YOU DIED!\",\"color\":\"red\"}");
 
 		return;
 

@@ -1,4 +1,4 @@
-package com.blockhead7360.mc.wedbars;
+package com.blockhead7360.mc.wedbars.arena;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -7,6 +7,9 @@ import java.util.Map;
 import java.util.Set;
 
 import org.bukkit.Location;
+
+import com.blockhead7360.mc.wedbars.team.ArenaTeamData;
+import com.blockhead7360.mc.wedbars.team.Team;
 
 public class ArenaData {
 	

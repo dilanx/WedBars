@@ -1,4 +1,4 @@
-package com.blockhead7360.mc.wedbars;
+package com.blockhead7360.mc.wedbars.team;
 
 import org.bukkit.ChatColor;
 import org.bukkit.Color;
@@ -11,11 +11,8 @@ public enum Team {
 	YELLOW((short) 4, ChatColor.YELLOW, Color.YELLOW, "Yellow"),
 	AQUA((short) 9, ChatColor.DARK_AQUA, Color.AQUA, "Aqua"),
 	WHITE((short) 0, ChatColor.WHITE, Color.WHITE, "White"),
-	GRAY((short) 15, ChatColor.DARK_GRAY, Color.GRAY, "Gray"),
+	GRAY((short) 7, ChatColor.DARK_GRAY, Color.GRAY, "Gray"),
 	PINK((short) 6, ChatColor.LIGHT_PURPLE, Color.FUCHSIA, "Pink");
-	
-	
-	
 	
 	private final short stackColor;
 	private final ChatColor chat;

@@ -1,4 +1,4 @@
-package com.blockhead7360.mc.wedbars;
+package com.blockhead7360.mc.wedbars.game;
 
 import java.util.List;
 
@@ -11,11 +11,19 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryClickEvent;
+import org.bukkit.event.inventory.InventoryType.SlotType;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.potion.PotionEffect;
+import org.bukkit.potion.PotionEffectType;
 
+import com.blockhead7360.mc.wedbars.Utility;
 import com.blockhead7360.mc.wedbars.Utility.EnchantmentSet;
+import com.blockhead7360.mc.wedbars.WedBars;
+import com.blockhead7360.mc.wedbars.player.Gamer;
+import com.blockhead7360.mc.wedbars.team.ArenaTeam;
+import com.blockhead7360.mc.wedbars.team.TeamUpgrade;
 
 public class Shop implements Listener {
 
@@ -131,13 +139,13 @@ public class Shop implements Listener {
 
 		// forge
 
-		inv.setItem(7, Utility.createHiddenEnchantedItemStack(Material.CHAINMAIL_CHESTPLATE, 1, ChatColor.YELLOW + "Average Armor",
+		inv.setItem(7, Utility.createHiddenEnchantedItemStack(Material.IRON_INGOT, 1, ChatColor.YELLOW + "Better Gen",
 				(has[TeamUpgrade.FORGE1] ? sel : unsel),
 				ChatColor.GRAY + "Vroom vroom generator go faster", ChatColor.GRAY + "", "",
 				ChatColor.GRAY + "Price: " + ChatColor.AQUA + "2 diamond", (has[TeamUpgrade.FORGE1] ? ChatColor.GREEN + "ACTIVE" : "")));
 
 		if (has[TeamUpgrade.FORGE1])
-			inv.setItem(16, Utility.createHiddenEnchantedItemStack(Material.IRON_CHESTPLATE, 1, ChatColor.YELLOW + "Nice Armor",
+			inv.setItem(16, Utility.createHiddenEnchantedItemStack(Material.GOLD_INGOT, 1, ChatColor.YELLOW + "Insane Gen",
 					(has[TeamUpgrade.FORGE2] ? sel : unsel),
 					ChatColor.GRAY + "Vroom vroom generator go even faster", ChatColor.GRAY + "", "",
 					ChatColor.GRAY + "Price: " + ChatColor.AQUA + "4 diamond", (has[TeamUpgrade.FORGE2] ? ChatColor.GREEN + "ACTIVE" : "")));
@@ -145,7 +153,7 @@ public class Shop implements Listener {
 			inv.setItem(16, locked);
 
 		if (has[TeamUpgrade.FORGE2])
-			inv.setItem(25, Utility.createHiddenEnchantedItemStack(Material.GOLD_CHESTPLATE, 1, ChatColor.YELLOW + "Gamer Armor (cool kids only)",
+			inv.setItem(25, Utility.createHiddenEnchantedItemStack(Material.EMERALD, 1, ChatColor.YELLOW + "Sus Gen",
 					(has[TeamUpgrade.FORGE3] ? sel : unsel),
 					ChatColor.GRAY + "Vroom vroom generator go EVEN faster", ChatColor.GRAY + "", "",
 					ChatColor.GRAY + "Price: " + ChatColor.AQUA + "6 diamond", (has[TeamUpgrade.FORGE3] ? ChatColor.GREEN + "ACTIVE" : "")));
@@ -153,7 +161,7 @@ public class Shop implements Listener {
 			inv.setItem(25, locked);
 
 		if (has[TeamUpgrade.FORGE3])
-			inv.setItem(34, Utility.createHiddenEnchantedItemStack(Material.DIAMOND_CHESTPLATE, 1, ChatColor.YELLOW + "THIS ARMOR IS CRACKED AT MC MY GUY",
+			inv.setItem(34, Utility.createHiddenEnchantedItemStack(Material.GOLD_BLOCK, 1, ChatColor.YELLOW + "THIS GEN IS LITERALLY HACKING",
 					(has[TeamUpgrade.FORGE4] ? sel : unsel),
 					ChatColor.GRAY + "OMG vroom vroom generator go so fast omg", ChatColor.GRAY + "", "",
 					ChatColor.GRAY + "Price: " + ChatColor.AQUA + "8 diamond", (has[TeamUpgrade.FORGE4] ? ChatColor.GREEN + "ACTIVE" : "")));
@@ -205,8 +213,6 @@ public class Shop implements Listener {
 
 		case ShopPage.QUICK_BUY:
 
-			ItemStack blankSpot = Utility.createIconItemStack(Material.STAINED_GLASS_PANE, 1, (short) 7, " ");
-
 			ItemStack[] qb = {
 
 					Utility.createIconItemStack(Material.WOOL, 16, ChatColor.YELLOW + "Wool", "",
@@ -215,26 +221,38 @@ public class Shop implements Listener {
 							ChatColor.GRAY + "Price: " + ChatColor.WHITE + "10 iron"),
 					Utility.createIconItemStack(Material.CHAINMAIL_BOOTS, 1, ChatColor.YELLOW + "Permanent Chainmail Armor (buy this if ur loser)", "",
 							ChatColor.GRAY + "Price: " + ChatColor.WHITE + "40 iron"),
-					blankSpot,
+					nextPick(player),
 					Utility.createIconItemStack(Material.BOW, 1, ChatColor.YELLOW + "Bow", "",
 							ChatColor.GRAY + "Price: " + ChatColor.GOLD + "12 gold"),
 					Utility.createIconItemStack(Material.POTION, 1, ChatColor.GRAY + "Potion coming soon"),
-					Utility.createIconItemStack(Material.TNT, 1, ChatColor.YELLOW + "TNT", "",
-							ChatColor.GRAY + "Price: " + ChatColor.GOLD + "4 gold"),
+					Utility.createIconItemStack(Material.GOLDEN_APPLE, 1, ChatColor.YELLOW + "Golden Apple", "",
+							ChatColor.GRAY + "Price: " + ChatColor.GOLD + "3 gold"),
 					Utility.createIconItemStack(Material.WOOD, 16, ChatColor.YELLOW + "Wood", "",
 							ChatColor.GRAY + "Price: " + ChatColor.GOLD + "4 gold"),
 					Utility.createIconItemStack(Material.IRON_SWORD, 1, ChatColor.YELLOW + "Iron Sword", "",
 							ChatColor.GRAY + "Price: " + ChatColor.GOLD + "7 gold"),
 					Utility.createIconItemStack(Material.IRON_BOOTS, 1, ChatColor.YELLOW + "Permanent Iron Armor", "",
 							ChatColor.GRAY + "Price: " + ChatColor.GOLD + "12 gold"),
+					nextAxe(player),
+					Utility.createEnchantedItemStack(Material.BOW, 1, ChatColor.YELLOW + "Fancy Bow",
+							new EnchantmentSet[] {new EnchantmentSet(Enchantment.ARROW_DAMAGE, 1)}, "",
+							ChatColor.GRAY + "Price: " + ChatColor.GOLD + "24 gold"),
+					Utility.createIconItemStack(Material.POTION, 1, ChatColor.GRAY + "Potion coming soon"),
+					Utility.createIconItemStack(Material.FIREBALL, 1, ChatColor.YELLOW + "Fireball", "",
+							ChatColor.GRAY + "Price: " + ChatColor.WHITE + "40 iron"),
+					Utility.createIconItemStack(Material.ENDER_STONE, 12, ChatColor.YELLOW + "End Stone", "",
+							ChatColor.GRAY + "Price: " + ChatColor.WHITE + "24 iron"),
+					Utility.createIconItemStack(Material.DIAMOND_SWORD, 1, ChatColor.YELLOW + "Diamond Sword", "",
+							ChatColor.GRAY + "Price: " + ChatColor.GREEN + "4 emerald"),
+					Utility.createIconItemStack(Material.DIAMOND_BOOTS, 1, ChatColor.YELLOW + "Permanent Diamond Armor", "",
+							ChatColor.GRAY + "Price: " + ChatColor.GREEN + "6 emerald"),
 					Utility.createIconItemStack(Material.SHEARS, 1, ChatColor.YELLOW + "Permanent Shears", "",
 							ChatColor.GRAY + "Price: " + ChatColor.WHITE + "20 iron"),
 					Utility.createIconItemStack(Material.ARROW, 8, ChatColor.YELLOW + "Arrow", "",
 							ChatColor.GRAY + "Price: " + ChatColor.GOLD + "2 gold"),
 					Utility.createIconItemStack(Material.POTION, 1, ChatColor.GRAY + "Potion coming soon"),
-					Utility.createIconItemStack(Material.WATER_BUCKET, 1, ChatColor.GRAY + "Water Bucket coming soon"),
-					blankSpot, blankSpot, blankSpot, blankSpot, blankSpot, blankSpot, blankSpot
-
+					Utility.createIconItemStack(Material.TNT, 1, ChatColor.YELLOW + "TNT", "",
+							ChatColor.GRAY + "Price: " + ChatColor.GOLD + "4 gold"),
 
 			};
 
@@ -317,7 +335,7 @@ public class Shop implements Listener {
 							ChatColor.GRAY + "Price: " + ChatColor.WHITE + "40 iron"),
 					Utility.createIconItemStack(Material.IRON_BOOTS, 1, ChatColor.YELLOW + "Permanent Iron Armor", "",
 							ChatColor.GRAY + "Price: " + ChatColor.GOLD + "12 gold"),
-					Utility.createIconItemStack(Material.IRON_BOOTS, 1, ChatColor.YELLOW + "Permanent Diamond Armor", "",
+					Utility.createIconItemStack(Material.DIAMOND_BOOTS, 1, ChatColor.YELLOW + "Permanent Diamond Armor", "",
 							ChatColor.GRAY + "Price: " + ChatColor.GREEN + "6 emerald")
 			};
 
@@ -331,83 +349,12 @@ public class Shop implements Listener {
 
 		case ShopPage.TOOLS:
 
-
-			ItemStack nextPick = null;
-
-			if (player.getInventory().contains(Material.WOOD_PICKAXE)) {
-
-				nextPick = Utility.createEnchantedItemStack(Material.IRON_PICKAXE, 1, ChatColor.YELLOW + "Iron Pickaxe",
-						new EnchantmentSet[] {new EnchantmentSet(Enchantment.DIG_SPEED, 2)}, "",
-						ChatColor.GRAY + "Price: " + ChatColor.WHITE + "10 iron");
-
-			} else if (player.getInventory().contains(Material.IRON_PICKAXE)) {
-
-				nextPick = Utility.createEnchantedItemStack(Material.GOLD_PICKAXE, 1, ChatColor.YELLOW + "Gold Pickaxe",
-						new EnchantmentSet[] {new EnchantmentSet(Enchantment.DIG_SPEED, 3),
-								new EnchantmentSet(Enchantment.DAMAGE_ALL, 2)}, "",
-						ChatColor.GRAY + "Price: " + ChatColor.GOLD + "3 gold");
-
-			} else if (player.getInventory().contains(Material.GOLD_PICKAXE)) {
-
-				nextPick = Utility.createEnchantedItemStack(Material.DIAMOND_PICKAXE, 1, ChatColor.YELLOW + "Diamond Pickaxe",
-						new EnchantmentSet[] {new EnchantmentSet(Enchantment.DIG_SPEED, 1)}, "",
-						ChatColor.GRAY + "Price: " + ChatColor.GOLD + "6 iron");
-
-			} else if (player.getInventory().contains(Material.DIAMOND_PICKAXE)) {
-
-				nextPick = Utility.createEnchantedItemStack(Material.DIAMOND_PICKAXE, 1, ChatColor.YELLOW + "Diamond Pickaxe",
-						new EnchantmentSet[] {new EnchantmentSet(Enchantment.DIG_SPEED, 1)});
-
-			} else {
-
-				nextPick = Utility.createEnchantedItemStack(Material.WOOD_PICKAXE, 1, ChatColor.YELLOW + "Wooden Pickaxe",
-						new EnchantmentSet[] {new EnchantmentSet(Enchantment.DIG_SPEED, 1)}, "",
-						ChatColor.GRAY + "Price: " + ChatColor.WHITE + "10 iron");
-
-			}
-
-			ItemStack nextAxe = null;
-
-			if (player.getInventory().contains(Material.WOOD_AXE)) {
-
-				nextAxe = Utility.createEnchantedItemStack(Material.STONE_AXE, 1, ChatColor.YELLOW + "Stone Axe",
-						new EnchantmentSet[] {new EnchantmentSet(Enchantment.DIG_SPEED, 1)}, "",
-						ChatColor.GRAY + "Price: " + ChatColor.WHITE + "10 iron");
-
-			} else if (player.getInventory().contains(Material.STONE_AXE)) {
-
-				nextAxe = Utility.createEnchantedItemStack(Material.IRON_AXE, 1, ChatColor.YELLOW + "Iron Axe",
-						new EnchantmentSet[] {new EnchantmentSet(Enchantment.DIG_SPEED, 1)}, "",
-						ChatColor.GRAY + "Price: " + ChatColor.GOLD + "3 gold");
-
-			} else if (player.getInventory().contains(Material.IRON_AXE)) {
-
-				nextAxe = Utility.createEnchantedItemStack(Material.DIAMOND_AXE, 1, ChatColor.YELLOW + "Diamond Axe",
-						new EnchantmentSet[] {new EnchantmentSet(Enchantment.DIG_SPEED, 1)}, "",
-						ChatColor.GRAY + "Price: " + ChatColor.GOLD + "6 iron");
-
-			} else if (player.getInventory().contains(Material.DIAMOND_AXE)) {
-
-				nextAxe = Utility.createEnchantedItemStack(Material.DIAMOND_AXE, 1, ChatColor.YELLOW + "Diamond Axe",
-						new EnchantmentSet[] {new EnchantmentSet(Enchantment.DIG_SPEED, 1)});
-
-			}else {
-
-				nextAxe = Utility.createEnchantedItemStack(Material.WOOD_AXE, 1, ChatColor.YELLOW + "Wooden Axe",
-						new EnchantmentSet[] {new EnchantmentSet(Enchantment.DIG_SPEED, 1)}, "",
-						ChatColor.GRAY + "Price: " + ChatColor.WHITE + "10 iron");
-
-			}
-
-
-
-
 			ItemStack[] t = {
 
 					Utility.createIconItemStack(Material.SHEARS, 1, ChatColor.YELLOW + "Permanent Shears", "",
 							ChatColor.GRAY + "Price: " + ChatColor.WHITE + "20 iron"),
-					nextPick,
-					nextAxe
+					nextPick(player),
+					nextAxe(player)
 
 			};
 
@@ -506,6 +453,13 @@ public class Shop implements Listener {
 	@EventHandler
 	public void onInventoryClick(InventoryClickEvent e) {
 
+		if (e.getSlotType() == SlotType.ARMOR) {
+			
+			e.setCancelled(true);
+			return;
+			
+		}
+		
 		if (e.getView().getTitle().equals(ChatColor.BOLD + "Team Upgrades")) {
 
 			e.setCancelled(true);
@@ -531,85 +485,82 @@ public class Shop implements Listener {
 						String active = lore.get(lore.size() - 1);
 
 						if (!ChatColor.stripColor(active).equals("ACTIVE")) {
-							
+
 							int upgrade = -1;
-							
+
 							switch (item.getType()) {
-							
+
 							case DIAMOND_SWORD:
 								upgrade = TeamUpgrade.SWORDS;
 								break;
-								
+
 							case APPLE:
 								upgrade = TeamUpgrade.HEAL;
 								break;
-								
+
 							case CHAINMAIL_CHESTPLATE:
 								upgrade = TeamUpgrade.ARMOR1;
 								break;
-								
+
 							case IRON_CHESTPLATE:
 								upgrade = TeamUpgrade.ARMOR2;
 								break;
-								
+
 							case GOLD_CHESTPLATE:
 								upgrade = TeamUpgrade.ARMOR3;
 								break;
-								
+
 							case DIAMOND_CHESTPLATE:
 								upgrade = TeamUpgrade.ARMOR4;
 								break;
-								
+
 							case IRON_PICKAXE:
 								upgrade = TeamUpgrade.MINE1;
 								break;
-								
+
 							case GOLD_PICKAXE:
 								upgrade = TeamUpgrade.MINE2;
 								break;
-								
+
 							case IRON_INGOT:
 								upgrade = TeamUpgrade.FORGE1;
 								break;
-								
+
 							case GOLD_INGOT:
 								upgrade = TeamUpgrade.FORGE2;
 								break;
-								
+
 							case EMERALD:
 								upgrade = TeamUpgrade.FORGE3;
 								break;
-								
+
 							case GOLD_BLOCK:
 								upgrade = TeamUpgrade.FORGE4;
 								break;
-								
+
 							default:
 								break;
-							
+
 							} 
-							
-							if (upgrade < 0) {
-								
-								player.sendMessage(ChatColor.RED + "Error");
-								return;
-								
-							}
-							
-							String[] price = ChatColor.stripColor(lore.get(3)).split(" ");
 
-							int number = Integer.parseInt(price[1]);
+							if (upgrade >= 0) {
 
-							Material type = txt2mat(price[2]);
+								String[] price = ChatColor.stripColor(lore.get(3)).split(" ");
 
-							boolean success = purchaseUpgrade(player, TeamUpgrade.ARMOR1, number, type);
-							
-							if (success) {
-								
-								player.playSound(player.getLocation(), Sound.NOTE_PLING, 1, 2);
-								teamUpgrades_inv(player, e.getInventory());
-								return;
-								
+								int number = Integer.parseInt(price[1]);
+
+								Material type = txt2mat(price[2]);
+
+								boolean success = purchaseUpgrade(player, item.getItemMeta().getDisplayName(), upgrade, number, type);
+
+								if (success) {
+
+									player.playSound(player.getLocation(), Sound.NOTE_PLING, 1, 2);
+									teamUpgrades_inv(player, e.getInventory());
+									return;
+
+								}
+
 							}
 
 						}
@@ -698,11 +649,11 @@ public class Shop implements Listener {
 
 	}
 
-	public boolean purchaseUpgrade(Player player, int upgrade, int cost, Material type) {
+	public boolean purchaseUpgrade(Player player, String purchase, int upgrade, int cost, Material type) {
 
 		Gamer gamer = WedBars.arena.getGamer(player.getName());
 		ArenaTeam team = WedBars.arena.getTeam(gamer.getTeam());
-		
+
 		boolean has = player.getInventory().contains(type, cost);
 
 		if (!has) {
@@ -711,23 +662,126 @@ public class Shop implements Listener {
 			return false;
 
 		}
-		
+
+		team.addUpgrade(upgrade);
+
 		switch (upgrade) {
-		
+
 		case TeamUpgrade.SWORDS:
-			
-			
-			
-		
-		
-		
+
+			for (Gamer g : team.getGamers()) {
+
+				Player p = g.getPlayer();
+
+				ItemStack[] is = p.getInventory().getContents();
+
+				for (int i = 0; i < is.length; i++) {
+
+					if (is[i] == null) continue;
+
+					if (is[i].getType().toString().endsWith("_SWORD")) {
+
+						ItemMeta meta = is[i].getItemMeta();
+						meta.removeEnchant(Enchantment.DAMAGE_ALL);
+						meta.addEnchant(Enchantment.DAMAGE_ALL, 1, true);
+						is[i].setItemMeta(meta);
+
+					}
+
+				}
+
+			}
+
+			break;
+
+		case TeamUpgrade.ARMOR1:
+		case TeamUpgrade.ARMOR2:
+		case TeamUpgrade.ARMOR3:
+		case TeamUpgrade.ARMOR4:
+
+			for (Gamer g : team.getGamers()) {
+
+				Player p = g.getPlayer();
+
+				ItemStack[] ar = p.getInventory().getArmorContents();
+
+				for (int i = 0; i < ar.length; i++) {
+
+					ItemMeta meta = ar[i].getItemMeta();
+					meta.removeEnchant(Enchantment.PROTECTION_ENVIRONMENTAL);
+					meta.addEnchant(Enchantment.PROTECTION_ENVIRONMENTAL, upgrade - 1, true);
+					ar[i].setItemMeta(meta);
+
+				}
+
+			}
+
+			break;
+
+		case TeamUpgrade.MINE1:
+		case TeamUpgrade.MINE2:
+
+			for (Gamer g : team.getGamers()) {
+
+				Player p = g.getPlayer();
+
+				p.addPotionEffect(new PotionEffect(PotionEffectType.FAST_DIGGING, Integer.MAX_VALUE, upgrade - 6, true, false));
+
+			}
+
+			break;
+
+
+		case TeamUpgrade.FORGE1:
+
+			double ironcalc1 = 1 / ((1.0 / team.getIronGenerator().getSpeed()) * WedBars.FORGE1);
+			System.out.println(ironcalc1);
+			team.getIronGenerator().setSpeed((int) ironcalc1);
+			double goldcalc1 = 1 / ((1.0 / team.getGoldGenerator().getSpeed()) * WedBars.FORGE1);
+			System.out.println(goldcalc1);
+			team.getGoldGenerator().setSpeed((int) goldcalc1);
+
+			break;
+
+		case TeamUpgrade.FORGE2:
+
+			double ironcalc2 = 1 / ((1.0 / team.getIronGenerator().getSpeed()) * WedBars.FORGE2);
+			team.getIronGenerator().setSpeed((int) ironcalc2);
+			double goldcalc2 = 1 / ((1.0 / team.getGoldGenerator().getSpeed()) * WedBars.FORGE2);
+			team.getGoldGenerator().setSpeed((int) goldcalc2);
+			break;
+
+		case TeamUpgrade.FORGE3:
+
+			team.createEmeraldGenerator();
+			break;
+
+		case TeamUpgrade.FORGE4:
+
+			double ironcalc3 = 1 / ((1.0 / team.getIronGenerator().getSpeed()) * WedBars.FORGE4);
+			team.getIronGenerator().setSpeed((int) ironcalc3);
+			double goldcalc3 = 1 / ((1.0 / team.getGoldGenerator().getSpeed()) * WedBars.FORGE4);
+			team.getGoldGenerator().setSpeed((int) goldcalc3);
+			double emeraldcalc3 = 1 / ((1.0 / team.getEmeraldGenerator().getSpeed()) * WedBars.FORGE4);
+			team.getEmeraldGenerator().setSpeed((int) emeraldcalc3);
+			break;
+
 		}
-		
+
+		for (Gamer g : team.getGamers()) {
+
+			g.getPlayer().sendMessage(team.getTeam().getChatColor() + player.getName() + ChatColor.GRAY + " purchased " + purchase + ChatColor.GRAY + ".");
+
+		}
+
+		player.getInventory().removeItem(new ItemStack(type, cost));
+		player.updateInventory();
+
 		return true;
 
 	}
 
-	public boolean purchaseItem(Player player, ItemStack stack, int cost, Material type) {
+	public boolean purchaseItem(Player player, ItemStack item, int cost, Material type) {
 
 		if (player.getInventory().firstEmpty() == -1) {
 
@@ -744,11 +798,65 @@ public class Shop implements Listener {
 			return false;
 
 		}
+		
+		ItemStack stack = item.clone();
+
+		boolean addItem = true;
+		
+		if (stack.getType() == Material.WOOL && WedBars.arena != null) {
+
+			ItemMeta meta = stack.getItemMeta();
+
+			stack = new ItemStack(Material.WOOL, stack.getAmount(), WedBars.arena.getGamer(player.getName()).getTeam().getStackColor());
+			stack.setItemMeta(meta);
+			
+		}
+
+		else if (stack.getType() == Material.CHAINMAIL_BOOTS) {
+
+			if (player.getInventory().getBoots().getType() != Material.LEATHER_BOOTS) {
+
+				return false;
+
+			}
+			
+			player.getInventory().setLeggings(Utility.createUnbreakableItemStack(Material.CHAINMAIL_LEGGINGS, 1, ChatColor.YELLOW + "Chainmail Leggings (lmao why)"));
+			player.getInventory().setBoots(Utility.createUnbreakableItemStack(Material.CHAINMAIL_BOOTS, 1, ChatColor.YELLOW + "Chainmail Boots (lmao why)"));
+			addItem = false;
+
+		}
+		
+		else if (stack.getType() == Material.IRON_BOOTS) {
+			
+			if (player.getInventory().getBoots().getType() != Material.LEATHER_BOOTS
+					&& player.getInventory().getBoots().getType() != Material.CHAINMAIL_BOOTS) {
+				
+				return false;
+
+			}
+			
+			player.getInventory().setLeggings(Utility.createUnbreakableItemStack(Material.IRON_LEGGINGS, 1, ChatColor.YELLOW + "Iron Leggings"));
+			player.getInventory().setBoots(Utility.createUnbreakableItemStack(Material.IRON_BOOTS, 1, ChatColor.YELLOW + "Iron Boots"));
+			addItem = false;
+			
+		}
+		
+		else if (stack.getType() == Material.DIAMOND_BOOTS) {
+			
+			if (player.getInventory().getBoots().getType() == Material.DIAMOND_BOOTS) {
+
+				return false;
+
+			}
+			
+			player.getInventory().setLeggings(Utility.createUnbreakableItemStack(Material.DIAMOND_LEGGINGS, 1, ChatColor.YELLOW + "Diamond Leggings"));
+			player.getInventory().setBoots(Utility.createUnbreakableItemStack(Material.DIAMOND_BOOTS, 1, ChatColor.YELLOW + "Diamond Boots"));
+			addItem = false;
+			
+		}
 
 
-		// TODO check for types of item like armor and stuff
-
-		if (stack.getType().toString().endsWith("_PICKAXE")) {
+		else if (stack.getType().toString().endsWith("_PICKAXE")) {
 
 			player.getInventory().remove(Material.WOOD_PICKAXE);
 			player.getInventory().remove(Material.IRON_PICKAXE);
@@ -757,7 +865,7 @@ public class Shop implements Listener {
 
 		}
 
-		if (stack.getType().toString().endsWith("_AXE")) {
+		else if (stack.getType().toString().endsWith("_AXE")) {
 
 			player.getInventory().remove(Material.WOOD_AXE);
 			player.getInventory().remove(Material.STONE_AXE);
@@ -766,27 +874,26 @@ public class Shop implements Listener {
 
 		}
 
-		ItemStack item = stack.clone();
-		ItemMeta meta = item.getItemMeta();
-		
-		if (stack.getType().toString().endsWith("_SWORD")) {
-			
-			if (WedBars.arena != null) {
-				
-				if (WedBars.arena.getTeam(WedBars.arena.getGamer(player.getName()).getTeam()).hasUpgrade(TeamUpgrade.SWORDS)) {
-					
-					meta.addEnchant(Enchantment.DAMAGE_ALL, 1, true);
-					
-				}
-				
-			}
-			
-		}
-		
-		meta.setLore(null);
-		item.setItemMeta(meta);
+		ItemMeta meta = stack.getItemMeta();
 
-		player.getInventory().addItem(item);
+		if (stack.getType().toString().endsWith("_SWORD")) {
+
+			if (WedBars.arena != null) {
+
+				if (WedBars.arena.getTeam(WedBars.arena.getGamer(player.getName()).getTeam()).hasUpgrade(TeamUpgrade.SWORDS)) {
+
+					meta.addEnchant(Enchantment.DAMAGE_ALL, 1, true);
+
+				}
+
+			}
+
+		}
+
+		meta.setLore(null);
+		stack.setItemMeta(meta);
+
+		if (addItem) player.getInventory().addItem(stack);
 		player.getInventory().removeItem(new ItemStack(type, cost));
 		player.updateInventory();
 
@@ -795,7 +902,7 @@ public class Shop implements Listener {
 
 	}
 
-	private Material txt2mat(String type) {
+	private static Material txt2mat(String type) {
 
 		if (type.equals("iron")) {
 
@@ -818,6 +925,85 @@ public class Shop implements Listener {
 			return null;
 
 		}
+
+	}
+
+	private static ItemStack nextPick(Player player) {
+
+		ItemStack nextPick = null;
+
+		if (player.getInventory().contains(Material.WOOD_PICKAXE)) {
+
+			nextPick = Utility.createEnchantedItemStack(Material.IRON_PICKAXE, 1, ChatColor.YELLOW + "Iron Pickaxe",
+					new EnchantmentSet[] {new EnchantmentSet(Enchantment.DIG_SPEED, 2)}, "",
+					ChatColor.GRAY + "Price: " + ChatColor.WHITE + "10 iron");
+
+		} else if (player.getInventory().contains(Material.IRON_PICKAXE)) {
+
+			nextPick = Utility.createEnchantedItemStack(Material.GOLD_PICKAXE, 1, ChatColor.YELLOW + "Gold Pickaxe",
+					new EnchantmentSet[] {new EnchantmentSet(Enchantment.DIG_SPEED, 3),
+							new EnchantmentSet(Enchantment.DAMAGE_ALL, 2)}, "",
+					ChatColor.GRAY + "Price: " + ChatColor.GOLD + "3 gold");
+
+		} else if (player.getInventory().contains(Material.GOLD_PICKAXE)) {
+
+			nextPick = Utility.createEnchantedItemStack(Material.DIAMOND_PICKAXE, 1, ChatColor.YELLOW + "Diamond Pickaxe",
+					new EnchantmentSet[] {new EnchantmentSet(Enchantment.DIG_SPEED, 1)}, "",
+					ChatColor.GRAY + "Price: " + ChatColor.GOLD + "6 iron");
+
+		} else if (player.getInventory().contains(Material.DIAMOND_PICKAXE)) {
+
+			nextPick = Utility.createEnchantedItemStack(Material.DIAMOND_PICKAXE, 1, ChatColor.YELLOW + "Diamond Pickaxe",
+					new EnchantmentSet[] {new EnchantmentSet(Enchantment.DIG_SPEED, 1)});
+
+		} else {
+
+			nextPick = Utility.createEnchantedItemStack(Material.WOOD_PICKAXE, 1, ChatColor.YELLOW + "Wooden Pickaxe",
+					new EnchantmentSet[] {new EnchantmentSet(Enchantment.DIG_SPEED, 1)}, "",
+					ChatColor.GRAY + "Price: " + ChatColor.WHITE + "10 iron");
+
+		}
+
+		return nextPick;
+
+	}
+
+	private static ItemStack nextAxe(Player player) {
+
+		ItemStack nextAxe = null;
+
+		if (player.getInventory().contains(Material.WOOD_AXE)) {
+
+			nextAxe = Utility.createEnchantedItemStack(Material.STONE_AXE, 1, ChatColor.YELLOW + "Stone Axe",
+					new EnchantmentSet[] {new EnchantmentSet(Enchantment.DIG_SPEED, 1)}, "",
+					ChatColor.GRAY + "Price: " + ChatColor.WHITE + "10 iron");
+
+		} else if (player.getInventory().contains(Material.STONE_AXE)) {
+
+			nextAxe = Utility.createEnchantedItemStack(Material.IRON_AXE, 1, ChatColor.YELLOW + "Iron Axe",
+					new EnchantmentSet[] {new EnchantmentSet(Enchantment.DIG_SPEED, 1)}, "",
+					ChatColor.GRAY + "Price: " + ChatColor.GOLD + "3 gold");
+
+		} else if (player.getInventory().contains(Material.IRON_AXE)) {
+
+			nextAxe = Utility.createEnchantedItemStack(Material.DIAMOND_AXE, 1, ChatColor.YELLOW + "Diamond Axe",
+					new EnchantmentSet[] {new EnchantmentSet(Enchantment.DIG_SPEED, 1)}, "",
+					ChatColor.GRAY + "Price: " + ChatColor.GOLD + "6 iron");
+
+		} else if (player.getInventory().contains(Material.DIAMOND_AXE)) {
+
+			nextAxe = Utility.createEnchantedItemStack(Material.DIAMOND_AXE, 1, ChatColor.YELLOW + "Diamond Axe",
+					new EnchantmentSet[] {new EnchantmentSet(Enchantment.DIG_SPEED, 1)});
+
+		}else {
+
+			nextAxe = Utility.createEnchantedItemStack(Material.WOOD_AXE, 1, ChatColor.YELLOW + "Wooden Axe",
+					new EnchantmentSet[] {new EnchantmentSet(Enchantment.DIG_SPEED, 1)}, "",
+					ChatColor.GRAY + "Price: " + ChatColor.WHITE + "10 iron");
+
+		}
+
+		return nextAxe;
 
 	}
 

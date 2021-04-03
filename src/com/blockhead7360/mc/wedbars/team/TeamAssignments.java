@@ -1,4 +1,4 @@
-package com.blockhead7360.mc.wedbars;
+package com.blockhead7360.mc.wedbars.team;
 
 import java.util.ArrayList;
 import java.util.HashMap;

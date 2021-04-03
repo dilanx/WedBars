@@ -1,4 +1,4 @@
-package com.blockhead7360.mc.wedbars;
+package com.blockhead7360.mc.wedbars.game;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;
@@ -10,18 +10,30 @@ import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.Sound;
+import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Arrow;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.TNTPrimed;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.block.Action;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
+import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.inventory.ItemStack;
+
+import com.blockhead7360.mc.wedbars.Utility;
+import com.blockhead7360.mc.wedbars.Utility.EnchantmentSet;
+import com.blockhead7360.mc.wedbars.WedBars;
+import com.blockhead7360.mc.wedbars.arena.Arena;
+import com.blockhead7360.mc.wedbars.player.Gamer;
+import com.blockhead7360.mc.wedbars.player.Status;
+import com.blockhead7360.mc.wedbars.team.ArenaTeam;
+import com.blockhead7360.mc.wedbars.team.Team;
 
 public class Listeners implements Listener {
 
@@ -50,24 +62,46 @@ public class Listeners implements Listener {
 		placedBlocks.remove(index);
 
 	}
-	
-    @EventHandler
-    public void entityDamageEntity(EntityDamageByEntityEvent e) {
 
-        if (e.getDamager() instanceof Arrow && e.getEntity() instanceof Player) {
+	@EventHandler
+	public void onPlayerInteract(PlayerInteractEvent e) {
 
-            Player shooter = (Player) ((Arrow) e.getDamager()).getShooter();
-            Player player = (Player) e.getEntity();
-            
-            DecimalFormat round = new DecimalFormat("##.#");
-                        
-            if (player.getHealth() - e.getFinalDamage() > 0) {
-            	shooter.sendMessage(WedBars.arena.getGamer(player.getName()).getTeam().getChatColor() + player.getName()
-            	+ ChatColor.GRAY + " is now at " + ChatColor.RED + round.format(player.getHealth() - e.getFinalDamage()) + " HP");
+		if (!WedBars.running) return;
+
+		if (e.getAction() == Action.RIGHT_CLICK_BLOCK) {
+
+			if (e.getClickedBlock().getType() == Material.CHEST) {
+
+				// TODO chest implementation
+				
+				e.setCancelled(true);
+				e.getPlayer().sendMessage(ChatColor.RED + "Sorry! Normal chests aren't available for use right now.");
+				e.getPlayer().sendMessage(ChatColor.GRAY + "You'll have to use your ender chest instead.");
+
+
 			}
-        }
-        
-    }
+
+		}
+
+	}
+
+	@EventHandler
+	public void entityDamageEntity(EntityDamageByEntityEvent e) {
+
+		if (e.getDamager() instanceof Arrow && e.getEntity() instanceof Player) {
+
+			Player shooter = (Player) ((Arrow) e.getDamager()).getShooter();
+			Player player = (Player) e.getEntity();
+
+			DecimalFormat round = new DecimalFormat("##.#");
+
+			if (player.getHealth() - e.getFinalDamage() > 0) {
+				shooter.sendMessage(WedBars.arena.getGamer(player.getName()).getTeam().getChatColor() + player.getName()
+				+ ChatColor.GRAY + " is now at " + ChatColor.RED + round.format(player.getHealth() - e.getFinalDamage()) + " HP");
+			}
+		}
+
+	}
 
 	@EventHandler
 	public void blockPlaced(BlockPlaceEvent event) {
@@ -185,8 +219,62 @@ public class Listeners implements Listener {
 			player.getInventory().setArmorContents(armor);
 			player.getInventory().setItem(0, Utility.createUnbreakableItemStack(Material.WOOD_SWORD, 1, ChatColor.YELLOW + "Wooden Sword"));
 
+			for (int i = 0; i < contents.length; i++) {
 
-			// TODO give one tier down of tools
+				if (contents[i] == null) continue;
+
+				if (contents[i].getType() == Material.WOOD_PICKAXE || contents[i].getType() == Material.IRON_PICKAXE) {
+
+					player.getInventory().addItem(Utility.createEnchantedItemStack(Material.WOOD_PICKAXE, 1, ChatColor.YELLOW + "Wooden Pickaxe",
+							new EnchantmentSet[] {new EnchantmentSet(Enchantment.DIG_SPEED, 1)}));
+
+				}
+
+				else if (contents[i].getType() == Material.GOLD_PICKAXE) {
+
+					player.getInventory().addItem(Utility.createEnchantedItemStack(Material.IRON_PICKAXE, 1, ChatColor.YELLOW + "Iron Pickaxe",
+							new EnchantmentSet[] {new EnchantmentSet(Enchantment.DIG_SPEED, 2)}));
+
+
+				}
+
+				else if (contents[i].getType() == Material.DIAMOND_PICKAXE) {
+
+					player.getInventory().addItem(Utility.createEnchantedItemStack(Material.GOLD_PICKAXE, 1, ChatColor.YELLOW + "Gold Pickaxe",
+							new EnchantmentSet[] {new EnchantmentSet(Enchantment.DIG_SPEED, 3),
+									new EnchantmentSet(Enchantment.DAMAGE_ALL, 2)}));
+
+				}
+
+				else if (contents[i].getType() == Material.WOOD_AXE || contents[i].getType() == Material.STONE_AXE) {
+
+					player.getInventory().addItem(Utility.createEnchantedItemStack(Material.WOOD_AXE, 1, ChatColor.YELLOW + "Wooden Axe",
+							new EnchantmentSet[] {new EnchantmentSet(Enchantment.DIG_SPEED, 1)}));
+
+				}
+
+				else if (contents[i].getType() == Material.IRON_AXE) {
+
+					player.getInventory().addItem(Utility.createEnchantedItemStack(Material.STONE_AXE, 1, ChatColor.YELLOW + "Stone Axe",
+							new EnchantmentSet[] {new EnchantmentSet(Enchantment.DIG_SPEED, 1)}));
+
+				}
+
+				else if (contents[i].getType() == Material.DIAMOND_AXE) {
+
+					player.getInventory().addItem(Utility.createEnchantedItemStack(Material.IRON_AXE, 1, ChatColor.YELLOW + "Iron Axe",
+							new EnchantmentSet[] {new EnchantmentSet(Enchantment.DIG_SPEED, 1)}));
+
+				}
+				
+				else if (contents[i].getType() == Material.SHEARS) {
+					
+					player.getInventory().addItem(Utility.createUnbreakableItemStack(Material.SHEARS, 1, ChatColor.YELLOW + "Permanent Shears"));
+					
+				}
+
+
+			}
 
 			// i moved the death titles to the timer in Arena.java you'll see why
 

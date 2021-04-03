@@ -1,6 +1,9 @@
-package com.blockhead7360.mc.wedbars;
+package com.blockhead7360.mc.wedbars.team;
 
 import org.bukkit.Location;
+
+import com.blockhead7360.mc.wedbars.game.Generator;
+import com.blockhead7360.mc.wedbars.player.Gamer;
 
 public class ArenaTeam {
 	

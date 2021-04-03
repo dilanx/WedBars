@@ -11,6 +11,16 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import com.blockhead7360.mc.wedbars.arena.Arena;
+import com.blockhead7360.mc.wedbars.arena.ArenaData;
+import com.blockhead7360.mc.wedbars.arena.ArenaLoader;
+import com.blockhead7360.mc.wedbars.arena.SetupWizard;
+import com.blockhead7360.mc.wedbars.game.ConnectionListener;
+import com.blockhead7360.mc.wedbars.game.Listeners;
+import com.blockhead7360.mc.wedbars.game.Powerups;
+import com.blockhead7360.mc.wedbars.game.Shop;
+import com.blockhead7360.mc.wedbars.team.Team;
+import com.blockhead7360.mc.wedbars.team.TeamAssignments;
 import com.gmail.filoghost.holographicdisplays.api.Hologram;
 import com.gmail.filoghost.holographicdisplays.api.HologramsAPI;
 
@@ -32,7 +42,7 @@ public class WedBars extends JavaPlugin {
 
 
 	// forge scales
-	// n times the initial speed as set by the arena
+	// n times the initial interval as set by the arena
 
 	public static final double FORGE1 = 1.5;
 	public static final double FORGE2 = 2;
@@ -473,6 +483,27 @@ public class WedBars extends JavaPlugin {
 			}
 
 			Shop.openItemShop((Player) sender);
+			return true;
+
+		}
+		
+		if (cmd.getName().equalsIgnoreCase("teamshop")) {
+
+			if (!sender.hasPermission("wedbars.itemshop")) {
+
+				sender.sendMessage(ChatColor.RED + "Use one of the team upgrade NPCs to access the team upgrade shop.");
+				return true;
+
+			}
+
+			if (!(sender instanceof Player)) {
+
+				sender.sendMessage("Only players lol.");
+				return true;
+
+			}
+
+			Shop.openTeamUpgrades((Player) sender);
 			return true;
 
 		}
