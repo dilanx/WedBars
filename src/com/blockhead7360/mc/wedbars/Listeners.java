@@ -10,7 +10,6 @@ import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.Sound;
-import org.bukkit.World;
 import org.bukkit.entity.Arrow;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
@@ -56,11 +55,15 @@ public class Listeners implements Listener {
     public void entityDamageEntity(EntityDamageByEntityEvent e) {
 
         if (e.getDamager() instanceof Arrow && e.getEntity() instanceof Player) {
-            Arrow a = (Arrow)e.getDamager();
-            Player p = (Player)a.getShooter();
+
+            Player shooter = (Player) ((Arrow) e.getDamager()).getShooter();
+            Player player = (Player) e.getEntity();
+            
             DecimalFormat round = new DecimalFormat("##.#");
-            if ((((Player) e.getEntity()).getHealth() - e.getFinalDamage()) > 0) {
-				p.sendMessage(((Player) e.getEntity()).getPlayer().getDisplayName() + ChatColor.GRAY + " is now at " + ChatColor.RED + round.format((((Player) e.getEntity()).getHealth() - e.getFinalDamage())) + " HP");
+                        
+            if (player.getHealth() - e.getFinalDamage() > 0) {
+            	shooter.sendMessage(WedBars.arena.getGamer(player.getName()).getTeam().getChatColor() + player.getName()
+            	+ ChatColor.GRAY + " is now at " + ChatColor.RED + round.format(player.getHealth() - e.getFinalDamage()) + " HP");
 			}
         }
         
