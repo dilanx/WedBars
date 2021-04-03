@@ -59,7 +59,9 @@ public class Listeners implements Listener {
             Arrow a = (Arrow)e.getDamager();
             Player p = (Player)a.getShooter();
             DecimalFormat round = new DecimalFormat("##.#");
-            p.sendMessage(((Player) e.getEntity()).getPlayer().getDisplayName() + ChatColor.GRAY + " is now at " + ChatColor.RED + round.format((((Player) e.getEntity()).getHealth() - e.getFinalDamage())) + " HP" );
+            if ((((Player) e.getEntity()).getHealth() - e.getFinalDamage()) > 0) {
+				p.sendMessage(((Player) e.getEntity()).getPlayer().getDisplayName() + ChatColor.GRAY + " is now at " + ChatColor.RED + round.format((((Player) e.getEntity()).getHealth() - e.getFinalDamage())) + " HP");
+			}
         }
         
     }
