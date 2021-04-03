@@ -16,6 +16,7 @@ import com.blockhead7360.mc.wedbars.arena.ArenaData;
 import com.blockhead7360.mc.wedbars.arena.ArenaLoader;
 import com.blockhead7360.mc.wedbars.arena.SetupWizard;
 import com.blockhead7360.mc.wedbars.game.ConnectionListener;
+import com.blockhead7360.mc.wedbars.game.GameChat;
 import com.blockhead7360.mc.wedbars.game.Listeners;
 import com.blockhead7360.mc.wedbars.game.Powerups;
 import com.blockhead7360.mc.wedbars.game.Shop;
@@ -87,6 +88,7 @@ public class WedBars extends JavaPlugin {
 		getServer().getPluginManager().registerEvents(new Shop(), this);
 		getServer().getPluginManager().registerEvents(new SetupWizard(), this);
 		getServer().getPluginManager().registerEvents(new ConnectionListener(), this);
+		getServer().getPluginManager().registerEvents(new GameChat(), this);
 
 		Shop.init();
 

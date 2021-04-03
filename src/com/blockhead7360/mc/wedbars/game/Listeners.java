@@ -16,12 +16,14 @@ import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.TNTPrimed;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
+import org.bukkit.event.player.PlayerChangedWorldEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.inventory.ItemStack;
@@ -84,11 +86,18 @@ public class Listeners implements Listener {
 		}
 
 	}
+	
+	@EventHandler(priority = EventPriority.HIGH)
+	public void onPlayerChangedWorld(PlayerChangedWorldEvent e) {
+		
+		e.getPlayer().setGameMode(GameMode.ADVENTURE);
+		
+	}
 
 	@EventHandler
 	public void entityDamageEntity(EntityDamageByEntityEvent e) {
 
-		if (e.getDamager() instanceof Arrow && e.getEntity() instanceof Player) {
+		if (e.getDamager() instanceof Arrow && e.getEntity() instanceof Player && WedBars.arena != null) {
 
 			Player shooter = (Player) ((Arrow) e.getDamager()).getShooter();
 			Player player = (Player) e.getEntity();
@@ -280,7 +289,7 @@ public class Listeners implements Listener {
 
 			player.setHealth(20);
 			player.setGameMode(GameMode.SPECTATOR);
-			player.teleport(new Location(Bukkit.getWorld("world"), 0, 100, 0));
+			player.teleport(new Location(player.getWorld(), 0, 100, 0));
 
 			// TODO change messages
 

@@ -483,8 +483,9 @@ public class Arena {
 						for (Player player : Bukkit.getOnlinePlayers()) {
 
 							player.teleport(lobby);
-							player.setGameMode(GameMode.SURVIVAL);
+							player.setGameMode(GameMode.ADVENTURE);
 							player.removePotionEffect(PotionEffectType.FAST_DIGGING);
+							player.getInventory().clear();
 							WedBars.arena = null;
 
 						}
