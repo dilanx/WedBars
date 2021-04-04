@@ -14,63 +14,74 @@ import com.blockhead7360.mc.wedbars.player.Status;
 import com.blockhead7360.mc.wedbars.team.Team;
 
 public class GameChat implements Listener {
-	
+
 	@EventHandler
 	public void onAsyncPlayerChat(AsyncPlayerChatEvent e) {
-		
+
 		if (SetupWizard.settingUp != null && SetupWizard.settingUp.getName().equals(e.getPlayer().getName())) {
-			
+
 			return;
-			
+
 		}
-		
+
 		if (WedBars.arena != null) {
-			
+
 			e.setCancelled(true);
-			
+
 			Gamer gamer = WedBars.arena.getGamer(e.getPlayer().getName());
-			Team team = gamer.getTeam();
-			Status status = gamer.getStatus();
+
+			Status status = Status.DEAD;
 			
 			String msg = "";
 			
-			if (status == Status.ALIVE) {
-				
-				msg = team.getChatColor() + "" + ChatColor.BOLD + e.getPlayer().getName() + ChatColor.WHITE + " " + e.getMessage();
-				
+			if (gamer == null) {
+
+				msg = ChatColor.GRAY + "Spectator | " + ChatColor.WHITE + e.getPlayer().getName() + ChatColor.GRAY + ": " + e.getMessage();
+
 			} else {
-				
-				msg = ChatColor.GRAY + "Spectator | " + team.getChatColor() + e.getPlayer().getName() + ChatColor.GRAY + " " + e.getMessage();
-				
-			}
-			
-			for (Player p : Bukkit.getOnlinePlayers()) {
-								
+
+				Team team = gamer.getTeam();
+				status = gamer.getStatus();
+
 				if (status == Status.ALIVE) {
-					
-					p.sendMessage(msg);
-					return;
-					
+
+					msg = team.getChatColor() + e.getPlayer().getName() + ChatColor.WHITE + ": " + e.getMessage();
+
+				} else {
+
+					msg = ChatColor.GRAY + "Spectator | " + team.getChatColor() + e.getPlayer().getName() + ChatColor.GRAY + ": " + e.getMessage();
+
 				}
-				
-				Status s = WedBars.arena.getGamer(p.getName()).getStatus();
-				
-				if (status == Status.RESPAWNING || status == Status.DEAD) {
-					
-					if (s == Status.RESPAWNING || s == Status.DEAD) {
-						
-						p.sendMessage(msg);
-						
-					}
-					
-				}
-				
+
 			}
-			
-			
-			
+
+			for (Player p : Bukkit.getOnlinePlayers()) {
+
+				if (status == Status.ALIVE) {
+
+					p.sendMessage(msg);
+					continue;
+
+				}
+
+				Status s = WedBars.arena.getGamer(p.getName()).getStatus();
+
+				if (status == Status.RESPAWNING || status == Status.DEAD) {
+
+					if (s == Status.RESPAWNING || s == Status.DEAD) {
+
+						p.sendMessage(msg);
+
+					}
+
+				}
+
+			}
+
+
+
 		}
-		
+
 	}
-	
+
 }

@@ -122,6 +122,8 @@ public class Arena {
 			Player p = gamer.getPlayer();
 			Team team = gamer.getTeam();
 			ArenaTeam at = teams.get(team);
+			
+			gamer.setStatus(Status.ALIVE);
 
 			p.getEnderChest().clear();
 			p.getInventory().clear();
