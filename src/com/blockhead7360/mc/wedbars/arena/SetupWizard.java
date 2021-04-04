@@ -1,10 +1,15 @@
-package com.blockhead7360.mc.wedbars;
+package com.blockhead7360.mc.wedbars.arena;
 
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
+
+import com.blockhead7360.mc.wedbars.Utility;
+import com.blockhead7360.mc.wedbars.WedBars;
+import com.blockhead7360.mc.wedbars.team.ArenaTeamData;
+import com.blockhead7360.mc.wedbars.team.Team;
 
 import net.md_5.bungee.api.ChatColor;
 

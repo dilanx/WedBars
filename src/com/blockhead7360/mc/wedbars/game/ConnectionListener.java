@@ -1,8 +1,10 @@
-package com.blockhead7360.mc.wedbars;
+package com.blockhead7360.mc.wedbars.game;
 
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerQuitEvent;
+
+import com.blockhead7360.mc.wedbars.WedBars;
 
 public class ConnectionListener implements Listener {
 	

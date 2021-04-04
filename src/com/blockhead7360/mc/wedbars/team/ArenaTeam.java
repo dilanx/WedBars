@@ -1,6 +1,9 @@
-package com.blockhead7360.mc.wedbars;
+package com.blockhead7360.mc.wedbars.team;
 
 import org.bukkit.Location;
+
+import com.blockhead7360.mc.wedbars.game.Generator;
+import com.blockhead7360.mc.wedbars.player.Gamer;
 
 public class ArenaTeam {
 	
@@ -13,6 +16,8 @@ public class ArenaTeam {
 	private Location[] bedLoc;
 	
 	private Gamer[] gamers;
+	
+	private boolean[] upgrades;
 	
 	public ArenaTeam(Team team, Location spawnLoc, Location generatorLoc, int ironspeed, int goldspeed, int personalemeraldspeed, Location[] bedLoc, Gamer[] gamers) {
 		
@@ -29,6 +34,8 @@ public class ArenaTeam {
 		this.spawnLoc = spawnLoc;
 		this.bedLoc = bedLoc;
 		this.gamers = gamers;
+		
+		this.upgrades = new boolean[TeamUpgrade.SIZE];
 		
 	}
 	
@@ -119,6 +126,18 @@ public class ArenaTeam {
 
 	public void setBedExists(boolean bedExists) {
 		this.bedExists = bedExists;
+	}
+	
+	public boolean hasUpgrade(int upgrade) {
+		return upgrades[upgrade];
+	}
+	
+	public void addUpgrade(int upgrade) {
+		upgrades[upgrade] = true;
+	}
+	
+	public boolean[] getUpgrades() {
+		return upgrades;
 	}
 	
 	

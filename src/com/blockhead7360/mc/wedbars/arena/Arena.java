@@ -1,4 +1,4 @@
-package com.blockhead7360.mc.wedbars;
+package com.blockhead7360.mc.wedbars.arena;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -17,8 +17,19 @@ import org.bukkit.entity.Entity;
 import org.bukkit.entity.Item;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitRunnable;
 
+import com.blockhead7360.mc.wedbars.Utility;
+import com.blockhead7360.mc.wedbars.WedBars;
+import com.blockhead7360.mc.wedbars.game.GameScoreboard;
+import com.blockhead7360.mc.wedbars.game.Generator;
+import com.blockhead7360.mc.wedbars.player.Gamer;
+import com.blockhead7360.mc.wedbars.player.Status;
+import com.blockhead7360.mc.wedbars.team.ArenaTeam;
+import com.blockhead7360.mc.wedbars.team.ArenaTeamData;
+import com.blockhead7360.mc.wedbars.team.Team;
+import com.blockhead7360.mc.wedbars.team.TeamAssignments;
 import com.gmail.filoghost.holographicdisplays.api.Hologram;
 import com.gmail.filoghost.holographicdisplays.api.HologramsAPI;
 import com.gmail.filoghost.holographicdisplays.api.placeholder.PlaceholderReplacer;
@@ -34,64 +45,64 @@ public class Arena {
 	private Generator[] emeralds;
 
 	public Arena(ArenaData data, TeamAssignments teamAssignments) {
-		
+
 		this.lobby = data.getLobby();
-		
+
 		List<Location> dg = data.getDiamondGen();
 		int ds = data.getDiamondSpeed();
-		
+
 		diamonds = new Generator[dg.size()];
-		
+
 		for (int i = 0; i < dg.size(); i++) {
-			
+
 			diamonds[i] = new Generator(dg.get(i), ds);
-			
+
 		}
-		
-		
+
+
 		List<Location> eg = data.getEmeraldGen();
 		int es = data.getEmeraldSpeed();
-		
+
 		emeralds = new Generator[eg.size()];
-		
+
 		for (int i = 0; i < eg.size(); i++) {
-			
+
 			emeralds[i] = new Generator(eg.get(i), es);
-			
+
 		}
 
 		this.world = diamonds[0].getLocation().getWorld();
-		
+
 		this.teams = new HashMap<Team, ArenaTeam>();
 		this.gamers = new HashMap<String, Gamer>();
-		
+
 		Map<Team, List<String>> ta = teamAssignments.getTeamAssignments();
-		
+
 		for (Team team : ta.keySet()) {
-			
+
 			ArenaTeamData atd = data.getTeamData(team);
 			List<String> players = ta.get(team);
-			
+
 			Gamer[] g = new Gamer[players.size()];
-			
+
 			for (int i = 0; i < players.size(); i++) {
-				
+
 				Gamer gamer = new Gamer(Bukkit.getPlayer(players.get(i)), team);
 				g[i] = gamer;
-				
+
 				gamers.put(players.get(i), gamer);
-				
+
 			}
-			
-			
+
+
 			ArenaTeam at = new ArenaTeam(team, atd.getSpawn(), atd.getGenerator(),
 					data.getIronSpeed(), data.getGoldSpeed(), data.getPersonalEmeraldSpeed(),
 					atd.getBed(), g);
-			
+
 			teams.put(team, at);
-			
-			
-			
+
+
+
 		}
 
 	}
@@ -99,6 +110,7 @@ public class Arena {
 	/* 10 PER SECOND */
 
 	public void start() {
+
 
 		WedBars.running = true;
 		WedBars.arena = this;
@@ -110,13 +122,18 @@ public class Arena {
 			Player p = gamer.getPlayer();
 			Team team = gamer.getTeam();
 			ArenaTeam at = teams.get(team);
+			
+			gamer.setStatus(Status.ALIVE);
 
 			p.getEnderChest().clear();
 			p.getInventory().clear();
 			p.setHealth(20);
 			p.setGameMode(GameMode.SURVIVAL);
+			p.removePotionEffect(PotionEffectType.FAST_DIGGING);
 
 			p.teleport(at.getSpawnLoc());
+			p.playSound(p.getLocation(), Sound.NOTE_PLING, 1, 1);
+			Utility.sendStartTitle(p, team);
 
 			p.getInventory().setHelmet(Utility.createLeatherArmorPiece(Material.LEATHER_HELMET, team.getColor(), ChatColor.YELLOW + "Leather Helmet"));
 			p.getInventory().setChestplate(Utility.createLeatherArmorPiece(Material.LEATHER_CHESTPLATE, team.getColor(), ChatColor.YELLOW + "Leather Chestplate"));
@@ -129,7 +146,7 @@ public class Arena {
 
 
 		GameScoreboard.start(teams.values().toArray(new ArenaTeam[0]));
-		GameScoreboard.updateStatus(ChatColor.AQUA + "" + ChatColor.BOLD + "not implemented yet");
+		GameScoreboard.updateStatus(ChatColor.AQUA + "nothing yet lol");
 
 		// reset team stuff
 
@@ -164,7 +181,7 @@ public class Arena {
 			Hologram h = HologramsAPI.createHologram(WedBars.getInstance(), d.getLocation().clone().add(0, 3, 0));
 			h.setAllowPlaceholders(true);
 			h.appendTextLine(ChatColor.AQUA + "" + ChatColor.BOLD + "DIAMOND GENERATOR");
-			h.appendTextLine(ChatColor.WHITE + "spawning in " + ChatColor.RED + "{diamond" + i + "}");
+			h.appendTextLine(ChatColor.WHITE + "Spawning in " + ChatColor.RED + "{diamond" + i + "}");
 
 		}
 
@@ -187,14 +204,14 @@ public class Arena {
 
 			h.setAllowPlaceholders(true);
 			h.appendTextLine(ChatColor.GREEN + "" + ChatColor.BOLD + "EMERALD GENERATOR");
-			h.appendTextLine(ChatColor.WHITE + "spawning in " + ChatColor.RED + "{emerald" + i + "}");
+			h.appendTextLine(ChatColor.WHITE + "Spawning in " + ChatColor.RED + "{emerald" + i + "}");
 		}
 
 		// start game
 
 		new BukkitRunnable() {
 
-			int totalTestTime = 6000;
+			int totalTestTime = 36000;
 
 			public void run() {
 
@@ -371,16 +388,19 @@ public class Arena {
 	public Gamer getGamer(String name) {
 		return gamers.get(name);
 	}
-	
+
 	public void deleteGamer(Gamer gamer) {
-		
+
 		getTeam(gamer.getTeam()).removeGamer(gamer);
 		gamers.remove(gamer.getPlayer().getName());
-		
+
 	}
 
 	public ArenaTeam getTeam(Team team) {
 		return teams.get(team);
+	}
+	public Map<Team, ArenaTeam> getTeams() {
+		return teams;
 	}
 
 	public boolean checkForEndGame() {
@@ -461,15 +481,17 @@ public class Arena {
 					if (time <= 0) {
 
 						cancel();
-						
+
 						for (Player player : Bukkit.getOnlinePlayers()) {
-							
+
 							player.teleport(lobby);
-							player.setGameMode(GameMode.SURVIVAL);
+							player.setGameMode(GameMode.ADVENTURE);
+							player.removePotionEffect(PotionEffectType.FAST_DIGGING);
+							player.getInventory().clear();
 							WedBars.arena = null;
-							
+
 						}
-						
+
 						resetBlocks();
 
 					}
@@ -479,11 +501,11 @@ public class Arena {
 				}
 
 			}.runTaskTimer(WedBars.getInstance(), 0, 20L);
-			
+
 			return true;
 
 		}
-		
+
 		return false;
 
 	}
@@ -491,7 +513,7 @@ public class Arena {
 	public void resetBlocks() {
 
 		WedBars.resetting = true;
-		
+
 		Bukkit.broadcastMessage(" ");
 		Bukkit.broadcastMessage(ChatColor.GRAY + "The map is resetting...");
 		Bukkit.broadcastMessage(" ");

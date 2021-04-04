@@ -1,6 +1,9 @@
-package com.blockhead7360.mc.wedbars;
+package com.blockhead7360.mc.wedbars.player;
 
 import org.bukkit.entity.Player;
+
+import com.blockhead7360.mc.wedbars.WedBars;
+import com.blockhead7360.mc.wedbars.team.Team;
 
 public class Gamer {
 	

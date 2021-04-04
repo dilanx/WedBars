@@ -11,6 +11,17 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import com.blockhead7360.mc.wedbars.arena.Arena;
+import com.blockhead7360.mc.wedbars.arena.ArenaData;
+import com.blockhead7360.mc.wedbars.arena.ArenaLoader;
+import com.blockhead7360.mc.wedbars.arena.SetupWizard;
+import com.blockhead7360.mc.wedbars.game.ConnectionListener;
+import com.blockhead7360.mc.wedbars.game.GameChat;
+import com.blockhead7360.mc.wedbars.game.Listeners;
+import com.blockhead7360.mc.wedbars.game.Powerups;
+import com.blockhead7360.mc.wedbars.game.Shop;
+import com.blockhead7360.mc.wedbars.team.Team;
+import com.blockhead7360.mc.wedbars.team.TeamAssignments;
 import com.gmail.filoghost.holographicdisplays.api.Hologram;
 import com.gmail.filoghost.holographicdisplays.api.HologramsAPI;
 
@@ -29,12 +40,10 @@ public class WedBars extends JavaPlugin {
 
 	// speeds (interval between spawns in 10*seconds)
 
-	public static final int MAX_EMERALDS_IN_GEN = 3;
-	public static final int MAX_DIAMONDS_IN_GEN = 3;
 
 
 	// forge scales
-	// n times the initial speed as set by the arena
+	// n times the initial interval as set by the arena
 
 	public static final double FORGE1 = 1.5;
 	public static final double FORGE2 = 2;
@@ -59,10 +68,12 @@ public class WedBars extends JavaPlugin {
 
 	//public static final int GOLD1_SPEED = 60;
 
-	public static final int RESPAWN_TIME = 50;
 
 	// not gamerTicks, this one is seconds
-	public static final int TIME_BETWEEN_END_AND_RESET = 10;
+	public static int TIME_BETWEEN_END_AND_RESET = 0, MAX_DIAMONDS_IN_GEN = 0, MAX_EMERALDS_IN_GEN = 0;
+	
+	
+	public static int MAX_BUILD_HEIGHT = 0, TNT_FUSE = 0, RESPAWN_TIME = 0, VOID_LEVEL = 0;
 
 
 	private static WedBars instance;
@@ -77,10 +88,21 @@ public class WedBars extends JavaPlugin {
 		getServer().getPluginManager().registerEvents(new Shop(), this);
 		getServer().getPluginManager().registerEvents(new SetupWizard(), this);
 		getServer().getPluginManager().registerEvents(new ConnectionListener(), this);
+		getServer().getPluginManager().registerEvents(new GameChat(), this);
 
 		Shop.init();
 
 		instance = this;
+
+		saveDefaultConfig();
+		
+		MAX_BUILD_HEIGHT = getConfig().getInt("maxBuildHeight");
+		TNT_FUSE = getConfig().getInt("tntFuse");
+		TIME_BETWEEN_END_AND_RESET = getConfig().getInt("timeBeforeReset");
+		MAX_DIAMONDS_IN_GEN = getConfig().getInt("maxDiamondsInGen");
+		MAX_EMERALDS_IN_GEN = getConfig().getInt("maxEmeraldsInGen");
+		VOID_LEVEL = getConfig().getInt("voidLevel");
+		RESPAWN_TIME = getConfig().getInt("respawnTime");
 
 	}
 
@@ -131,6 +153,14 @@ public class WedBars extends JavaPlugin {
 			}
 			
 			Arena arena = new Arena(loadedArena, teamAssignments);
+
+			if (arena.getTeams().size() < 2) {
+
+				sender.sendMessage("You must have two or more teams in order to start a game.");
+				return true;
+
+			}
+
 			arena.start();
 			
 			return true;
@@ -455,6 +485,27 @@ public class WedBars extends JavaPlugin {
 			}
 
 			Shop.openItemShop((Player) sender);
+			return true;
+
+		}
+		
+		if (cmd.getName().equalsIgnoreCase("teamshop")) {
+
+			if (!sender.hasPermission("wedbars.itemshop")) {
+
+				sender.sendMessage(ChatColor.RED + "Use one of the team upgrade NPCs to access the team upgrade shop.");
+				return true;
+
+			}
+
+			if (!(sender instanceof Player)) {
+
+				sender.sendMessage("Only players lol.");
+				return true;
+
+			}
+
+			Shop.openTeamUpgrades((Player) sender);
 			return true;
 
 		}

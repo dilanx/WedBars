@@ -1,5 +1,5 @@
 name: WedBars
-version: 1.0
+version: 1.0_b1_u10
 main: com.blockhead7360.mc.wedbars.WedBars
 author: Blockhead7360
 description: It's like Bed Wars on Hypixel but better I swear
@@ -11,17 +11,19 @@ commands:
     description: Information about Wed Bars
     aliases: [wb]
   load:
-    description: Load
+    description: Loads a given arena.
   setup:
-    description: Setup
+    description: Enter the arena setup wizard.
   team:
-    description: Team
+    description: Assign a player to a team.
   start:
-    description: Start
+    description: Starts the game.
   test:
-    description: Test
+    description: Test?
   itemshop:
-    description: ItemShop
+    description: Opens the item shop, for use with NPCs.
+  teamshop:
+    description: Opens the team shop, for use with NPCs.
 permissions:
   wedbars.itemshop:
     default: false

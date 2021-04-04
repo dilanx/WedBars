@@ -1,4 +1,4 @@
-package com.blockhead7360.mc.wedbars;
+package com.blockhead7360.mc.wedbars.game;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -10,6 +10,12 @@ import org.bukkit.scoreboard.DisplaySlot;
 import org.bukkit.scoreboard.Objective;
 import org.bukkit.scoreboard.Score;
 import org.bukkit.scoreboard.Scoreboard;
+
+import com.blockhead7360.mc.wedbars.WedBars;
+import com.blockhead7360.mc.wedbars.player.Gamer;
+import com.blockhead7360.mc.wedbars.player.Status;
+import com.blockhead7360.mc.wedbars.team.ArenaTeam;
+import com.blockhead7360.mc.wedbars.team.Team;
 
 public class GameScoreboard {
 	
@@ -48,6 +54,13 @@ public class GameScoreboard {
 	public static void start(ArenaTeam[] teams) {
 		
 		sb = Bukkit.getScoreboardManager().getNewScoreboard();
+		Objective o = sb.registerNewObjective("health", "health");
+		o.setDisplayName(ChatColor.RED + "HP");
+		o.setDisplaySlot(DisplaySlot.BELOW_NAME);
+		
+		Objective o1 = sb.registerNewObjective("health1", "health");
+		o1.setDisplaySlot(DisplaySlot.PLAYER_LIST);
+		
 		obj = sb.registerNewObjective("game", "dummy");
 		obj.setDisplayName(ChatColor.YELLOW + "" + ChatColor.BOLD + "WED BARS");
 		obj.setDisplaySlot(DisplaySlot.SIDEBAR);
@@ -58,14 +71,16 @@ public class GameScoreboard {
 			
 		}
 		
-		obj.getScore(" ").setScore(15);
+		obj.getScore(ChatColor.GRAY + "WB " + WedBars.getInstance().getDescription().getVersion())
+		.setScore(15);
+		obj.getScore(" ").setScore(14);
 		status = "None1";
 		time = "None2";
-		obj.getScore("  ").setScore(12);
+		obj.getScore("  ").setScore(11);
 		
 		teamData = new HashMap<>();
 		
-		int x = 11;
+		int x = 10;
 		
 		for (int i = 0; i < teams.length; i++) {
 			
@@ -84,7 +99,7 @@ public class GameScoreboard {
 		
 		String text = ChatColor.WHITE + "" + time + ChatColor.GRAY + " until";
 		Score score = obj.getScore(text);
-		score.setScore(14);
+		score.setScore(13);
 		GameScoreboard.time = text;
 		
 	}
@@ -93,7 +108,7 @@ public class GameScoreboard {
 		
 		sb.resetScores(GameScoreboard.status);
 		Score score = obj.getScore(status);
-		score.setScore(13);
+		score.setScore(12);
 		GameScoreboard.status = status;
 		
 	}
