@@ -36,6 +36,7 @@ import com.blockhead7360.mc.wedbars.player.Gamer;
 import com.blockhead7360.mc.wedbars.player.Status;
 import com.blockhead7360.mc.wedbars.team.ArenaTeam;
 import com.blockhead7360.mc.wedbars.team.Team;
+import com.blockhead7360.mc.wedbars.team.TeamUpgrade;
 
 public class Listeners implements Listener {
 
@@ -211,7 +212,6 @@ public class Listeners implements Listener {
 		Gamer gamer = WedBars.arena.getGamer(player.getName());
 		boolean bedExists = WedBars.arena.getTeam(gamer.getTeam()).bedExists();
 
-
 		if (disconnect) {
 
 			Bukkit.broadcastMessage(gamer.getTeam().getChatColor() + player.getName() + ChatColor.GRAY + " disconnected.");
@@ -226,7 +226,12 @@ public class Listeners implements Listener {
 			player.getInventory().clear();
 
 			player.getInventory().setArmorContents(armor);
-			player.getInventory().setItem(0, Utility.createUnbreakableItemStack(Material.WOOD_SWORD, 1, ChatColor.YELLOW + "Wooden Sword"));
+						
+			if (WedBars.arena.getTeam(gamer.getTeam()).hasUpgrade(TeamUpgrade.SWORDS))
+				player.getInventory().setItem(0, Utility.createEnchantedItemStack(Material.WOOD_SWORD, 1, ChatColor.YELLOW + "Wooden Sword",
+						new EnchantmentSet[] {new EnchantmentSet(Enchantment.DAMAGE_ALL, 1)}));
+			else
+				player.getInventory().setItem(0, Utility.createUnbreakableItemStack(Material.WOOD_SWORD, 1, ChatColor.YELLOW + "Wooden Sword"));
 
 			for (int i = 0; i < contents.length; i++) {
 

@@ -292,7 +292,7 @@ public class Shop implements Listener {
 							ChatColor.GRAY + "Price: " + ChatColor.WHITE + "4 iron"),
 					Utility.createIconItemStack(Material.WOOD, 16, ChatColor.YELLOW + "Wood", "",
 							ChatColor.GRAY + "Price: " + ChatColor.GOLD + "4 gold"),
-					Utility.createIconItemStack(Material.OBSIDIAN, 16, ChatColor.YELLOW + "Obby :)", "",
+					Utility.createIconItemStack(Material.OBSIDIAN, 4, ChatColor.YELLOW + "Obby :)", "",
 							ChatColor.GRAY + "Price: " + ChatColor.GREEN + "4 emerald")
 
 			};
@@ -949,7 +949,7 @@ public class Shop implements Listener {
 
 			nextPick = Utility.createEnchantedItemStack(Material.DIAMOND_PICKAXE, 1, ChatColor.YELLOW + "Diamond Pickaxe",
 					new EnchantmentSet[] {new EnchantmentSet(Enchantment.DIG_SPEED, 1)}, "",
-					ChatColor.GRAY + "Price: " + ChatColor.GOLD + "6 iron");
+					ChatColor.GRAY + "Price: " + ChatColor.GOLD + "6 gold");
 
 		} else if (player.getInventory().contains(Material.DIAMOND_PICKAXE)) {
 
@@ -988,7 +988,7 @@ public class Shop implements Listener {
 
 			nextAxe = Utility.createEnchantedItemStack(Material.DIAMOND_AXE, 1, ChatColor.YELLOW + "Diamond Axe",
 					new EnchantmentSet[] {new EnchantmentSet(Enchantment.DIG_SPEED, 1)}, "",
-					ChatColor.GRAY + "Price: " + ChatColor.GOLD + "6 iron");
+					ChatColor.GRAY + "Price: " + ChatColor.GOLD + "6 gold");
 
 		} else if (player.getInventory().contains(Material.DIAMOND_AXE)) {
 

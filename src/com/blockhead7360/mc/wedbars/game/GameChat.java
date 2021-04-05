@@ -63,6 +63,16 @@ public class GameChat implements Listener {
 					continue;
 
 				}
+				
+				Gamer g = WedBars.arena.getGamer(p.getName());
+				
+				if (g == null) {
+					
+					p.sendMessage(msg);
+					continue;
+					
+				}
+				
 
 				Status s = WedBars.arena.getGamer(p.getName()).getStatus();
 

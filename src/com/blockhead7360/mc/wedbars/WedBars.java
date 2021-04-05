@@ -179,6 +179,9 @@ public class WedBars extends JavaPlugin {
 			if (args.length == 0) {
 
 				sender.sendMessage("Use '/load <arena>' to load a Wed Bars arena (unloading any previously loaded one).");
+				String list = ArenaLoader.listArenas(this).toString();
+				sender.sendMessage("Available arenas: " + list.substring(1, list.length() - 1));
+				
 				return true;
 
 			}

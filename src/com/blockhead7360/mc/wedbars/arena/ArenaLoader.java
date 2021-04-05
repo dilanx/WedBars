@@ -2,6 +2,7 @@ package com.blockhead7360.mc.wedbars.arena;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.bukkit.Location;
@@ -15,6 +16,30 @@ import com.blockhead7360.mc.wedbars.team.Team;
 
 public class ArenaLoader {
 
+	public static List<String> listArenas(WedBars plugin){
+		
+		List<String> list = new ArrayList<>();
+		
+		File folder = new File(plugin.getDataFolder(), "arenas");
+		if (!folder.exists()) {
+
+			folder.mkdirs();
+			return null;
+
+		}
+		
+		for (File file : folder.listFiles()) {
+			
+			String name = file.getName();
+			
+			if (name.endsWith(".yml")) list.add(name.substring(0, name.length() - 4));
+			
+		}
+		
+		return list;
+		
+	}
+	
 	public static ArenaData loadArena(WedBars plugin, String name) {
 
 		File folder = new File(plugin.getDataFolder(), "arenas");
