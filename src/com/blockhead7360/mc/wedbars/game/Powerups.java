@@ -31,12 +31,13 @@ import org.bukkit.potion.PotionEffectType;
 
 import com.blockhead7360.mc.wedbars.WedBars;
 import com.blockhead7360.mc.wedbars.player.Gamer;
+import org.bukkit.util.Vector;
 
 public class Powerups implements Listener {
 
     public static void launchFireball(Player player) {
-      player.launchProjectile(Fireball.class, player.getLocation().getDirection());
-      //f.setVelocity(f.getVelocity().subtract(new Vector(3,3,3)));
+      Fireball f = player.launchProjectile(Fireball.class, player.getLocation().getDirection());
+      f.setVelocity(f.getVelocity().subtract(new Vector(1,0,1)));
 
     }
 
@@ -57,7 +58,6 @@ public class Powerups implements Listener {
             if (gm instanceof Player && !s.getCustomName().contains(
                     WedBars.arena.getGamer(p.getName()).getTeam().getLabel())) {
                 s.setTarget((LivingEntity) e);
-                p.sendMessage("TARGETING " + gm.getName());
             }
         }
     }
@@ -88,8 +88,14 @@ public class Powerups implements Listener {
     
     @EventHandler
     public void onEntityExplode(EntityExplodeEvent e) {
+
+        if (e.getEntity() instanceof Fireball) {
+            e.setCancelled(true);
+           TNTPrimed t = (TNTPrimed) e.getLocation().getWorld().spawnEntity(e.getLocation(), EntityType.PRIMED_TNT);
+           t.setFuseTicks(0);
+        }
     	
-    	if (e.getEntity() instanceof Fireball || e.getEntity() instanceof TNTPrimed) {
+    	if (e.getEntity() instanceof TNTPrimed) {
     		
     		e.setCancelled(true);
 
