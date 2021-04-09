@@ -93,6 +93,7 @@ public class Powerups implements Listener {
             e.setCancelled(true);
            TNTPrimed t = (TNTPrimed) e.getLocation().getWorld().spawnEntity(e.getLocation(), EntityType.PRIMED_TNT);
            t.setFuseTicks(0);
+           return;
         }
     	
     	if (e.getEntity() instanceof TNTPrimed) {
