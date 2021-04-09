@@ -89,6 +89,7 @@ public class Powerups implements Listener {
     @EventHandler
     public void onEntityExplode(EntityExplodeEvent e) {
 
+
         if (e.getEntity() instanceof Fireball) {
             e.setCancelled(true);
            TNTPrimed t = (TNTPrimed) e.getLocation().getWorld().spawnEntity(e.getLocation(), EntityType.PRIMED_TNT);
