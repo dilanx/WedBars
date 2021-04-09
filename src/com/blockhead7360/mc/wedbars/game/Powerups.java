@@ -36,8 +36,8 @@ import org.bukkit.util.Vector;
 public class Powerups implements Listener {
 
     public static void launchFireball(Player player) {
-      Fireball f = player.launchProjectile(Fireball.class, player.getLocation().getDirection());
-      f.setVelocity(f.getVelocity().subtract(new Vector(1,0,1)));
+      player.launchProjectile(Fireball.class, player.getLocation().getDirection());
+     // f.setVelocity(f.getVelocity().subtract(new Vector(1,0,1)));
 
     }
 
