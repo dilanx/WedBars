@@ -22,40 +22,46 @@ public class GameChat implements Listener {
 			return;
 
 		}
+		
+		e.setCancelled(true);
 
-		if (WedBars.arena != null) {
+		if (WedBars.arena == null) {
 
-			e.setCancelled(true);
+			String msg = ChatColor.GRAY + "Lobby | " + ChatColor.WHITE + e.getPlayer().getName() + ChatColor.GRAY + ": " + e.getMessage();
 
-			Gamer gamer = WedBars.arena.getGamer(e.getPlayer().getName());
+			Bukkit.broadcastMessage(msg);
 
-			if (gamer != null && gamer.getStatus() != Status.DEAD) {
+			return;
 
-				// game chat
+		}
 
-				String msg = gamer.getTeam().getChatColor() + e.getPlayer().getName() + ChatColor.WHITE + ": " + e.getMessage();
+		Gamer gamer = WedBars.arena.getGamer(e.getPlayer().getName());
 
-				for (Player p : Bukkit.getOnlinePlayers()) {
+		if (gamer != null && gamer.getStatus() != Status.DEAD) {
+
+			// game chat
+
+			String msg = gamer.getTeam().getChatColor() + e.getPlayer().getName() + ChatColor.WHITE + ": " + e.getMessage();
+
+			for (Player p : Bukkit.getOnlinePlayers()) {
+
+				p.sendMessage(msg);
+
+			}
+
+		} else {
+
+			// spec chat
+
+			String msg = ChatColor.GRAY + "Spectator | " + ChatColor.WHITE + e.getPlayer().getName() + ChatColor.GRAY + ": " + e.getMessage();
+
+			for (Player p : Bukkit.getOnlinePlayers()) {
+
+				Gamer g = WedBars.arena.getGamer(p.getName());
+
+				if (g == null || g.getStatus() != Status.ALIVE) {
 
 					p.sendMessage(msg);
-
-				}
-
-			} else {
-
-				// spec chat
-
-				String msg = ChatColor.GRAY + "Spectator | " + ChatColor.WHITE + e.getPlayer().getName() + ChatColor.GRAY + ": " + e.getMessage();
-
-				for (Player p : Bukkit.getOnlinePlayers()) {
-
-					Gamer g = WedBars.arena.getGamer(p.getName());
-
-					if (g == null || g.getStatus() != Status.ALIVE) {
-
-						p.sendMessage(msg);
-
-					}
 
 				}
 

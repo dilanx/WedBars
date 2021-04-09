@@ -1,6 +1,8 @@
-changelog
+WedBars changelog
+
+Change build number in plugin.yml every time you export
 
 
 
 1.0_b1_u1
-- Updated game chat
+- Updated chat system
