@@ -7,7 +7,14 @@ import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.block.Block;
-import org.bukkit.entity.*;
+import org.bukkit.entity.Endermite;
+import org.bukkit.entity.Entity;
+import org.bukkit.entity.EntityType;
+import org.bukkit.entity.Fireball;
+import org.bukkit.entity.IronGolem;
+import org.bukkit.entity.LivingEntity;
+import org.bukkit.entity.Player;
+import org.bukkit.entity.TNTPrimed;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
@@ -17,6 +24,8 @@ import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
+
+import com.blockhead7360.mc.wedbars.player.Gamer;
 
 public class Powerups implements Listener {
 
@@ -67,7 +76,7 @@ public class Powerups implements Listener {
     		e.getLocation().getWorld().playEffect(e.getLocation(), Effect.EXPLOSION_LARGE, 1);
     		
     		List<Block> blocks = e.blockList();
-    		//TODO: fix behavior with glass and bed
+    		//TODO: fix behavior with glass
     		for (Block b : blocks) {
     			
     			List<Location> locs = WedBars.getListeners().getPlacedBlocks();

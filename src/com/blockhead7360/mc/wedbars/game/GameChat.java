@@ -11,7 +11,6 @@ import com.blockhead7360.mc.wedbars.WedBars;
 import com.blockhead7360.mc.wedbars.arena.SetupWizard;
 import com.blockhead7360.mc.wedbars.player.Gamer;
 import com.blockhead7360.mc.wedbars.player.Status;
-import com.blockhead7360.mc.wedbars.team.Team;
 
 public class GameChat implements Listener {
 
@@ -30,55 +29,29 @@ public class GameChat implements Listener {
 
 			Gamer gamer = WedBars.arena.getGamer(e.getPlayer().getName());
 
-			Status status = Status.DEAD;
-			
-			String msg = "";
-			
-			if (gamer == null) {
+			if (gamer != null && gamer.getStatus() != Status.DEAD) {
 
-				msg = ChatColor.GRAY + "Spectator | " + ChatColor.WHITE + e.getPlayer().getName() + ChatColor.GRAY + ": " + e.getMessage();
+				// game chat
+
+				String msg = gamer.getTeam().getChatColor() + e.getPlayer().getName() + ChatColor.WHITE + ": " + e.getMessage();
+
+				for (Player p : Bukkit.getOnlinePlayers()) {
+
+					p.sendMessage(msg);
+
+				}
 
 			} else {
 
-				Team team = gamer.getTeam();
-				status = gamer.getStatus();
+				// spec chat
 
-				if (status == Status.ALIVE) {
+				String msg = ChatColor.GRAY + "Spectator | " + ChatColor.WHITE + e.getPlayer().getName() + ChatColor.GRAY + ": " + e.getMessage();
 
-					msg = team.getChatColor() + e.getPlayer().getName() + ChatColor.WHITE + ": " + e.getMessage();
+				for (Player p : Bukkit.getOnlinePlayers()) {
 
-				} else {
+					Gamer g = WedBars.arena.getGamer(p.getName());
 
-					msg = ChatColor.GRAY + "Spectator | " + team.getChatColor() + e.getPlayer().getName() + ChatColor.GRAY + ": " + e.getMessage();
-
-				}
-
-			}
-
-			for (Player p : Bukkit.getOnlinePlayers()) {
-
-				if (status == Status.ALIVE) {
-
-					p.sendMessage(msg);
-					continue;
-
-				}
-				
-				Gamer g = WedBars.arena.getGamer(p.getName());
-				
-				if (g == null) {
-					
-					p.sendMessage(msg);
-					continue;
-					
-				}
-				
-
-				Status s = WedBars.arena.getGamer(p.getName()).getStatus();
-
-				if (status == Status.RESPAWNING || status == Status.DEAD) {
-
-					if (s == Status.RESPAWNING || s == Status.DEAD) {
+					if (g == null || g.getStatus() != Status.ALIVE) {
 
 						p.sendMessage(msg);
 
@@ -87,8 +60,6 @@ public class GameChat implements Listener {
 				}
 
 			}
-
-
 
 		}
 

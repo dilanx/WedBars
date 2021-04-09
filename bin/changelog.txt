@@ -1,0 +1,6 @@
+changelog
+
+
+
+1.0_b1_u1
+- Updated game chat

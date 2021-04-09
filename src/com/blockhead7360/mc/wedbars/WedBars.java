@@ -60,20 +60,13 @@ public class WedBars extends JavaPlugin {
 	public static final int GEN_EMERALD3 = 4;
 
 
-	//public static final int EMERALD1_SPEED = 300;
-	//public static final int DIAMOND1_SPEED = 150;
-
-	//public static final int IRON1_SPEED = 14;
-
-
-	//public static final int GOLD1_SPEED = 60;
-
-
 	// not gamerTicks, this one is seconds
-	public static int TIME_BETWEEN_END_AND_RESET = 0, MAX_DIAMONDS_IN_GEN = 0, MAX_EMERALDS_IN_GEN = 0;
+	public static int TIME_BETWEEN_END_AND_RESET;
 	
 	
-	public static int MAX_BUILD_HEIGHT = 0, TNT_FUSE = 0, RESPAWN_TIME = 0, VOID_LEVEL = 0;
+	// these are gamerTicks though
+	public static int MAX_DIAMONDS_IN_GEN, MAX_EMERALDS_IN_GEN;
+	public static int MAX_BUILD_HEIGHT, TNT_FUSE, RESPAWN_TIME, VOID_LEVEL;
 
 
 	private static WedBars instance;
