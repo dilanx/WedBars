@@ -58,6 +58,8 @@ public class WedBars extends JavaPlugin {
 	public static final int GEN_DIAMOND3 = 4;
 	public static final int GEN_EMERALD2 = 2;
 	public static final int GEN_EMERALD3 = 4;
+	
+	public static final int SPAWN_PROTECTION_DISTANCE_SQUARED = 1;
 
 
 	// not gamerTicks, this one is seconds
