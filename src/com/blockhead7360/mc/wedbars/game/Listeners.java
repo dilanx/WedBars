@@ -130,6 +130,18 @@ public class Listeners implements Listener {
 			tp.setFuseTicks(WedBars.TNT_FUSE);
 			return;
 		}
+		
+		for (ArenaTeam team : WedBars.arena.getTeams().values()) {
+			
+			if (team.getSpawnLoc().distanceSquared(event.getBlock().getLocation()) <= WedBars.SPAWN_PROTECTION_DISTANCE_SQUARED) {
+				
+				event.setCancelled(true);
+				event.getPlayer().sendMessage(ChatColor.RED + "You can't place blocks there!");
+				return;
+				
+			}
+			
+		}
 
 		placedBlocks.add(event.getBlock().getLocation());
 	}

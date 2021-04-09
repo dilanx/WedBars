@@ -17,6 +17,7 @@ import org.bukkit.entity.Entity;
 import org.bukkit.entity.Item;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitRunnable;
 
@@ -30,6 +31,7 @@ import com.blockhead7360.mc.wedbars.team.ArenaTeam;
 import com.blockhead7360.mc.wedbars.team.ArenaTeamData;
 import com.blockhead7360.mc.wedbars.team.Team;
 import com.blockhead7360.mc.wedbars.team.TeamAssignments;
+import com.blockhead7360.mc.wedbars.team.TeamUpgrade;
 import com.gmail.filoghost.holographicdisplays.api.Hologram;
 import com.gmail.filoghost.holographicdisplays.api.HologramsAPI;
 import com.gmail.filoghost.holographicdisplays.api.placeholder.PlaceholderReplacer;
@@ -222,12 +224,20 @@ public class Arena {
 					// Players
 
 					// TODO change messages
+					
+					boolean healPool = at.hasUpgrade(TeamUpgrade.HEAL);
 
 					for (Gamer gamer : at.getGamers()) {
+						
+						Player player = gamer.getPlayer();
+						
+						if (healPool && player.getLocation().distanceSquared(at.getBedLoc()[0]) <= WedBars.TRAP_DISTANCE_SQUARED) {
+							
+							player.addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION, 1, 1));
+							
+						}
 
 						if (gamer.getStatus() == Status.RESPAWNING) {
-
-							Player player = gamer.getPlayer();
 
 							if (gamer.respawnPassTime()) {
 
