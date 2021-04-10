@@ -6,7 +6,6 @@ import org.bukkit.Effect;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.Sound;
-import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
@@ -21,6 +20,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityExplodeEvent;
+import org.bukkit.event.entity.EntityTargetEvent;
 import org.bukkit.event.entity.ProjectileHitEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerItemConsumeEvent;
@@ -68,37 +68,37 @@ public class Powerups implements Listener {
 				}
 
 				golem.setCustomName(team.getChatColor() + "" + time + "s | " + golem.getHealth() + " HP");
-				
+
 				boolean found = false;
-				
+
 				for (Entity e : golem.getNearbyEntities(dist, dist, dist)) {
-					
+
 					if (e instanceof Player) {
-						
+
 						Player p = (Player) e;
 						Gamer g = WedBars.arena.getGamer(p.getName());
-						
+
 						if (g != null && g.getTeam() != team) {
-							
+
 							golem.setTarget((LivingEntity) p);
 							found = true;
 							break;
-							
+
 						}
-						
+
 					}
-					
+
 				}
-				
+
 				if (!found) golem.setTarget(null);
 
-				if (time == 0) {
+				if (time <= 0) {
 
 					golem.remove();
 					cancel();
 
 				}
-				
+
 				time--;
 
 			}
@@ -108,17 +108,17 @@ public class Powerups implements Listener {
 	}
 
 	public static void spawnSilverfish(Gamer gamer, Location spawnLoc) {
-//		Player p = (Player)e.getEntity().getShooter();
-//		Gamer g = WedBars.arena.getGamer(p.getName());
-//		World w = e.getEntity().getLocation().getWorld();
-//		Silverfish s = (Silverfish)w.spawnEntity(e.getEntity().getLocation(), EntityType.SILVERFISH);
-//		s.setCustomName("" + g.getTeam().getLabel() + "'s Bed Bug");
-//		for (Entity gm : w.getNearbyEntities(s.getLocation(), 10, 10 ,10)) {
-//			if (gm instanceof Player && !s.getCustomName().contains(
-//					WedBars.arena.getGamer(p.getName()).getTeam().getLabel())) {
-//				s.setTarget((LivingEntity) e);
-//			}
-//		}
+		//		Player p = (Player)e.getEntity().getShooter();
+		//		Gamer g = WedBars.arena.getGamer(p.getName());
+		//		World w = e.getEntity().getLocation().getWorld();
+		//		Silverfish s = (Silverfish)w.spawnEntity(e.getEntity().getLocation(), EntityType.SILVERFISH);
+		//		s.setCustomName("" + g.getTeam().getLabel() + "'s Bed Bug");
+		//		for (Entity gm : w.getNearbyEntities(s.getLocation(), 10, 10 ,10)) {
+		//			if (gm instanceof Player && !s.getCustomName().contains(
+		//					WedBars.arena.getGamer(p.getName()).getTeam().getLabel())) {
+		//				s.setTarget((LivingEntity) e);
+		//			}
+		//		}
 		Team team = gamer.getTeam();
 		Player player = gamer.getPlayer();
 
@@ -164,7 +164,7 @@ public class Powerups implements Listener {
 
 				if (!found) bug.setTarget(null);
 
-				if (time == 0) {
+				if (time <= 0) {
 
 					bug.remove();
 					cancel();
@@ -177,17 +177,38 @@ public class Powerups implements Listener {
 
 		}.runTaskTimer(WedBars.getInstance(), 0, 20L);
 	}
-	
+
 	@EventHandler
 	public void onEntityDamageByEntity(EntityDamageByEntityEvent e) {
+
+		if (WedBars.running) {
+
+			if (e.getDamager() instanceof Player && (e.getEntity() instanceof IronGolem || e.getEntity() instanceof Silverfish)) {
+
+				Team team = WedBars.arena.getGamer(((Player) e.getDamager()).getName()).getTeam();
+
+				if (e.getEntity().getCustomName().startsWith(team.getChatColor() + "")) {
+
+					e.setCancelled(true);
+
+				}
+
+			}
+
+		}
+
+	}
+	
+	@EventHandler
+	public void onEntityTarget(EntityTargetEvent e) {
 		
 		if (WedBars.running) {
 			
-			if (e.getDamager() instanceof Player && (e.getEntity() instanceof IronGolem || e.getEntity() instanceof Silverfish)) {
+			if (e.getEntity() instanceof Silverfish && e.getTarget() instanceof Player) {
 				
-				Team team = WedBars.arena.getGamer(((Player) e.getDamager()).getName()).getTeam();
+				Gamer gamer = WedBars.arena.getGamer(e.getTarget().getName());
 				
-				if (e.getEntity().getCustomName().startsWith(team.getChatColor() + "")) {
+				if (e.getEntity().getCustomName().startsWith(gamer.getTeam().getChatColor() + "")) {
 					
 					e.setCancelled(true);
 					
@@ -202,7 +223,7 @@ public class Powerups implements Listener {
 	@EventHandler
 	public void onPlayerInteract(PlayerInteractEvent e) {
 
-		
+
 		if (e.getAction() == Action.RIGHT_CLICK_AIR || e.getAction() == Action.RIGHT_CLICK_BLOCK) {
 
 			ItemStack hand = e.getPlayer().getItemInHand();
@@ -210,7 +231,7 @@ public class Powerups implements Listener {
 			if (hand != null) {
 
 				if (hand.getType() == Material.FIREBALL) {
-					
+
 					e.setCancelled(true);
 
 					launchFireball(e.getPlayer());
@@ -219,15 +240,20 @@ public class Powerups implements Listener {
 					else e.getPlayer().setItemInHand(null);
 
 				}
-				
-				if (WedBars.running && hand.getType() == Material.MONSTER_EGG) {
-					
-					e.setCancelled(true);
-					
-					spawnGolem(WedBars.arena.getGamer(e.getPlayer().getName()));
-					if (hand.getAmount() > 1) hand.setAmount(hand.getAmount() - 1);
-					else e.getPlayer().setItemInHand(null);
-					
+
+				if (WedBars.running) {
+
+					if (hand.getType() == Material.MONSTER_EGG) {
+
+						e.setCancelled(true);
+
+						spawnGolem(WedBars.arena.getGamer(e.getPlayer().getName()));
+						if (hand.getAmount() > 1) hand.setAmount(hand.getAmount() - 1);
+						else e.getPlayer().setItemInHand(null);
+
+					}
+
+
 				}
 
 			}
@@ -249,19 +275,19 @@ public class Powerups implements Listener {
 				gamer.setInvisArmor(player.getInventory().getArmorContents().clone());
 				player.getInventory().setArmorContents(null);
 			}
-			
+
 		}
-		
+
 		if (e.getItem().getType() == Material.MILK_BUCKET) {
-			
+
 			Player player = e.getPlayer();
-			
+
 			e.setCancelled(true);
-			
+
 			player.addPotionEffect(new PotionEffect(PotionEffectType.WATER_BREATHING, 600, 1, true, false));
-			
+
 			player.setItemInHand(null);
-			
+
 		}
 
 	}
@@ -332,12 +358,11 @@ public class Powerups implements Listener {
 	//    }
 
 
-	//TODO: Make silverfish target teams, fix execption for casting shooters as players
 	@EventHandler
 	public void onProjectileHit(ProjectileHitEvent e) {
 		if (!WedBars.running) return;
-		if (e.getEntityType() == EntityType.SNOWBALL) {
-			spawnSilverfish(WedBars.arena.getGamer(((Player)e.getEntity().getShooter()).getName()), e.getEntity().getLocation());
+		if (e.getEntityType() == EntityType.SNOWBALL && e.getEntity().getShooter() instanceof Player) {
+			spawnSilverfish(WedBars.arena.getGamer(((Player) e.getEntity().getShooter()).getName()), e.getEntity().getLocation());
 		}
 
 	}

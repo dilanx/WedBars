@@ -10,3 +10,4 @@
 - added invisibility functionality
 - added golems
 - added magic milk
+- added silverfish

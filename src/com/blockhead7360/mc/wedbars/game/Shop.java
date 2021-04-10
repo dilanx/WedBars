@@ -459,7 +459,8 @@ public class Shop implements Listener {
 
 					Utility.createIconItemStack(Material.GOLDEN_APPLE, 1, ChatColor.YELLOW + "Golden Apple", "",
 							ChatColor.GRAY + "Price: " + ChatColor.GOLD + "3 gold"),
-					Utility.createIconItemStack(Material.SNOW_BALL, 1, ChatColor.GRAY + "Silverfish coming soon"),
+					Utility.createIconItemStack(Material.SNOW_BALL, 1, ChatColor.YELLOW + "Silverfish", "",
+							ChatColor.GRAY + "Price: " + ChatColor.WHITE + "40 iron"),
 					Utility.createIconItemStack(Material.MONSTER_EGG, 1, ChatColor.YELLOW + "Gamer Golem", "",
 							ChatColor.GRAY + "Price: " + ChatColor.WHITE + "120 iron"),
 					Utility.createIconItemStack(Material.FIREBALL, 1, ChatColor.YELLOW + "Fireball", "",
