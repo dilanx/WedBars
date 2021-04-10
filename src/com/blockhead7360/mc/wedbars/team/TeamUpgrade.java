@@ -5,7 +5,7 @@ public class TeamUpgrade {
 	public static final int
 
 	// this needs to match the amount of upgrades below
-	SIZE = 14,
+	SIZE = 12,
 	
 	SWORDS = 0,
 	HEAL = 1,
@@ -18,9 +18,6 @@ public class TeamUpgrade {
 	FORGE1 = 8,
 	FORGE2 = 9,
 	FORGE3 = 10,
-	FORGE4 = 11,
-	
-	TRAP_BLIND = 12,
-	TRAP_FATIGUE = 13;
+	FORGE4 = 11;
 	
 }

@@ -34,6 +34,7 @@ import com.blockhead7360.mc.wedbars.WedBars;
 import com.blockhead7360.mc.wedbars.arena.Arena;
 import com.blockhead7360.mc.wedbars.player.Gamer;
 import com.blockhead7360.mc.wedbars.player.Status;
+import com.blockhead7360.mc.wedbars.player.Titles;
 import com.blockhead7360.mc.wedbars.team.ArenaTeam;
 import com.blockhead7360.mc.wedbars.team.Team;
 import com.blockhead7360.mc.wedbars.team.TeamUpgrade;
@@ -213,7 +214,7 @@ public class Listeners implements Listener {
 
 
 
-		for (Gamer gamer : team.getGamers()) Utility.sendBedBrokenTitle(gamer.getPlayer());
+		for (Gamer gamer : team.getGamers()) Titles.sendBedBrokenTitle(gamer.getPlayer());
 
 
 
@@ -351,7 +352,7 @@ public class Listeners implements Listener {
 		if (bedExists && !disconnect) {
 
 			gamer.setStatus(Status.RESPAWNING);
-			Utility.sendDeathTitle(player, WedBars.RESPAWN_TIME);
+			Titles.sendDeathTitle(player, WedBars.RESPAWN_TIME);
 
 		} else {
 
@@ -384,7 +385,7 @@ public class Listeners implements Listener {
 
 			if (!end && !disconnect) {
 
-				Utility.sendDeathTitle(player, -1);
+				Titles.sendDeathTitle(player, -1);
 
 			}
 

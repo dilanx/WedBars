@@ -4,6 +4,7 @@ import org.bukkit.Location;
 
 import com.blockhead7360.mc.wedbars.game.Generator;
 import com.blockhead7360.mc.wedbars.player.Gamer;
+import com.blockhead7360.mc.wedbars.team.traps.TeamTrap;
 
 public class ArenaTeam {
 	
@@ -18,6 +19,7 @@ public class ArenaTeam {
 	private Gamer[] gamers;
 	
 	private boolean[] upgrades;
+	private TeamTrap trap;
 	
 	public ArenaTeam(Team team, Location spawnLoc, Location generatorLoc, int ironspeed, int goldspeed, int personalemeraldspeed, Location[] bedLoc, Gamer[] gamers) {
 		
@@ -36,6 +38,7 @@ public class ArenaTeam {
 		this.gamers = gamers;
 		
 		this.upgrades = new boolean[TeamUpgrade.SIZE];
+		this.trap = null;
 		
 	}
 	
@@ -138,6 +141,22 @@ public class ArenaTeam {
 	
 	public boolean[] getUpgrades() {
 		return upgrades;
+	}
+	
+	public boolean hasTrap() {
+		return trap != null;
+	}
+
+	public TeamTrap getTrap() {
+		return trap;
+	}
+
+	public void setTrap(TeamTrap trap) {
+		this.trap = trap;
+	}
+	
+	public void removeTrap() {
+		trap = null;
 	}
 	
 	

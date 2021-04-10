@@ -27,6 +27,7 @@ import com.blockhead7360.mc.wedbars.game.GameScoreboard;
 import com.blockhead7360.mc.wedbars.game.Generator;
 import com.blockhead7360.mc.wedbars.player.Gamer;
 import com.blockhead7360.mc.wedbars.player.Status;
+import com.blockhead7360.mc.wedbars.player.Titles;
 import com.blockhead7360.mc.wedbars.team.ArenaTeam;
 import com.blockhead7360.mc.wedbars.team.ArenaTeamData;
 import com.blockhead7360.mc.wedbars.team.Team;
@@ -135,7 +136,7 @@ public class Arena {
 
 			p.teleport(at.getSpawnLoc());
 			p.playSound(p.getLocation(), Sound.NOTE_PLING, 1, 1);
-			Utility.sendStartTitle(p, team);
+			Titles.sendStartTitle(p, team);
 
 			p.getInventory().setHelmet(Utility.createLeatherArmorPiece(Material.LEATHER_HELMET, team.getColor(), ChatColor.YELLOW + "Leather Helmet"));
 			p.getInventory().setChestplate(Utility.createLeatherArmorPiece(Material.LEATHER_CHESTPLATE, team.getColor(), ChatColor.YELLOW + "Leather Chestplate"));
@@ -161,8 +162,16 @@ public class Arena {
 			}
 
 		}
-
-		Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "kill @e[type=Item]");
+		
+		for (Entity e : world.getEntities()) {
+			
+			if (e instanceof Item) {
+				
+				e.remove();
+				
+			}
+			
+		}
 
 		// prepare generator holograms
 
@@ -225,17 +234,59 @@ public class Arena {
 
 					// TODO change messages
 					
+					
+					Location bed = at.getBedLoc()[0];
+					int dist = WedBars.TRAP_DISTANCE;
 					boolean healPool = at.hasUpgrade(TeamUpgrade.HEAL);
+					boolean hasTrap = at.hasTrap();
+					
+					for (Entity e : world.getNearbyEntities(bed, dist, dist, dist)) {
+						
+						if (e instanceof Player) {
+							
+							Player p = (Player) e;
+							
+							if (p.getGameMode() != GameMode.SURVIVAL) continue;
+							
+							if (WedBars.arena.getGamer(p.getName()).getTeam() == at.getTeam()) {
+								
+								if (healPool) {
+									
+									p.addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION, 40, 1));
+									
+								}
+								
+							} else {
+								
+								if (hasTrap) {
+									
+									for (Gamer gamer : at.getGamers()) {
+										
+										Player player = gamer.getPlayer();
+										Titles.sendTrapTriggeredTitle(player);
+										player.playSound(player.getLocation(), Sound.WITHER_SPAWN, 1, 1);
+										
+									}
+									
+									at.getTrap().activate(p);
+									at.removeTrap();
+									hasTrap = false;
+									
+								}
+								
+							}
+							
+						}
+						
+						
+					}
+					
+					
+					
 
 					for (Gamer gamer : at.getGamers()) {
 						
 						Player player = gamer.getPlayer();
-						
-						if (healPool && player.getLocation().distanceSquared(at.getBedLoc()[0]) <= WedBars.TRAP_DISTANCE_SQUARED) {
-							
-							player.addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION, 1, 1));
-							
-						}
 
 						if (gamer.getStatus() == Status.RESPAWNING) {
 
@@ -246,7 +297,7 @@ public class Arena {
 								player.teleport(at.getSpawnLoc());
 								player.setGameMode(GameMode.SURVIVAL);
 
-								Utility.sendDeathTitle(player, -2);
+								Titles.sendDeathTitle(player, -2);
 
 							} else {
 
@@ -254,7 +305,7 @@ public class Arena {
 
 								if (timeLeft % 10 == 0) {
 
-									Utility.sendDeathTitle(player, timeLeft);
+									Titles.sendDeathTitle(player, timeLeft);
 
 								}
 							}
@@ -454,7 +505,7 @@ public class Arena {
 
 						Player player = gamer.getPlayer();
 
-						Utility.sendWinTitle(player);
+						Titles.sendWinTitle(player);
 
 						player.playSound(player.getLocation(), Sound.ENDERDRAGON_DEATH, 1, 1);
 						player.setGameMode(GameMode.SPECTATOR);
@@ -467,7 +518,7 @@ public class Arena {
 
 						Player player = gamer.getPlayer();
 
-						Utility.sendLossTitle(player);
+						Titles.sendLossTitle(player);
 
 						player.playSound(player.getLocation(), Sound.ENDERDRAGON_DEATH, 1, 1);
 						player.setGameMode(GameMode.SPECTATOR);

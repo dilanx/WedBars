@@ -24,10 +24,12 @@ import com.blockhead7360.mc.wedbars.WedBars;
 import com.blockhead7360.mc.wedbars.player.Gamer;
 import com.blockhead7360.mc.wedbars.team.ArenaTeam;
 import com.blockhead7360.mc.wedbars.team.TeamUpgrade;
+import com.blockhead7360.mc.wedbars.team.traps.TrapFatigue;
 
 public class Shop implements Listener {
 
 	private static ItemStack[] categories;
+	private static ItemStack[] traps;
 	private static ItemStack selected, unselected;
 
 	public static void init() {
@@ -44,10 +46,31 @@ public class Shop implements Listener {
 				Utility.createIconItemStack(Material.TNT, 1, ChatColor.GREEN + "Utility")
 
 		};
+		
+		traps = new ItemStack[] {
+				
+				Utility.createIconItemStack(Material.IRON_PICKAXE, 1, ChatColor.YELLOW + "Miner Fatigue", "",
+						ChatColor.GRAY + "Price: " + ChatColor.AQUA + "1 diamond")
+				
+		};
 
 		selected = Utility.createIconItemStack(Material.STAINED_GLASS_PANE, 1, (short) 14, ChatColor.GRAY + "Selected");
 		unselected = Utility.createIconItemStack(Material.STAINED_GLASS_PANE, 1, (short) 15, " ");
 
+	}
+	
+	public static void openTrapMenu(Player player) {
+		
+		Inventory inv = Bukkit.createInventory(null, 9, ChatColor.BOLD + "Trap Store");
+		
+		for (ItemStack is : traps) {
+			
+			inv.addItem(is);
+			
+		}
+		
+		player.openInventory(inv);
+		
 	}
 
 	public static void openTeamUpgrades(Player player) {
@@ -170,7 +193,15 @@ public class Shop implements Listener {
 
 		// trap
 
-		inv.setItem(49, Utility.createIconItemStack(Material.STAINED_GLASS, 1, (short) 7, ChatColor.GRAY + "Traps coming soon"));
+		if (team.hasTrap()) {
+			
+			inv.setItem(49, team.getTrap().icon());
+			
+		} else {
+			
+			inv.setItem(49, Utility.createIconItemStack(Material.STAINED_GLASS, 1, (short) 7, ChatColor.WHITE + "No active trap", "", ChatColor.GRAY + "Click to purchase one."));
+			
+		}
 
 		return;
 	}
@@ -460,6 +491,52 @@ public class Shop implements Listener {
 			
 		}
 		
+		if (e.getView().getTitle().equals(ChatColor.BOLD + "Trap Store")) {
+			
+			e.setCancelled(true);
+
+			if (e.getCurrentItem() == null || e.getCurrentItem().getType() == Material.AIR) return;
+
+			if (e.getRawSlot() > 8) return;
+			
+			Player player = (Player) e.getWhoClicked();
+			
+			ItemStack item = e.getCurrentItem();
+			ItemMeta meta = item.getItemMeta();
+			
+			if (meta.hasLore()) {
+				
+				List<String> lore = item.getItemMeta().getLore();
+
+				if (lore.size() > 0) {
+					
+					String[] price = ChatColor.stripColor(lore.get(lore.size() - 1)).split(" ");
+
+					int number = Integer.parseInt(price[1]);
+
+					Material type = txt2mat(price[2]);
+					
+					boolean success = purchaseTrap(player, meta.getDisplayName(), number, type);
+					
+					if (success) {
+						
+						player.playSound(player.getLocation(), Sound.NOTE_PLING, 1, 2);
+						openTeamUpgrades(player);
+						return;
+						
+					}
+					
+					
+				}
+				
+				
+			}
+			
+			player.playSound(player.getLocation(), Sound.ANVIL_LAND, 1, 1);
+			return;
+			
+		}
+		
 		if (e.getView().getTitle().equals(ChatColor.BOLD + "Team Upgrades")) {
 
 			e.setCancelled(true);
@@ -472,6 +549,14 @@ public class Shop implements Listener {
 
 			ItemStack item = e.getCurrentItem();
 
+			if (e.getRawSlot() == 49 && item.getType() == Material.STAINED_GLASS) {
+				
+				openTrapMenu(player);
+				
+				return;
+				
+			}
+			
 			if (item.hasItemMeta()) {
 
 				ItemMeta meta = item.getItemMeta();
@@ -647,6 +732,47 @@ public class Shop implements Listener {
 
 		}
 
+	}
+	
+	public boolean purchaseTrap(Player player, String purchase, int cost, Material type) {
+		
+		Gamer gamer = WedBars.arena.getGamer(player.getName());
+		ArenaTeam team = WedBars.arena.getTeam(gamer.getTeam());
+		
+		boolean has = player.getInventory().contains(type, cost);
+
+		if (!has) {
+
+			player.sendMessage(ChatColor.RED + "Not enough resources!");
+			return false;
+
+		}
+		
+		String purch = ChatColor.stripColor(purchase).toLowerCase();
+		
+		if (purch.contains("fatigue")) {
+			
+			team.setTrap(new TrapFatigue());
+			
+		}
+		
+		else {
+			
+			return false;
+			
+		}
+		
+		for (Gamer g : team.getGamers()) {
+
+			g.getPlayer().sendMessage(team.getTeam().getChatColor() + player.getName() + ChatColor.GRAY + " purchased " + purchase + ChatColor.GRAY + ".");
+
+		}
+		
+		player.getInventory().removeItem(new ItemStack(type, cost));
+		player.updateInventory();
+		
+		return true;
+		
 	}
 
 	public boolean purchaseUpgrade(Player player, String purchase, int upgrade, int cost, Material type) {

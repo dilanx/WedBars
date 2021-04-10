@@ -31,7 +31,6 @@ import org.bukkit.potion.PotionEffectType;
 
 import com.blockhead7360.mc.wedbars.WedBars;
 import com.blockhead7360.mc.wedbars.player.Gamer;
-import org.bukkit.util.Vector;
 
 public class Powerups implements Listener {
 
