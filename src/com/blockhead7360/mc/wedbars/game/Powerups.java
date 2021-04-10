@@ -7,21 +7,11 @@ import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.block.Block;
-import org.bukkit.entity.Entity;
-import org.bukkit.entity.EntityType;
-import org.bukkit.entity.Fireball;
-import org.bukkit.entity.IronGolem;
-import org.bukkit.entity.LivingEntity;
-import org.bukkit.entity.Player;
-import org.bukkit.entity.Silverfish;
-import org.bukkit.entity.TNTPrimed;
+import org.bukkit.entity.*;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
-import org.bukkit.event.entity.EntityDamageByEntityEvent;
-import org.bukkit.event.entity.EntityExplodeEvent;
-import org.bukkit.event.entity.EntityTargetEvent;
-import org.bukkit.event.entity.ProjectileHitEvent;
+import org.bukkit.event.entity.*;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerItemConsumeEvent;
 import org.bukkit.event.player.PlayerTeleportEvent;
@@ -43,6 +33,34 @@ public class Powerups implements Listener {
 
 	}
 
+	public static void createBridge(Gamer gamer, Egg egg) {
+		Team team = gamer.getTeam();
+		short stackColor = gamer.getTeam().getStackColor();
+		Player player = gamer.getPlayer();
+
+		new BukkitRunnable() {
+
+			Location currentLocation;
+			Location previousLocation = egg.getLocation();
+
+			public void run() {
+
+				currentLocation = egg.getLocation();
+
+				if (egg.isDead() || !WedBars.running || currentLocation.getY() <= 0) {
+					cancel();
+					return;
+				}
+
+				previousLocation.getBlock().setType(Material.WOOL);
+//				WedBars.getListeners().getPlacedBlocks().add()
+
+				previousLocation = egg.getLocation();
+
+			}
+		}.runTaskTimer(WedBars.getInstance(), 0, 2L);
+
+	}
 
 
 	public static void spawnGolem(Gamer gamer) {
@@ -108,17 +126,7 @@ public class Powerups implements Listener {
 	}
 
 	public static void spawnSilverfish(Gamer gamer, Location spawnLoc) {
-		//		Player p = (Player)e.getEntity().getShooter();
-		//		Gamer g = WedBars.arena.getGamer(p.getName());
-		//		World w = e.getEntity().getLocation().getWorld();
-		//		Silverfish s = (Silverfish)w.spawnEntity(e.getEntity().getLocation(), EntityType.SILVERFISH);
-		//		s.setCustomName("" + g.getTeam().getLabel() + "'s Bed Bug");
-		//		for (Entity gm : w.getNearbyEntities(s.getLocation(), 10, 10 ,10)) {
-		//			if (gm instanceof Player && !s.getCustomName().contains(
-		//					WedBars.arena.getGamer(p.getName()).getTeam().getLabel())) {
-		//				s.setTarget((LivingEntity) e);
-		//			}
-		//		}
+
 		Team team = gamer.getTeam();
 		Player player = gamer.getPlayer();
 
@@ -340,22 +348,6 @@ public class Powerups implements Listener {
 		}
 	}
 
-	//    @EventHandler
-	//    public void golemTargeting(CreatureSpawnEvent event) {
-	//        if (!WedBars.running) return;
-	//        if (event.getEntity() instanceof IronGolem){
-	//            IronGolem golem = (IronGolem)event.getEntity();
-	//            World gw = golem.getWorld();
-	//            for (Entity e : gw.getNearbyEntities(golem.getLocation(), 15,15,15)) {
-	//                if (e instanceof Player && !golem.getCustomName().contains(
-	//                        WedBars.arena.getGamer(e.getName()).getTeam().getLabel())) {
-	//                    golem.setTarget((LivingEntity) e);
-	//                    Endermite trackingMob = (Endermite)gw.spawnEntity(e.getLocation(), EntityType.ENDERMITE);
-	//                  trackingMob.addPotionEffect(new PotionEffect(PotionEffectType.INVISIBILITY, 9, 2, false, false));
-	//                }
-	//            }
-	//        }
-	//    }
 
 
 	@EventHandler
@@ -364,6 +356,12 @@ public class Powerups implements Listener {
 		if (e.getEntityType() == EntityType.SNOWBALL && e.getEntity().getShooter() instanceof Player) {
 			spawnSilverfish(WedBars.arena.getGamer(((Player) e.getEntity().getShooter()).getName()), e.getEntity().getLocation());
 		}
+
+	}
+
+	@EventHandler
+	public void onProjectileLaunch(ProjectileLaunchEvent e) {
+		if (!WedBars.running) return;
 
 	}
 
