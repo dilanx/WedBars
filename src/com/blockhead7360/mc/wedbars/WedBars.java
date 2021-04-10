@@ -64,9 +64,11 @@ public class WedBars extends JavaPlugin {
 
 	// not gamerTicks, these are in seconds
 	public static int TIME_BETWEEN_END_AND_RESET;
-	public static final int GOLEM_LIFE = 240;
-	
-	public static final int GOLEM_ATTACK_DISTANCE = 7;
+	public static int GOLEM_LIFE = 240;
+	public static int GOLEM_ATTACK_DISTANCE = 7;
+	public static int GOLEM_HEALTH, BUG_HEALTH;
+	public static int BUG_LIFE = 120;
+	public static int BUG_ATTACK_DISTANCE = 4;
 	
 	
 	// these are gamerTicks though
@@ -101,6 +103,12 @@ public class WedBars extends JavaPlugin {
 		MAX_EMERALDS_IN_GEN = getConfig().getInt("maxEmeraldsInGen");
 		VOID_LEVEL = getConfig().getInt("voidLevel");
 		RESPAWN_TIME = getConfig().getInt("respawnTime");
+		GOLEM_ATTACK_DISTANCE = getConfig().getInt("golemTargetDistance");
+		GOLEM_LIFE = getConfig().getInt("golemLife");
+		BUG_ATTACK_DISTANCE = getConfig().getInt("bugTargetDistance");
+		BUG_LIFE = getConfig().getInt("bugLife");
+		GOLEM_HEALTH = getConfig().getInt("golemHealth");
+		BUG_HEALTH = getConfig().getInt("bugHealth");
 
 	}
 
