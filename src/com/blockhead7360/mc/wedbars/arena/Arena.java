@@ -157,7 +157,7 @@ public class Arena {
 
 
 		GameScoreboard.start(teams.values().toArray(new ArenaTeam[0]));
-		GameScoreboard.updateStatus(ChatColor.AQUA + "Diamond 2");
+		GameScoreboard.updateStatus(ChatColor.AQUA + "" + ChatColor.BOLD + "Diamond 2");
 		time = 3000;
 
 		// reset team stuff
@@ -480,7 +480,7 @@ public class Arena {
 
 			stage = 1;
 			time = 3000;
-			GameScoreboard.updateStatus(ChatColor.GREEN + "Emerald 2");
+			GameScoreboard.updateStatus(ChatColor.GREEN + "" + ChatColor.BOLD + "Emerald 2");
 
 		}
 
@@ -507,7 +507,7 @@ public class Arena {
 
 			stage = 2;
 			time = 3000;
-			GameScoreboard.updateStatus(ChatColor.AQUA + "Diamond 3");
+			GameScoreboard.updateStatus(ChatColor.AQUA + "" + ChatColor.BOLD + "Diamond 3");
 
 		}
 
@@ -534,7 +534,7 @@ public class Arena {
 
 			stage = 3;
 			time = 3000;
-			GameScoreboard.updateStatus(ChatColor.GREEN + "Emerald 3");
+			GameScoreboard.updateStatus(ChatColor.GREEN + "" + ChatColor.BOLD + "Emerald 3");
 
 		}
 
@@ -561,7 +561,7 @@ public class Arena {
 
 			stage = 4;
 			time = 3600;
-			GameScoreboard.updateStatus(ChatColor.RED + "beds destroyed");
+			GameScoreboard.updateStatus(ChatColor.RED + "" + ChatColor.BOLD + "beds destroyed");
 
 		}
 
@@ -605,7 +605,7 @@ public class Arena {
 
 			stage = 5;
 			time = 6000;
-			GameScoreboard.updateStatus(ChatColor.RED + "game end");
+			GameScoreboard.updateStatus(ChatColor.RED + "" + ChatColor.BOLD + "game end");
 
 		}
 		

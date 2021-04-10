@@ -2,18 +2,36 @@ package com.blockhead7360.mc.wedbars.game;
 
 import java.util.List;
 
-import org.bukkit.*;
+import org.bukkit.DyeColor;
+import org.bukkit.Effect;
+import org.bukkit.Location;
+import org.bukkit.Material;
+import org.bukkit.Sound;
+import org.bukkit.World;
 import org.bukkit.block.Block;
-import org.bukkit.entity.*;
+import org.bukkit.entity.Egg;
+import org.bukkit.entity.Entity;
+import org.bukkit.entity.EntityType;
+import org.bukkit.entity.Fireball;
+import org.bukkit.entity.IronGolem;
+import org.bukkit.entity.LivingEntity;
+import org.bukkit.entity.Player;
+import org.bukkit.entity.Silverfish;
+import org.bukkit.entity.TNTPrimed;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
-import org.bukkit.event.entity.*;
+import org.bukkit.event.entity.EntityDamageByEntityEvent;
+import org.bukkit.event.entity.EntityExplodeEvent;
+import org.bukkit.event.entity.EntityTargetEvent;
+import org.bukkit.event.entity.ProjectileHitEvent;
+import org.bukkit.event.entity.ProjectileLaunchEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerItemConsumeEvent;
 import org.bukkit.event.player.PlayerTeleportEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.PotionMeta;
+import org.bukkit.material.Wool;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitRunnable;
@@ -32,7 +50,7 @@ public class Powerups implements Listener {
 
 	public static void createBridge(Egg egg) {
 		Team team = WedBars.arena.getGamer(((Player)egg.getShooter()).getName()).getTeam();
-		short stackColor = team.getStackColor();
+		DyeColor blockColor = team.getBlockColor();
 		//Player player = gamer.getPlayer();
 		World w = egg.getWorld();
 
@@ -61,10 +79,20 @@ public class Powerups implements Listener {
 
 				for (int i = -1; i <= 1; i++) {
 					for (int j = -1; j <= 1; j++) {
+						
 						Location l = new Location(w, x + i, y, z + j);
-						if (l.getBlock().getType() != Material.AIR) continue;
-						l.getBlock().setType(Material.WOOL);
-						WedBars.getListeners().getPlacedBlocks().add(l);
+						Block b = l.getBlock();
+						
+						if (b.getType() == Material.AIR) {
+
+							b.setType(Material.WOOL);
+
+							Wool w = (Wool) b.getState().getData();
+							w.setColor(blockColor);
+							WedBars.getListeners().getPlacedBlocks().add(l);
+
+						}
+
 					}
 				}
 
@@ -221,26 +249,26 @@ public class Powerups implements Listener {
 		}
 
 	}
-	
+
 	@EventHandler
 	public void onEntityTarget(EntityTargetEvent e) {
-		
+
 		if (WedBars.running) {
-			
+
 			if (e.getEntity() instanceof Silverfish && e.getTarget() instanceof Player) {
-				
+
 				Gamer gamer = WedBars.arena.getGamer(e.getTarget().getName());
-				
+
 				if (gamer != null && e.getEntity().getCustomName().startsWith(gamer.getTeam().getChatColor() + "")) {
-					
+
 					e.setCancelled(true);
-					
+
 				}
-				
+
 			}
-			
+
 		}
-		
+
 	}
 
 	@EventHandler
