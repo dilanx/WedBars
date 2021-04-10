@@ -33,15 +33,15 @@ public class Powerups implements Listener {
 
 	}
 
-	public static void createBridge(Gamer gamer, Egg egg) {
-		Team team = gamer.getTeam();
-		short stackColor = gamer.getTeam().getStackColor();
-		Player player = gamer.getPlayer();
+	public static void createBridge(Egg egg) {
+		Team team = WedBars.arena.getGamer(((Player)egg.getShooter()).getName()).getTeam();
+		short stackColor = team.getStackColor();
+		//Player player = gamer.getPlayer();
 
 		new BukkitRunnable() {
 
 			Location currentLocation;
-			Location previousLocation = egg.getLocation();
+			Location previousLocation;
 
 			public void run() {
 
@@ -52,13 +52,17 @@ public class Powerups implements Listener {
 					return;
 				}
 
+				 if (previousLocation == null) {
+				 	previousLocation = egg.getLocation();
+				 	return;
+				 }
 				previousLocation.getBlock().setType(Material.WOOL);
-//				WedBars.getListeners().getPlacedBlocks().add()
+				WedBars.getListeners().getPlacedBlocks().add(previousLocation);
 
 				previousLocation = egg.getLocation();
 
 			}
-		}.runTaskTimer(WedBars.getInstance(), 0, 2L);
+		}.runTaskTimer(WedBars.getInstance(), 5, 2L);
 
 	}
 
@@ -362,7 +366,9 @@ public class Powerups implements Listener {
 	@EventHandler
 	public void onProjectileLaunch(ProjectileLaunchEvent e) {
 		if (!WedBars.running) return;
-
+		if (e.getEntityType() == EntityType.EGG) {
+			createBridge((Egg)e.getEntity());
+		}
 	}
 
 }
