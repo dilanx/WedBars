@@ -469,7 +469,6 @@ public class Shop implements Listener {
 							ChatColor.GRAY + "Price: " + ChatColor.GOLD + "4 gold"),
 					Utility.createIconItemStack(Material.ENDER_PEARL, 1, ChatColor.YELLOW + "Ender Pearl", "",
 							ChatColor.GRAY + "Price: " + ChatColor.GREEN + "4 emerald"),
-					Utility.createIconItemStack(Material.WATER_BUCKET, 1, ChatColor.GRAY + "Water Bucket coming soon"),
 					Utility.createIconItemStack(Material.EGG, 1, ChatColor.GRAY + "Bridge Egg coming soon"),
 					Utility.createIconItemStack(Material.MILK_BUCKET, 1, ChatColor.YELLOW + "Magic Milk" + ChatColor.GRAY + ChatColor.ITALIC + " 30s", "",
 							ChatColor.GRAY + "Price: " + ChatColor.GOLD + "4 gold"),
@@ -482,7 +481,7 @@ public class Shop implements Listener {
 
 			}
 
-			for (int i = 7; i < 9; i++) {
+			for (int i = 7; i < 8; i++) {
 
 				inv.setItem(21 + i, u[i]);
 

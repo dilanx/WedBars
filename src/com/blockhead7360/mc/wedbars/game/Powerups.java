@@ -220,7 +220,7 @@ public class Powerups implements Listener {
 				
 				Gamer gamer = WedBars.arena.getGamer(e.getTarget().getName());
 				
-				if (e.getEntity().getCustomName().startsWith(gamer.getTeam().getChatColor() + "")) {
+				if (gamer != null && e.getEntity().getCustomName().startsWith(gamer.getTeam().getChatColor() + "")) {
 					
 					e.setCancelled(true);
 					
