@@ -1,0 +1,12 @@
+
+
+1.0 beta 2
+- added traps
+- added heal pool functionality
+- generator is less jank
+- added game stages
+- increased fireball damage
+- added potions to shop
+- added invisibility functionality
+- added golems
+- added magic milk

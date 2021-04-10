@@ -13,14 +13,14 @@ public class TrapFatigue extends TeamTrap {
 
 	public ItemStack icon() {
 		
-		return Utility.createIconItemStack(Material.IRON_PICKAXE, 1, ChatColor.YELLOW + "Miner Fatigue");
+		return Utility.createIconItemStack(Material.IRON_PICKAXE, 1, ChatColor.YELLOW + "Miner Fatigue Trap");
 		
 	}
 	
 	
 	public void activate(Player player) {
 		
-		player.addPotionEffect(new PotionEffect(PotionEffectType.SLOW_DIGGING, 100, 2));
+		player.addPotionEffect(new PotionEffect(PotionEffectType.SLOW_DIGGING, 160, 2));
 		
 	}
 	

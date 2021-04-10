@@ -7,7 +7,7 @@ import com.blockhead7360.mc.wedbars.team.Team;
 
 public class Titles {
 	
-	public static void sendStartTitle(Player player, Team team) {
+	public static void start(Player player, Team team) {
 
 		Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "title " + player.getName() +
 				" times 0 100 20");
@@ -19,7 +19,7 @@ public class Titles {
 
 	}
 	
-	public static void sendWinTitle(Player player) {
+	public static void win(Player player) {
 
 		Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "title " + player.getName() +
 				" times 0 100 20");
@@ -30,7 +30,7 @@ public class Titles {
 
 	}
 
-	public static void sendLossTitle(Player player) {
+	public static void loss(Player player) {
 
 		Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "title " + player.getName() +
 				" times 0 100 20");
@@ -41,7 +41,7 @@ public class Titles {
 
 	}
 	
-	public static void sendTrapTriggeredTitle(Player player) {
+	public static void trapTriggered(Player player) {
 		
 		Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "title " + player.getName() +
 				" times 0 100 20");
@@ -54,7 +54,7 @@ public class Titles {
 
 	// more messages
 
-	public static void sendDeathTitle(Player player, int time) {
+	public static void death(Player player, int time) {
 
 		if (time == -2) {
 
@@ -92,8 +92,19 @@ public class Titles {
 		return;
 
 	}
+	
+	public static void allBedsBroken(Player player) {
 
-	public static void sendBedBrokenTitle(Player player) {
+		Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "title " + player.getName() +
+				" times 0 60 20");
+		Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "title " + player.getName() +
+				" subtitle {\"text\":\"All beds have been destroyed.\",\"color\":\"gray\"}");
+		Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "title " + player.getName() +
+				" title {\"text\":\"BED DESTROYED!\",\"color\":\"red\"}");
+
+	}
+
+	public static void bedBroken(Player player) {
 
 		Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "title " + player.getName() +
 				" times 0 60 20");

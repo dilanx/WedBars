@@ -11,6 +11,8 @@ import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.LeatherArmorMeta;
+import org.bukkit.inventory.meta.PotionMeta;
+import org.bukkit.potion.PotionEffect;
 import org.bukkit.util.BlockIterator;
 
 public class Utility {
@@ -71,6 +73,20 @@ public class Utility {
 		stack.setItemMeta(meta);
 		return stack;
 
+	}
+	
+	public static ItemStack createPotionItemStack(String displayName, PotionEffect pe, String... lore) {
+		
+		ItemStack stack = new ItemStack(Material.POTION, 1);
+		PotionMeta meta = (PotionMeta) stack.getItemMeta();
+		meta.setDisplayName(displayName);
+		if (lore != null) meta.setLore(Arrays.asList(lore));
+		meta.addCustomEffect(pe, true);
+		meta.setMainEffect(pe.getType());
+		stack.setItemMeta(meta);
+		
+		return stack;
+		
 	}
 
 	public static class EnchantmentSet {

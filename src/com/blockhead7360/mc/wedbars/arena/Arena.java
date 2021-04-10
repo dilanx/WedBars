@@ -14,6 +14,7 @@ import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.World;
 import org.bukkit.entity.Entity;
+import org.bukkit.entity.IronGolem;
 import org.bukkit.entity.Item;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
@@ -42,14 +43,21 @@ public class Arena {
 
 	private World world;
 	private Location lobby;
+	private int stage;
+	private int time;
 	private Map<Team, ArenaTeam> teams;
 	private Map<String, Gamer> gamers;
+	private int initialDiamondSpeed, initialEmeraldSpeed;
 	private Generator[] diamonds;
 	private Generator[] emeralds;
 
 	public Arena(ArenaData data, TeamAssignments teamAssignments) {
 
 		this.lobby = data.getLobby();
+		this.time = 0;
+		this.stage = 0;
+		this.initialDiamondSpeed = data.getDiamondSpeed();
+		this.initialEmeraldSpeed = data.getEmeraldSpeed();
 
 		List<Location> dg = data.getDiamondGen();
 		int ds = data.getDiamondSpeed();
@@ -125,7 +133,7 @@ public class Arena {
 			Player p = gamer.getPlayer();
 			Team team = gamer.getTeam();
 			ArenaTeam at = teams.get(team);
-			
+
 			gamer.setStatus(Status.ALIVE);
 
 			p.getEnderChest().clear();
@@ -136,7 +144,7 @@ public class Arena {
 
 			p.teleport(at.getSpawnLoc());
 			p.playSound(p.getLocation(), Sound.NOTE_PLING, 1, 1);
-			Titles.sendStartTitle(p, team);
+			Titles.start(p, team);
 
 			p.getInventory().setHelmet(Utility.createLeatherArmorPiece(Material.LEATHER_HELMET, team.getColor(), ChatColor.YELLOW + "Leather Helmet"));
 			p.getInventory().setChestplate(Utility.createLeatherArmorPiece(Material.LEATHER_CHESTPLATE, team.getColor(), ChatColor.YELLOW + "Leather Chestplate"));
@@ -149,7 +157,8 @@ public class Arena {
 
 
 		GameScoreboard.start(teams.values().toArray(new ArenaTeam[0]));
-		GameScoreboard.updateStatus(ChatColor.AQUA + "nothing yet lol");
+		GameScoreboard.updateStatus(ChatColor.AQUA + "Diamond 2");
+		time = 3000;
 
 		// reset team stuff
 
@@ -162,15 +171,15 @@ public class Arena {
 			}
 
 		}
-		
+
 		for (Entity e : world.getEntities()) {
-			
-			if (e instanceof Item) {
-				
+
+			if (e instanceof Item || e instanceof IronGolem) {
+
 				e.remove();
-				
+
 			}
-			
+
 		}
 
 		// prepare generator holograms
@@ -222,70 +231,63 @@ public class Arena {
 
 		new BukkitRunnable() {
 
-			int totalTestTime = 36000;
-
 			public void run() {
 
 				// Teams
 
 				for (ArenaTeam at : teams.values()) {
 
-					// Players
-
-					// TODO change messages
-					
-					
 					Location bed = at.getBedLoc()[0];
 					int dist = WedBars.TRAP_DISTANCE;
 					boolean healPool = at.hasUpgrade(TeamUpgrade.HEAL);
 					boolean hasTrap = at.hasTrap();
-					
+
 					for (Entity e : world.getNearbyEntities(bed, dist, dist, dist)) {
-						
+
 						if (e instanceof Player) {
-							
+
 							Player p = (Player) e;
-							
+
 							if (p.getGameMode() != GameMode.SURVIVAL) continue;
-							
-							if (WedBars.arena.getGamer(p.getName()).getTeam() == at.getTeam()) {
-								
+
+							if (getGamer(p.getName()).getTeam() == at.getTeam()) {
+
 								if (healPool) {
-									
+
 									p.addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION, 40, 1));
-									
+
 								}
-								
+
 							} else {
-								
-								if (hasTrap) {
-									
+
+								if (hasTrap && !p.hasPotionEffect(PotionEffectType.WATER_BREATHING)) {
+
 									for (Gamer gamer : at.getGamers()) {
-										
+
 										Player player = gamer.getPlayer();
-										Titles.sendTrapTriggeredTitle(player);
+										Titles.trapTriggered(player);
 										player.playSound(player.getLocation(), Sound.WITHER_SPAWN, 1, 1);
-										
+
 									}
-									
+
 									at.getTrap().activate(p);
 									at.removeTrap();
 									hasTrap = false;
-									
+
 								}
-								
+
 							}
-							
+
 						}
-						
-						
+
+
 					}
-					
-					
-					
+
+
+
 
 					for (Gamer gamer : at.getGamers()) {
-						
+
 						Player player = gamer.getPlayer();
 
 						if (gamer.getStatus() == Status.RESPAWNING) {
@@ -297,7 +299,7 @@ public class Arena {
 								player.teleport(at.getSpawnLoc());
 								player.setGameMode(GameMode.SURVIVAL);
 
-								Titles.sendDeathTitle(player, -2);
+								Titles.death(player, -2);
 
 							} else {
 
@@ -305,11 +307,22 @@ public class Arena {
 
 								if (timeLeft % 10 == 0) {
 
-									Titles.sendDeathTitle(player, timeLeft);
+									Titles.death(player, timeLeft);
 
 								}
 							}
 
+						}
+						
+						if (gamer.hasInvisArmor() && gamer.getStatus() == Status.ALIVE) {
+							
+							if (!player.hasPotionEffect(PotionEffectType.INVISIBILITY)) {
+								
+								player.getInventory().setArmorContents(gamer.getInvisArmor());
+								gamer.removeInvisArmor();
+								
+							}
+							
 						}
 
 					}
@@ -381,13 +394,6 @@ public class Arena {
 
 					}
 
-
-					/*if (d.getCurTimeLeft() % 10 == 0) {
-
-						Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "hd setline diamond" + i + " 2 &fspawning in &c" + (d.getCurTimeLeft() / 10));
-
-					}*/
-
 				}
 
 				// Emerald gen
@@ -419,20 +425,23 @@ public class Arena {
 
 					}
 
-					/*if (e.getCurTimeLeft() % 10 == 0) {
+				}
 
-						Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "hd setline emerald" + i + " 2 &fspawning in &c" + (e.getCurTimeLeft() / 10));
+				// Update scoreboard and game stage
 
-					}*/
+				if (time % 10 == 0)
+					GameScoreboard.updateTime(Utility.timeFormat(time));
+
+				time--;
+
+				if (time <= 0) {
+
+					// stages
+
+					nextStage();
 
 				}
 
-				// Update scoreboard
-
-				if (totalTestTime % 10 == 0)
-					GameScoreboard.updateTime(Utility.timeFormat(totalTestTime));
-
-				totalTestTime--;
 
 				if (!WedBars.running) {
 
@@ -446,22 +455,166 @@ public class Arena {
 
 	}
 
-	public Gamer getGamer(String name) {
-		return gamers.get(name);
-	}
+	public void nextStage() {
 
-	public void deleteGamer(Gamer gamer) {
+		if (stage == 0) {
 
-		getTeam(gamer.getTeam()).removeGamer(gamer);
-		gamers.remove(gamer.getPlayer().getName());
+			// diamond 2
 
-	}
+			if (diamonds.length > 0) {
 
-	public ArenaTeam getTeam(Team team) {
-		return teams.get(team);
-	}
-	public Map<Team, ArenaTeam> getTeams() {
-		return teams;
+				double newSpeed = 1 / ((1.0 / initialDiamondSpeed) * WedBars.GEN_DIAMOND2);
+
+				for (Generator g : diamonds) {
+
+					g.setSpeed((int) newSpeed);
+
+				}
+
+			}
+
+			Bukkit.broadcastMessage(" ");
+			Bukkit.broadcastMessage("     " + ChatColor.YELLOW + ChatColor.BOLD + "NEW STAGE: " + ChatColor.AQUA + ChatColor.BOLD + "Diamond 2");
+			Bukkit.broadcastMessage("     " + ChatColor.GRAY + "Diamond generators now generate diamonds faster.");
+			Bukkit.broadcastMessage(" ");
+
+			stage = 1;
+			time = 3000;
+			GameScoreboard.updateStatus(ChatColor.GREEN + "Emerald 2");
+
+		}
+
+		else if (stage == 1) {
+
+			// emerald 2
+
+			if (emeralds.length > 0) {
+
+				double newSpeed = 1 / ((1.0 / initialEmeraldSpeed) * WedBars.GEN_EMERALD2);
+
+				for (Generator g : emeralds) {
+
+					g.setSpeed((int) newSpeed);
+
+				}
+
+			}
+
+			Bukkit.broadcastMessage(" ");
+			Bukkit.broadcastMessage("     " + ChatColor.YELLOW + ChatColor.BOLD + "NEW STAGE: " + ChatColor.GREEN + ChatColor.BOLD + "Emerald 2");
+			Bukkit.broadcastMessage("     " + ChatColor.GRAY + "Emerald generators now generate emeralds faster.");
+			Bukkit.broadcastMessage(" ");
+
+			stage = 2;
+			time = 3000;
+			GameScoreboard.updateStatus(ChatColor.AQUA + "Diamond 3");
+
+		}
+
+		else if (stage == 2) {
+
+			// diamond 3
+
+			if (diamonds.length > 0) {
+
+				double newSpeed = 1 / ((1.0 / initialDiamondSpeed) * WedBars.GEN_DIAMOND3);
+
+				for (Generator g : diamonds) {
+
+					g.setSpeed((int) newSpeed);
+
+				}
+
+			}
+
+			Bukkit.broadcastMessage(" ");
+			Bukkit.broadcastMessage("     " + ChatColor.YELLOW + ChatColor.BOLD + "NEW STAGE: " + ChatColor.AQUA + ChatColor.BOLD + "Diamond 3");
+			Bukkit.broadcastMessage("     " + ChatColor.GRAY + "Diamond generators now generate diamonds even FASTER than before.");
+			Bukkit.broadcastMessage(" ");
+
+			stage = 3;
+			time = 3000;
+			GameScoreboard.updateStatus(ChatColor.GREEN + "Emerald 3");
+
+		}
+
+		else if (stage == 3) {
+
+			// emerald 3
+
+			if (emeralds.length > 0) {
+
+				double newSpeed = 1 / ((1.0 / initialEmeraldSpeed) * WedBars.GEN_EMERALD2);
+
+				for (Generator g : emeralds) {
+
+					g.setSpeed((int) newSpeed);
+
+				}
+
+			}
+
+			Bukkit.broadcastMessage(" ");
+			Bukkit.broadcastMessage("     " + ChatColor.YELLOW + ChatColor.BOLD + "NEW STAGE: " + ChatColor.GREEN + ChatColor.BOLD + "Emerald 3");
+			Bukkit.broadcastMessage("     " + ChatColor.GRAY + "Emerald generators now generate emeralds even FASTER than before.");
+			Bukkit.broadcastMessage(" ");
+
+			stage = 4;
+			time = 3600;
+			GameScoreboard.updateStatus(ChatColor.RED + "beds destroyed");
+
+		}
+
+		else if (stage == 4) {
+
+			// beds destroyed
+
+			for (ArenaTeam team : teams.values()) {
+
+				if (team.bedExists()) {
+
+					for (Location loc : team.getBedLoc()) {
+
+						loc.getBlock().setType(Material.AIR);
+
+					}
+					
+					team.setBedExists(false);
+					GameScoreboard.updateTeam(team);
+					
+					for (Gamer g : team.getGamers()) {
+						
+						Titles.allBedsBroken(g.getPlayer());
+						
+					}
+
+				}
+
+			}
+
+			for (Player player : Bukkit.getOnlinePlayers()) {
+
+				player.playSound(player.getLocation(), Sound.ENDERDRAGON_GROWL, 1, 1);
+
+			}
+
+			Bukkit.broadcastMessage(" ");
+			Bukkit.broadcastMessage("     " + ChatColor.YELLOW + ChatColor.BOLD + "NEW STAGE: " + ChatColor.RED + ChatColor.BOLD + "Beds Destroyed");
+			Bukkit.broadcastMessage("     " + ChatColor.GRAY + "Everyone's bed has been destroyed.");
+			Bukkit.broadcastMessage(" ");
+
+			stage = 5;
+			time = 6000;
+			GameScoreboard.updateStatus(ChatColor.RED + "game end");
+
+		}
+		
+		else if (stage == 5) {
+			
+			//TODO
+			
+		}
+
 	}
 
 	public boolean checkForEndGame() {
@@ -505,7 +658,7 @@ public class Arena {
 
 						Player player = gamer.getPlayer();
 
-						Titles.sendWinTitle(player);
+						Titles.win(player);
 
 						player.playSound(player.getLocation(), Sound.ENDERDRAGON_DEATH, 1, 1);
 						player.setGameMode(GameMode.SPECTATOR);
@@ -518,7 +671,7 @@ public class Arena {
 
 						Player player = gamer.getPlayer();
 
-						Titles.sendLossTitle(player);
+						Titles.loss(player);
 
 						player.playSound(player.getLocation(), Sound.ENDERDRAGON_DEATH, 1, 1);
 						player.setGameMode(GameMode.SPECTATOR);
@@ -602,6 +755,24 @@ public class Arena {
 
 		}.runTaskTimer(WedBars.getInstance(), 0, 1L);
 
+	}
+
+	public Gamer getGamer(String name) {
+		return gamers.get(name);
+	}
+
+	public void deleteGamer(Gamer gamer) {
+
+		getTeam(gamer.getTeam()).removeGamer(gamer);
+		gamers.remove(gamer.getPlayer().getName());
+
+	}
+
+	public ArenaTeam getTeam(Team team) {
+		return teams.get(team);
+	}
+	public Map<Team, ArenaTeam> getTeams() {
+		return teams;
 	}
 
 	public ArenaTeam whoseBed(Gamer gamer, Location loc) {

@@ -10,7 +10,7 @@ public class ArenaTeam {
 	
 	private Team team;
 	private Location generatorLoc;
-	private int emeraldspeed;
+	private int initialInitialIronSpeed, initialInitialGoldSpeed, initialInitialEmeraldSpeed;
 	private Generator ironGenerator, goldGenerator, emeraldGenerator;
 	private boolean bedExists;
 	private Location spawnLoc;
@@ -21,15 +21,16 @@ public class ArenaTeam {
 	private boolean[] upgrades;
 	private TeamTrap trap;
 	
-	public ArenaTeam(Team team, Location spawnLoc, Location generatorLoc, int ironspeed, int goldspeed, int personalemeraldspeed, Location[] bedLoc, Gamer[] gamers) {
+	public ArenaTeam(Team team, Location spawnLoc, Location generatorLoc, int initialInitialIronSpeed, int initialInitialGoldSpeed, int personalemeraldspeed, Location[] bedLoc, Gamer[] gamers) {
 		
 		this.team = team;
 		
 		this.generatorLoc = generatorLoc;
-		this.ironGenerator = new Generator(generatorLoc, ironspeed);
-		this.goldGenerator = new Generator(generatorLoc, goldspeed);
+		
+		this.ironGenerator = new Generator(generatorLoc, initialInitialIronSpeed);
+		this.goldGenerator = new Generator(generatorLoc, initialInitialGoldSpeed);
 		this.emeraldGenerator = null;
-		this.emeraldspeed = personalemeraldspeed;
+		this.initialInitialEmeraldSpeed = personalemeraldspeed;
 		
 		this.bedExists = true;
 		
@@ -44,7 +45,7 @@ public class ArenaTeam {
 	
 	public void createEmeraldGenerator() {
 		
-		this.emeraldGenerator = new Generator(generatorLoc, emeraldspeed);
+		this.emeraldGenerator = new Generator(generatorLoc, initialInitialEmeraldSpeed);
 		
 	}
 
@@ -158,6 +159,29 @@ public class ArenaTeam {
 	public void removeTrap() {
 		trap = null;
 	}
-	
+
+	public int getInitialIronSpeed() {
+		return initialInitialIronSpeed;
+	}
+
+	public void setInitialIronSpeed(int initialInitialIronSpeed) {
+		this.initialInitialIronSpeed = initialInitialIronSpeed;
+	}
+
+	public int getInitialGoldSpeed() {
+		return initialInitialGoldSpeed;
+	}
+
+	public void setInitialGoldSpeed(int initialInitialGoldSpeed) {
+		this.initialInitialGoldSpeed = initialInitialGoldSpeed;
+	}
+
+	public int getInitialEmeraldSpeed() {
+		return initialInitialEmeraldSpeed;
+	}
+
+	public void setInitialEmeraldSpeed(int initialInitialEmeraldSpeed) {
+		this.initialInitialEmeraldSpeed = initialInitialEmeraldSpeed;
+	}
 	
 }

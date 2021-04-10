@@ -62,9 +62,11 @@ public class WedBars extends JavaPlugin {
 	public static final int SPAWN_PROTECTION_DISTANCE_SQUARED = 25;
 	public static final int TRAP_DISTANCE = 7;
 
-
-	// not gamerTicks, this one is seconds
+	// not gamerTicks, these are in seconds
 	public static int TIME_BETWEEN_END_AND_RESET;
+	public static final int GOLEM_LIFE = 240;
+	
+	public static final int GOLEM_ATTACK_DISTANCE = 7;
 	
 	
 	// these are gamerTicks though

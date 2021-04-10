@@ -26,7 +26,7 @@ public class ConnectionListener implements Listener {
 			if (gamer == null || gamer.getStatus() == Status.DEAD) return;
 			
 			if (WedBars.running)
-				WedBars.getListeners().death(e.getPlayer(), true);
+				GameActions.death(e.getPlayer(), true);
 			else
 				WedBars.arena.deleteGamer(gamer);
 			

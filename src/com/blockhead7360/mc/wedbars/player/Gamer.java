@@ -1,6 +1,7 @@
 package com.blockhead7360.mc.wedbars.player;
 
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
 
 import com.blockhead7360.mc.wedbars.WedBars;
 import com.blockhead7360.mc.wedbars.team.Team;
@@ -12,6 +13,7 @@ public class Gamer {
 	private Status status;
 	private int respawningTimeLeft;
 	
+	private ItemStack[] invisArmor;
 	
 	public Gamer(Player player, Team team) {
 		
@@ -19,6 +21,7 @@ public class Gamer {
 		this.team = team;
 		this.status = Status.WAITING;
 		this.respawningTimeLeft = WedBars.RESPAWN_TIME;
+		this.invisArmor = null;
 		
 	}
 
@@ -74,6 +77,21 @@ public class Gamer {
 		
 		return false;
 		
+	}
+
+	public boolean hasInvisArmor() {
+		return invisArmor != null;
+	}
+	public ItemStack[] getInvisArmor() {
+		return invisArmor;
+	}
+
+	public void setInvisArmor(ItemStack[] invisArmor) {
+		this.invisArmor = invisArmor;
+	}
+	
+	public void removeInvisArmor() {
+		invisArmor = null;
 	}
 	
 }
