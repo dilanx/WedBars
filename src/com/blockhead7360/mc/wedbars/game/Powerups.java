@@ -2,10 +2,7 @@ package com.blockhead7360.mc.wedbars.game;
 
 import java.util.List;
 
-import org.bukkit.Effect;
-import org.bukkit.Location;
-import org.bukkit.Material;
-import org.bukkit.Sound;
+import org.bukkit.*;
 import org.bukkit.block.Block;
 import org.bukkit.entity.*;
 import org.bukkit.event.EventHandler;
@@ -37,6 +34,7 @@ public class Powerups implements Listener {
 		Team team = WedBars.arena.getGamer(((Player)egg.getShooter()).getName()).getTeam();
 		short stackColor = team.getStackColor();
 		//Player player = gamer.getPlayer();
+		World w = egg.getWorld();
 
 		new BukkitRunnable() {
 
@@ -47,22 +45,35 @@ public class Powerups implements Listener {
 
 				currentLocation = egg.getLocation();
 
-				if (egg.isDead() || !WedBars.running || currentLocation.getY() <= 0) {
+				if (egg.isDead() || !WedBars.running || currentLocation.getY() <= 30 || currentLocation.getY() >= 90) {
 					cancel();
 					return;
 				}
 
-				 if (previousLocation == null) {
-				 	previousLocation = egg.getLocation();
-				 	return;
-				 }
-				previousLocation.getBlock().setType(Material.WOOL);
-				WedBars.getListeners().getPlacedBlocks().add(previousLocation);
+				if (previousLocation == null) {
+					previousLocation = egg.getLocation();
+					return;
+				}
+
+				int x = previousLocation.getBlockX();
+				int y = previousLocation.getBlockY();
+				int z = previousLocation.getBlockZ();
+
+				for (int i = -1; i <= 1; i++) {
+					for (int j = -1; j <= 1; j++) {
+						Location l = new Location(w, x + i, y, z + j);
+						if (l.getBlock().getType() != Material.AIR) continue;
+						l.getBlock().setType(Material.WOOL);
+						WedBars.getListeners().getPlacedBlocks().add(l);
+					}
+				}
+
+
 
 				previousLocation = egg.getLocation();
 
 			}
-		}.runTaskTimer(WedBars.getInstance(), 5, 2L);
+		}.runTaskTimer(WedBars.getInstance(), 2, 2L);
 
 	}
 
