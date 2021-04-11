@@ -432,7 +432,7 @@ public class Shop implements Listener {
 		case ShopPage.POTIONS:
 
 			ItemStack[] p = {
-					
+
 					Utility.createPotionItemStack(ChatColor.YELLOW + "Speed Potion" + ChatColor.GRAY + ChatColor.ITALIC + " 30s",
 							new PotionEffect(PotionEffectType.SPEED, 600, 1), "",
 							ChatColor.GRAY + "Price: " + ChatColor.GREEN + "1 emerald"),
@@ -469,7 +469,8 @@ public class Shop implements Listener {
 							ChatColor.GRAY + "Price: " + ChatColor.GOLD + "4 gold"),
 					Utility.createIconItemStack(Material.ENDER_PEARL, 1, ChatColor.YELLOW + "Ender Pearl", "",
 							ChatColor.GRAY + "Price: " + ChatColor.GREEN + "4 emerald"),
-					Utility.createIconItemStack(Material.EGG, 1, ChatColor.GRAY + "Bridge Egg coming soon"),
+					Utility.createIconItemStack(Material.EGG, 1, ChatColor.YELLOW + "Bridge Egg", "",
+							ChatColor.GRAY + "Price: " + ChatColor.GREEN + "2 emerald"),
 					Utility.createIconItemStack(Material.MILK_BUCKET, 1, ChatColor.YELLOW + "Magic Milk" + ChatColor.GRAY + ChatColor.ITALIC + " 30s", "",
 							ChatColor.GRAY + "Price: " + ChatColor.GOLD + "4 gold"),
 
@@ -871,19 +872,20 @@ public class Shop implements Listener {
 
 
 		case TeamUpgrade.FORGE1:
-
-			double ironcalc1 = 1 / ((1.0 / team.getInitialIronSpeed()) * WedBars.FORGE1);
+			double ironcalc1 = (double) team.getInitialIronSpeed() / WedBars.FORGE1;
 			team.getIronGenerator().setSpeed((int) ironcalc1);
-			double goldcalc1 = 1 / ((1.0 / team.getInitialGoldSpeed()) * WedBars.FORGE1);
+			Bukkit.broadcastMessage(team.getInitialIronSpeed() + "");
+			Bukkit.broadcastMessage(ironcalc1 + "");
+			double goldcalc1 = (double) team.getInitialGoldSpeed() / WedBars.FORGE1;
 			team.getGoldGenerator().setSpeed((int) goldcalc1);
 
 			break;
 
 		case TeamUpgrade.FORGE2:
 
-			double ironcalc2 = 1 / ((1.0 / team.getInitialIronSpeed()) * WedBars.FORGE2);
+			double ironcalc2 = (double) team.getInitialIronSpeed() / WedBars.FORGE2;
 			team.getIronGenerator().setSpeed((int) ironcalc2);
-			double goldcalc2 = 1 / ((1.0 / team.getInitialGoldSpeed()) * WedBars.FORGE2);
+			double goldcalc2 = (double) team.getInitialIronSpeed() / WedBars.FORGE2;
 			team.getGoldGenerator().setSpeed((int) goldcalc2);
 			break;
 
@@ -894,11 +896,11 @@ public class Shop implements Listener {
 
 		case TeamUpgrade.FORGE4:
 
-			double ironcalc3 = 1 / ((1.0 / team.getInitialIronSpeed()) * WedBars.FORGE4);
+			double ironcalc3 = (double) team.getInitialIronSpeed() / WedBars.FORGE4;
 			team.getIronGenerator().setSpeed((int) ironcalc3);
-			double goldcalc3 = 1 / ((1.0 / team.getInitialGoldSpeed()) * WedBars.FORGE4);
+			double goldcalc3 = (double) team.getInitialIronSpeed() / WedBars.FORGE4;
 			team.getGoldGenerator().setSpeed((int) goldcalc3);
-			double emeraldcalc3 = 1 / ((1.0 / team.getInitialEmeraldSpeed()) * WedBars.FORGE4);
+			double emeraldcalc3 = (double) team.getInitialEmeraldSpeed() / WedBars.FORGE4;
 			team.getEmeraldGenerator().setSpeed((int) emeraldcalc3);
 			break;
 
@@ -953,8 +955,30 @@ public class Shop implements Listener {
 
 			}
 
-			player.getInventory().setLeggings(Utility.createUnbreakableItemStack(Material.CHAINMAIL_LEGGINGS, 1, ChatColor.YELLOW + "Chainmail Leggings (lmao why)"));
-			player.getInventory().setBoots(Utility.createUnbreakableItemStack(Material.CHAINMAIL_BOOTS, 1, ChatColor.YELLOW + "Chainmail Boots (lmao why)"));
+			ItemStack leggings = Utility.createUnbreakableItemStack(Material.CHAINMAIL_LEGGINGS, 1, ChatColor.YELLOW + "Chainmail Leggings (lmao why)");
+			ItemStack boots = Utility.createUnbreakableItemStack(Material.CHAINMAIL_BOOTS, 1, ChatColor.YELLOW + "Chainmail Boots (lmao why)");
+
+			if (player.getInventory().getChestplate().containsEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL)) {
+
+				ItemMeta chestMeta = player.getInventory().getChestplate().getItemMeta();
+				ItemMeta lMeta = leggings.getItemMeta();
+				ItemMeta bMeta = boots.getItemMeta();
+
+				for (Enchantment e : chestMeta.getEnchants().keySet()) {
+
+					int l = chestMeta.getEnchantLevel(e);
+					lMeta.addEnchant(e, l, true);
+					bMeta.addEnchant(e, l, true);
+
+				}
+
+				leggings.setItemMeta(lMeta);
+				boots.setItemMeta(bMeta);
+
+			}
+
+			player.getInventory().setLeggings(leggings);
+			player.getInventory().setBoots(boots);
 			addItem = false;
 
 		}
@@ -967,9 +991,32 @@ public class Shop implements Listener {
 				return false;
 
 			}
+			
+			ItemStack leggings = Utility.createUnbreakableItemStack(Material.IRON_LEGGINGS, 1, ChatColor.YELLOW + "Iron Leggings");
+			ItemStack boots = Utility.createUnbreakableItemStack(Material.IRON_BOOTS, 1, ChatColor.YELLOW + "Iron Boots");
 
-			player.getInventory().setLeggings(Utility.createUnbreakableItemStack(Material.IRON_LEGGINGS, 1, ChatColor.YELLOW + "Iron Leggings"));
-			player.getInventory().setBoots(Utility.createUnbreakableItemStack(Material.IRON_BOOTS, 1, ChatColor.YELLOW + "Iron Boots"));
+			if (player.getInventory().getChestplate().containsEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL)) {
+
+				ItemMeta chestMeta = player.getInventory().getChestplate().getItemMeta();
+				ItemMeta lMeta = leggings.getItemMeta();
+				ItemMeta bMeta = boots.getItemMeta();
+
+				for (Enchantment e : chestMeta.getEnchants().keySet()) {
+
+					int l = chestMeta.getEnchantLevel(e);
+					lMeta.addEnchant(e, l, true);
+					bMeta.addEnchant(e, l, true);
+
+				}
+
+				leggings.setItemMeta(lMeta);
+				boots.setItemMeta(bMeta);
+
+			}
+
+
+			player.getInventory().setLeggings(leggings);
+			player.getInventory().setBoots(boots);
 			addItem = false;
 
 		}
@@ -981,9 +1028,31 @@ public class Shop implements Listener {
 				return false;
 
 			}
+			
+			ItemStack leggings = Utility.createUnbreakableItemStack(Material.DIAMOND_LEGGINGS, 1, ChatColor.YELLOW + "Diamond Leggings");
+			ItemStack boots = Utility.createUnbreakableItemStack(Material.DIAMOND_BOOTS, 1, ChatColor.YELLOW + "Diamond Boots");
+			
+			if (player.getInventory().getChestplate().containsEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL)) {
 
-			player.getInventory().setLeggings(Utility.createUnbreakableItemStack(Material.DIAMOND_LEGGINGS, 1, ChatColor.YELLOW + "Diamond Leggings"));
-			player.getInventory().setBoots(Utility.createUnbreakableItemStack(Material.DIAMOND_BOOTS, 1, ChatColor.YELLOW + "Diamond Boots"));
+				ItemMeta chestMeta = player.getInventory().getChestplate().getItemMeta();
+				ItemMeta lMeta = leggings.getItemMeta();
+				ItemMeta bMeta = boots.getItemMeta();
+
+				for (Enchantment e : chestMeta.getEnchants().keySet()) {
+
+					int l = chestMeta.getEnchantLevel(e);
+					lMeta.addEnchant(e, l, true);
+					bMeta.addEnchant(e, l, true);
+
+				}
+
+				leggings.setItemMeta(lMeta);
+				boots.setItemMeta(bMeta);
+
+			}
+
+			player.getInventory().setLeggings(leggings);
+			player.getInventory().setBoots(boots);
 			addItem = false;
 
 		}
@@ -1010,9 +1079,9 @@ public class Shop implements Listener {
 		if (stack.getType().isBlock()) {
 
 			stack = new ItemStack(stack.getType(), stack.getAmount(), stack.getDurability());
-			
+
 		} else {
-			
+
 			ItemMeta meta = stack.getItemMeta();
 
 			if (stack.getType().toString().endsWith("_SWORD")) {
@@ -1031,7 +1100,7 @@ public class Shop implements Listener {
 
 			meta.setLore(null);
 			stack.setItemMeta(meta);
-			
+
 		}
 
 		if (addItem) player.getInventory().addItem(stack);

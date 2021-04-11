@@ -2,7 +2,6 @@ package com.blockhead7360.mc.wedbars.game;
 
 import java.util.List;
 
-import org.bukkit.DyeColor;
 import org.bukkit.Effect;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -31,7 +30,6 @@ import org.bukkit.event.player.PlayerItemConsumeEvent;
 import org.bukkit.event.player.PlayerTeleportEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.PotionMeta;
-import org.bukkit.material.Wool;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitRunnable;
@@ -49,21 +47,23 @@ public class Powerups implements Listener {
 	}
 
 	public static void createBridge(Egg egg) {
-		Team team = WedBars.arena.getGamer(((Player)egg.getShooter()).getName()).getTeam();
-		DyeColor blockColor = team.getBlockColor();
+		Team team = WedBars.arena.getGamer(((Player) egg.getShooter()).getName()).getTeam();
+		short stackColor = team.getStackColor();
 		//Player player = gamer.getPlayer();
 		World w = egg.getWorld();
 
 		new BukkitRunnable() {
 
-			Location currentLocation;
+			//Location currentLocation;
 			Location previousLocation;
+			int time = WedBars.BRIDGE_EGG_TIME;
 
+			@SuppressWarnings("deprecation")
 			public void run() {
 
-				currentLocation = egg.getLocation();
+				//currentLocation = egg.getLocation();
 
-				if (egg.isDead() || !WedBars.running || currentLocation.getY() <= 30 || currentLocation.getY() >= 90) {
+				if (egg.isDead() || !WedBars.running) {
 					cancel();
 					return;
 				}
@@ -86,9 +86,12 @@ public class Powerups implements Listener {
 						if (b.getType() == Material.AIR) {
 
 							b.setType(Material.WOOL);
+							b.setData((byte) stackColor);
 
-							Wool w = (Wool) b.getState().getData();
-							w.setColor(blockColor);
+//							Wool w = (Wool) b.getState().getData();
+//							w.setColor(blockColor);
+//							b.getState().setData(w);
+							
 							WedBars.getListeners().getPlacedBlocks().add(l);
 
 						}
@@ -99,9 +102,18 @@ public class Powerups implements Listener {
 
 
 				previousLocation = egg.getLocation();
+				
+				if (time <= 0) {
+					
+					cancel();
+					return;
+					
+				}
+				
+				time--;
 
 			}
-		}.runTaskTimer(WedBars.getInstance(), 2, 2L);
+		}.runTaskTimer(WedBars.getInstance(), 5L, 2L);
 
 	}
 
@@ -406,7 +418,7 @@ public class Powerups implements Listener {
 	public void onProjectileLaunch(ProjectileLaunchEvent e) {
 		if (!WedBars.running) return;
 		if (e.getEntityType() == EntityType.EGG) {
-			createBridge((Egg)e.getEntity());
+			createBridge((Egg) e.getEntity());
 		}
 	}
 

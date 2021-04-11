@@ -11,3 +11,4 @@
 - added golems
 - added magic milk
 - added silverfish
+- added bridge egg

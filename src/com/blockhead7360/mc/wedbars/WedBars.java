@@ -71,11 +71,16 @@ public class WedBars extends JavaPlugin {
 	public static int GOLEM_HEALTH, BUG_HEALTH;
 	public static int BUG_LIFE = 120;
 	public static int BUG_ATTACK_DISTANCE = 4;
+	
+
 
 
 	// these are gamerTicks though
 	public static int MAX_DIAMONDS_IN_GEN, MAX_EMERALDS_IN_GEN;
 	public static int MAX_BUILD_HEIGHT, TNT_FUSE, RESPAWN_TIME, VOID_LEVEL;
+	
+	//TODO i didn't put this in config
+	public static int BRIDGE_EGG_TIME = 30;
 
 
 	private static WedBars instance;

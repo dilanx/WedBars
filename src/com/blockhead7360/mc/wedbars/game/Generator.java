@@ -39,7 +39,7 @@ public class Generator {
 	public boolean passTime() {
 		
 		curTimeLeft--;
-		
+				
 		if (curTimeLeft <= 0) {
 			
 			curTimeLeft = speed;

@@ -233,6 +233,13 @@ public class Arena {
 
 			public void run() {
 
+				if (!WedBars.running) {
+
+					cancel();
+					return;
+
+				}
+				
 				// Teams
 
 				for (ArenaTeam at : teams.values()) {
@@ -282,9 +289,6 @@ public class Arena {
 
 
 					}
-
-
-
 
 					for (Gamer gamer : at.getGamers()) {
 
@@ -439,13 +443,6 @@ public class Arena {
 					// stages
 
 					nextStage();
-
-				}
-
-
-				if (!WedBars.running) {
-
-					cancel();
 
 				}
 

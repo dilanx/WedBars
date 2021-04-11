@@ -53,6 +53,7 @@ public class GameActions {
 	public static void death(Player player, boolean disconnect) {
 
 		Gamer gamer = WedBars.arena.getGamer(player.getName());
+		if (gamer == null) return;
 		boolean bedExists = WedBars.arena.getTeam(gamer.getTeam()).bedExists();
 
 		if (disconnect) {

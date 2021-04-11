@@ -10,7 +10,7 @@ public class ArenaTeam {
 	
 	private Team team;
 	private Location generatorLoc;
-	private int initialInitialIronSpeed, initialInitialGoldSpeed, initialInitialEmeraldSpeed;
+	private int initialIronSpeed, initialGoldSpeed, initialEmeraldSpeed;
 	private Generator ironGenerator, goldGenerator, emeraldGenerator;
 	private boolean bedExists;
 	private Location spawnLoc;
@@ -21,16 +21,18 @@ public class ArenaTeam {
 	private boolean[] upgrades;
 	private TeamTrap trap;
 	
-	public ArenaTeam(Team team, Location spawnLoc, Location generatorLoc, int initialInitialIronSpeed, int initialInitialGoldSpeed, int personalemeraldspeed, Location[] bedLoc, Gamer[] gamers) {
+	public ArenaTeam(Team team, Location spawnLoc, Location generatorLoc, int initialIronSpeed, int initialGoldSpeed, int personalemeraldspeed, Location[] bedLoc, Gamer[] gamers) {
 		
 		this.team = team;
 		
 		this.generatorLoc = generatorLoc;
 		
-		this.ironGenerator = new Generator(generatorLoc, initialInitialIronSpeed);
-		this.goldGenerator = new Generator(generatorLoc, initialInitialGoldSpeed);
+		this.ironGenerator = new Generator(generatorLoc, initialIronSpeed);
+		this.goldGenerator = new Generator(generatorLoc, initialGoldSpeed);
 		this.emeraldGenerator = null;
-		this.initialInitialEmeraldSpeed = personalemeraldspeed;
+		this.initialIronSpeed = initialIronSpeed;
+		this.initialGoldSpeed = initialGoldSpeed;
+		this.initialEmeraldSpeed = personalemeraldspeed;
 		
 		this.bedExists = true;
 		
@@ -45,7 +47,7 @@ public class ArenaTeam {
 	
 	public void createEmeraldGenerator() {
 		
-		this.emeraldGenerator = new Generator(generatorLoc, initialInitialEmeraldSpeed);
+		this.emeraldGenerator = new Generator(generatorLoc, initialEmeraldSpeed);
 		
 	}
 
@@ -161,27 +163,27 @@ public class ArenaTeam {
 	}
 
 	public int getInitialIronSpeed() {
-		return initialInitialIronSpeed;
+		return initialIronSpeed;
 	}
 
-	public void setInitialIronSpeed(int initialInitialIronSpeed) {
-		this.initialInitialIronSpeed = initialInitialIronSpeed;
+	public void setInitialIronSpeed(int initialIronSpeed) {
+		this.initialIronSpeed = initialIronSpeed;
 	}
 
 	public int getInitialGoldSpeed() {
-		return initialInitialGoldSpeed;
+		return initialGoldSpeed;
 	}
 
-	public void setInitialGoldSpeed(int initialInitialGoldSpeed) {
-		this.initialInitialGoldSpeed = initialInitialGoldSpeed;
+	public void setInitialGoldSpeed(int initialGoldSpeed) {
+		this.initialGoldSpeed = initialGoldSpeed;
 	}
 
 	public int getInitialEmeraldSpeed() {
-		return initialInitialEmeraldSpeed;
+		return initialEmeraldSpeed;
 	}
 
-	public void setInitialEmeraldSpeed(int initialInitialEmeraldSpeed) {
-		this.initialInitialEmeraldSpeed = initialInitialEmeraldSpeed;
+	public void setInitialEmeraldSpeed(int initialEmeraldSpeed) {
+		this.initialEmeraldSpeed = initialEmeraldSpeed;
 	}
 	
 }
