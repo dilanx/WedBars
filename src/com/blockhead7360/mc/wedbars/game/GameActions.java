@@ -200,6 +200,11 @@ public class GameActions {
 		} else {
 
 			gamer.setStatus(Status.DEAD);
+			for (Player p : Bukkit.getOnlinePlayers()) {
+				
+				p.playSound(p.getLocation(), Sound.AMBIENCE_THUNDER, 1, 1);
+				
+			}
 			ArenaTeam team = WedBars.arena.getTeam(gamer.getTeam());
 			GameScoreboard.updateTeam(team);
 

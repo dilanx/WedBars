@@ -1,5 +1,8 @@
 package com.blockhead7360.mc.wedbars.player;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
@@ -15,6 +18,8 @@ public class Gamer {
 	
 	private ItemStack[] invisArmor;
 	
+	private Map<Statistic, Integer> stats;
+	
 	public Gamer(Player player, Team team) {
 		
 		this.player = player;
@@ -22,6 +27,8 @@ public class Gamer {
 		this.status = Status.WAITING;
 		this.respawningTimeLeft = WedBars.RESPAWN_TIME;
 		this.invisArmor = null;
+		
+		stats = new HashMap<>();
 		
 	}
 
@@ -92,6 +99,24 @@ public class Gamer {
 	
 	public void removeInvisArmor() {
 		invisArmor = null;
+	}
+	
+	public void setStatistic(Statistic stat, int value) {
+		
+		stats.put(stat, value);
+		
+	}
+	
+	public int getStatistic(Statistic stat) {
+		
+		return stats.get(stat);
+		
+	}
+	
+	public void addOneToStatistic(Statistic stat) {
+		
+		stats.put(stat, stats.get(stat) + 1);
+		
 	}
 	
 }

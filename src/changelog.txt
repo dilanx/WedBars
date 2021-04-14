@@ -12,3 +12,4 @@
 - added magic milk
 - added silverfish
 - added bridge egg
+- added team chest (test this)

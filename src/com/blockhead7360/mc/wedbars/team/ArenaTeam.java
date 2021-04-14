@@ -1,6 +1,8 @@
 package com.blockhead7360.mc.wedbars.team;
 
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
+import org.bukkit.inventory.Inventory;
 
 import com.blockhead7360.mc.wedbars.game.Generator;
 import com.blockhead7360.mc.wedbars.player.Gamer;
@@ -20,6 +22,8 @@ public class ArenaTeam {
 	
 	private boolean[] upgrades;
 	private TeamTrap trap;
+	
+	private Inventory chest;
 	
 	public ArenaTeam(Team team, Location spawnLoc, Location generatorLoc, int initialIronSpeed, int initialGoldSpeed, int personalemeraldspeed, Location[] bedLoc, Gamer[] gamers) {
 		
@@ -42,6 +46,7 @@ public class ArenaTeam {
 		
 		this.upgrades = new boolean[TeamUpgrade.SIZE];
 		this.trap = null;
+		chest = Bukkit.createInventory(null, 27, team.getLabel() + " team chest");
 		
 	}
 	
@@ -184,6 +189,10 @@ public class ArenaTeam {
 
 	public void setInitialEmeraldSpeed(int initialEmeraldSpeed) {
 		this.initialEmeraldSpeed = initialEmeraldSpeed;
+	}
+	
+	public Inventory getChest() {
+		return chest;
 	}
 	
 }

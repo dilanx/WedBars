@@ -8,6 +8,7 @@ import org.bukkit.ChatColor;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.Sound;
 import org.bukkit.entity.Arrow;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
@@ -67,12 +68,13 @@ public class Listeners implements Listener {
 
 			if (e.getClickedBlock().getType() == Material.CHEST) {
 
-				// TODO chest implementation
-
 				e.setCancelled(true);
-				e.getPlayer().sendMessage(ChatColor.RED + "Sorry! Normal chests aren't available for use right now.");
-				e.getPlayer().sendMessage(ChatColor.GRAY + "You'll have to use your ender chest instead.");
-
+				
+				Player player = e.getPlayer();
+				
+				ArenaTeam team = WedBars.arena.getTeam(WedBars.arena.getGamer(player.getName()).getTeam());
+				player.openInventory(team.getChest());
+				player.playSound(player.getLocation(), Sound.NOTE_PLING, 1, 1);
 
 			}
 

@@ -39,3 +39,11 @@ golemHealth: 20
 bugLife: 120
 bugTargetDistance: 4
 bugHealth: 8
+
+# MySQL database information (required for stats)
+mysql:
+  enabled: false
+  host: None
+  database: None
+  user: None
+  pass: None
