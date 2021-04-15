@@ -109,13 +109,19 @@ public class Gamer {
 	
 	public int getStatistic(Statistic stat) {
 		
+		if (!stats.containsKey(stat))
+			stats.put(stat, 0);
+		
 		return stats.get(stat);
 		
 	}
 	
 	public void addOneToStatistic(Statistic stat) {
 		
-		stats.put(stat, stats.get(stat) + 1);
+		if (stats.containsKey(stat))
+			stats.put(stat, stats.get(stat) + 1);
+		else
+			stats.put(stat, 1);
 		
 	}
 	

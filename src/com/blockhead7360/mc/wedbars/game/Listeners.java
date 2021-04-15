@@ -29,6 +29,7 @@ import org.bukkit.potion.PotionEffectType;
 import com.blockhead7360.mc.wedbars.WedBars;
 import com.blockhead7360.mc.wedbars.arena.Arena;
 import com.blockhead7360.mc.wedbars.player.Gamer;
+import com.blockhead7360.mc.wedbars.player.Statistic;
 import com.blockhead7360.mc.wedbars.team.ArenaTeam;
 
 public class Listeners implements Listener {
@@ -129,36 +130,37 @@ public class Listeners implements Listener {
 	}
 
 	@EventHandler
-	public void blockPlaced(BlockPlaceEvent event) {
+	public void blockPlaced(BlockPlaceEvent e) {
 
 		if (!WedBars.running) return;
 
-		if (event.getBlock().getLocation().getY() >= WedBars.MAX_BUILD_HEIGHT) {
-			event.setCancelled(true);
-			event.getPlayer().sendMessage(ChatColor.RED + "You can't build any higher!");
+		if (e.getBlock().getLocation().getY() >= WedBars.MAX_BUILD_HEIGHT) {
+			e.setCancelled(true);
+			e.getPlayer().sendMessage(ChatColor.RED + "You can't build any higher!");
 			return;
 		}
 
-		if (event.getBlock().getType() == Material.TNT) {
-			event.getBlock().setType(Material.AIR);
-			TNTPrimed tp = (TNTPrimed)event.getBlock().getWorld().spawnEntity(event.getBlock().getLocation(), EntityType.PRIMED_TNT);
+		if (e.getBlock().getType() == Material.TNT) {
+			e.getBlock().setType(Material.AIR);
+			TNTPrimed tp = (TNTPrimed)e.getBlock().getWorld().spawnEntity(e.getBlock().getLocation(), EntityType.PRIMED_TNT);
 			tp.setFuseTicks(WedBars.TNT_FUSE);
 			return;
 		}
 
 		for (ArenaTeam team : WedBars.arena.getTeams().values()) {
 
-			if (team.getSpawnLoc().distanceSquared(event.getBlock().getLocation()) <= WedBars.SPAWN_PROTECTION_DISTANCE_SQUARED) {
+			if (team.getSpawnLoc().distanceSquared(e.getBlock().getLocation()) <= WedBars.SPAWN_PROTECTION_DISTANCE_SQUARED) {
 
-				event.setCancelled(true);
-				event.getPlayer().sendMessage(ChatColor.RED + "You can't place blocks there!");
+				e.setCancelled(true);
+				e.getPlayer().sendMessage(ChatColor.RED + "You can't place blocks there!");
 				return;
 
 			}
 
 		}
-
-		placedBlocks.add(event.getBlock().getLocation());
+		
+		WedBars.arena.getGamer(e.getPlayer().getName()).addOneToStatistic(Statistic.BPLACED);
+		placedBlocks.add(e.getBlock().getLocation());
 	}
 
 	@EventHandler

@@ -13,3 +13,4 @@
 - added silverfish
 - added bridge egg
 - added team chest (test this)
+- added stats (mysql)

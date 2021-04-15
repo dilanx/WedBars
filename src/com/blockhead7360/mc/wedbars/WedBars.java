@@ -22,6 +22,7 @@ import com.blockhead7360.mc.wedbars.game.GameChat;
 import com.blockhead7360.mc.wedbars.game.Listeners;
 import com.blockhead7360.mc.wedbars.game.Powerups;
 import com.blockhead7360.mc.wedbars.game.Shop;
+import com.blockhead7360.mc.wedbars.player.GamerStats;
 import com.blockhead7360.mc.wedbars.team.Team;
 import com.blockhead7360.mc.wedbars.team.TeamAssignments;
 import com.gmail.filoghost.holographicdisplays.api.Hologram;
@@ -71,14 +72,14 @@ public class WedBars extends JavaPlugin {
 	public static int GOLEM_HEALTH, BUG_HEALTH;
 	public static int BUG_LIFE = 120;
 	public static int BUG_ATTACK_DISTANCE = 4;
-	
+
 
 
 
 	// these are gamerTicks though
 	public static int MAX_DIAMONDS_IN_GEN, MAX_EMERALDS_IN_GEN;
 	public static int MAX_BUILD_HEIGHT, TNT_FUSE, RESPAWN_TIME, VOID_LEVEL;
-	
+
 	//TODO i didn't put this in config
 	public static int BRIDGE_EGG_TIME = 30;
 
@@ -117,6 +118,13 @@ public class WedBars extends JavaPlugin {
 		GOLEM_HEALTH = getConfig().getInt("golemHealth");
 		BUG_HEALTH = getConfig().getInt("bugHealth");
 
+		GamerStats.init(
+				getConfig().getBoolean("mysql.enabled"),
+				getConfig().getString("mysql.host"),
+				getConfig().getString("mysql.database"),
+				getConfig().getString("mysql.user"),
+				getConfig().getString("mysql.pass"));
+
 	}
 
 	public void onDisable() {
@@ -137,7 +145,7 @@ public class WedBars extends JavaPlugin {
 				sender.sendMessage(" ");
 				return true;
 			}
-			
+
 			sender.sendMessage(" ");
 			sender.sendMessage(ChatColor.GRAY + "---[ " + ChatColor.GREEN + "Wed Bars Command Help" + ChatColor.GRAY + " ]---");
 			sender.sendMessage(ChatColor.RED + "/setup" + ChatColor.GRAY + " - Setup a new arena.");
@@ -231,16 +239,16 @@ public class WedBars extends JavaPlugin {
 			return true;
 
 		}
-		
+
 		if (cmd.getName().equalsIgnoreCase("autoteam")) {
-			
+
 			if (!sender.hasPermission("wedbars.admin")) {
 
 				sender.sendMessage("You do not have permission to use this command.");
 				return true;
 
 			}
-			
+
 			if (loadedArena == null) {
 
 				sender.sendMessage("Load an arena first with /load.");
@@ -254,11 +262,11 @@ public class WedBars extends JavaPlugin {
 				return true;
 
 			}
-			
+
 			List<String> teamOptions = new ArrayList<String>();
-			
+
 			for (int i = 0; i < args.length; i++) {
-				
+
 				Team team = Team.getByLabel(args[i]);
 
 				if (team == null) {
@@ -274,43 +282,44 @@ public class WedBars extends JavaPlugin {
 					return true;
 
 				}
-				
+
 				teamOptions.add(args[i]);
-				
+
 			}
-			
+
 			List<Player> players = new ArrayList<Player>();
-			
+
 			for (Player p : getServer().getOnlinePlayers()) players.add(p);
-			
+
 			double pplPerTeam = Math.ceil((double) players.size() / (double) teamOptions.size());
-			
+
 			Collections.shuffle(players);
 			Collections.shuffle(teamOptions);
-			
+
 			int curPlayer = 0;
 			int curTeam = 0;
-			
+
 			for (Player player : players) {
-				
+
 				getServer().dispatchCommand(getServer().getConsoleSender(), "team " + teamOptions.get(curTeam) + " " + player.getName());
 				curPlayer++;
-				
+
 				if (curPlayer >= pplPerTeam) {
-					
+
 					curPlayer = 0;
 					curTeam++;
-					
+
 				}
-				
+
 			}
-			
+
 			Bukkit.broadcastMessage(" ");
-			
+			Bukkit.broadcastMessage(ChatColor.GRAY + "Players have been randomly assigned to teams automatically.");
+
 			getServer().dispatchCommand(getServer().getConsoleSender(), "team show");
-			
+
 			return true;
-			
+
 		}
 
 		if (cmd.getName().equalsIgnoreCase("team")) {

@@ -15,6 +15,8 @@ import com.blockhead7360.mc.wedbars.Utility;
 import com.blockhead7360.mc.wedbars.Utility.EnchantmentSet;
 import com.blockhead7360.mc.wedbars.WedBars;
 import com.blockhead7360.mc.wedbars.player.Gamer;
+import com.blockhead7360.mc.wedbars.player.GamerStats;
+import com.blockhead7360.mc.wedbars.player.Statistic;
 import com.blockhead7360.mc.wedbars.player.Status;
 import com.blockhead7360.mc.wedbars.player.Titles;
 import com.blockhead7360.mc.wedbars.team.ArenaTeam;
@@ -22,7 +24,7 @@ import com.blockhead7360.mc.wedbars.team.Team;
 import com.blockhead7360.mc.wedbars.team.TeamUpgrade;
 
 public class GameActions {
-	
+
 	public static void bedGone(ArenaTeam team, Gamer breaker) {
 
 		team.setBedExists(false);
@@ -43,8 +45,12 @@ public class GameActions {
 		GameScoreboard.updateTeam(team);
 
 
-
-		for (Gamer gamer : team.getGamers()) Titles.bedBroken(gamer.getPlayer());
+		breaker.addOneToStatistic(Statistic.BKILLS);
+		
+		for (Gamer gamer : team.getGamers()) {
+			Titles.bedBroken(gamer.getPlayer());
+			gamer.addOneToStatistic(Statistic.BDEATHS);
+		}
 
 
 
@@ -62,18 +68,18 @@ public class GameActions {
 			WedBars.arena.deleteGamer(gamer);
 
 		} else {
-			
+
 			ItemStack[] armor;
-			
+
 			if (gamer.hasInvisArmor()) {
-				
+
 				armor = gamer.getInvisArmor();
 				gamer.removeInvisArmor();
-				
+
 			} else {
-				
+
 				armor = player.getInventory().getArmorContents();
-				
+
 			}
 
 			ItemStack[] contents = player.getInventory().getContents();
@@ -81,7 +87,7 @@ public class GameActions {
 			player.getInventory().clear();
 
 			player.getInventory().setArmorContents(armor);
-						
+
 			if (WedBars.arena.getTeam(gamer.getTeam()).hasUpgrade(TeamUpgrade.SWORDS))
 				player.getInventory().setItem(0, Utility.createEnchantedItemStack(Material.WOOD_SWORD, 1, ChatColor.YELLOW + "Wooden Sword",
 						new EnchantmentSet[] {new EnchantmentSet(Enchantment.DAMAGE_ALL, 1)}));
@@ -135,11 +141,11 @@ public class GameActions {
 							new EnchantmentSet[] {new EnchantmentSet(Enchantment.DIG_SPEED, 1)}));
 
 				}
-				
+
 				else if (contents[i].getType() == Material.SHEARS) {
-					
+
 					player.getInventory().addItem(Utility.createUnbreakableItemStack(Material.SHEARS, 1, ChatColor.YELLOW + "Permanent Shears"));
-					
+
 				}
 
 
@@ -149,9 +155,9 @@ public class GameActions {
 
 			player.setHealth(20);
 			player.setGameMode(GameMode.SPECTATOR);
-			
+
 			if (player.hasPotionEffect(PotionEffectType.INVISIBILITY)) player.removePotionEffect(PotionEffectType.INVISIBILITY);
-			
+
 			player.teleport(new Location(player.getWorld(), 0, 100, 0));
 
 			Player killer = player.getKiller();
@@ -165,8 +171,10 @@ public class GameActions {
 
 				killer.playSound(killer.getLocation(), Sound.ORB_PICKUP, 1, 1);
 
+				Gamer kGamer = WedBars.arena.getGamer(killer.getName());
+
 				Bukkit.broadcastMessage(gamer.getTeam().getChatColor() + player.getName()
-				+ ChatColor.GRAY + " was killed by " + WedBars.arena.getGamer(killer.getName()).getTeam().getChatColor() + killer.getName() + ChatColor.GRAY + "."
+				+ ChatColor.GRAY + " was killed by " + kGamer.getTeam().getChatColor() + killer.getName() + ChatColor.GRAY + "."
 				+ (bedExists ? "" : ChatColor.RED + "" + ChatColor.BOLD + " FINAL KILL!"));
 
 				// Give items to killer
@@ -188,9 +196,17 @@ public class GameActions {
 
 				killer.updateInventory();
 
+				kGamer.addOneToStatistic(Statistic.KILLS);
+
+				if (!bedExists) {
+					kGamer.addOneToStatistic(Statistic.FKILLS);
+				}
+
 			}
 
 		}
+
+		gamer.addOneToStatistic(Statistic.DEATHS);
 
 		if (bedExists && !disconnect) {
 
@@ -200,10 +216,11 @@ public class GameActions {
 		} else {
 
 			gamer.setStatus(Status.DEAD);
+			gamer.addOneToStatistic(Statistic.FDEATHS);
 			for (Player p : Bukkit.getOnlinePlayers()) {
-				
+
 				p.playSound(p.getLocation(), Sound.AMBIENCE_THUNDER, 1, 1);
-				
+
 			}
 			ArenaTeam team = WedBars.arena.getTeam(gamer.getTeam());
 			GameScoreboard.updateTeam(team);
@@ -227,6 +244,9 @@ public class GameActions {
 				Bukkit.broadcastMessage("     " + t.getChatColor() + t.getLabel() + ChatColor.GRAY + " team is gone now.");
 				Bukkit.broadcastMessage(" ");
 
+				for (Gamer g : team.getGamers())
+					g.addOneToStatistic(Statistic.LOSSES);
+
 			}
 
 			boolean end = WedBars.arena.checkForEndGame();
@@ -236,9 +256,15 @@ public class GameActions {
 				Titles.death(player, -1);
 
 			}
+			
+			if (disconnect) {
+				
+				GamerStats.sendGamerData(gamer, false);
+				
+			}
 
 		}
 
 	}
-	
+
 }

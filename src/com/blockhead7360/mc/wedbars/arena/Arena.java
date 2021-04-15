@@ -27,6 +27,8 @@ import com.blockhead7360.mc.wedbars.WedBars;
 import com.blockhead7360.mc.wedbars.game.GameScoreboard;
 import com.blockhead7360.mc.wedbars.game.Generator;
 import com.blockhead7360.mc.wedbars.player.Gamer;
+import com.blockhead7360.mc.wedbars.player.GamerStats;
+import com.blockhead7360.mc.wedbars.player.Statistic;
 import com.blockhead7360.mc.wedbars.player.Status;
 import com.blockhead7360.mc.wedbars.player.Titles;
 import com.blockhead7360.mc.wedbars.team.ArenaTeam;
@@ -101,6 +103,10 @@ public class Arena {
 				Gamer gamer = new Gamer(Bukkit.getPlayer(players.get(i)), team);
 				g[i] = gamer;
 
+				// load stats
+				
+				GamerStats.updateGamerWithStats(gamer, false);
+				
 				gamers.put(players.get(i), gamer);
 
 			}
@@ -656,6 +662,7 @@ public class Arena {
 						Player player = gamer.getPlayer();
 
 						Titles.win(player);
+						gamer.addOneToStatistic(Statistic.WINS);
 
 						player.playSound(player.getLocation(), Sound.ENDERDRAGON_DEATH, 1, 1);
 						player.setGameMode(GameMode.SPECTATOR);
@@ -677,6 +684,12 @@ public class Arena {
 
 				}
 
+			}
+			
+			for (Gamer gamer : gamers.values()) {
+				
+				GamerStats.sendGamerData(gamer, false);
+				
 			}
 
 			GameScoreboard.updateStatus(ChatColor.GRAY + "map reset");
