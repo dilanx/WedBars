@@ -1,5 +1,5 @@
 name: WedBars
-version: 1.0_b1_u10
+version: 1.0_b2_u40
 main: com.blockhead7360.mc.wedbars.WedBars
 author: Blockhead7360
 description: It's like Bed Wars on Hypixel but better I swear
@@ -16,6 +16,8 @@ commands:
     description: Enter the arena setup wizard.
   team:
     description: Assign a player to a team.
+  autoteam:
+    description: Automatically randomly assign players to teams.
   start:
     description: Starts the game.
   test:

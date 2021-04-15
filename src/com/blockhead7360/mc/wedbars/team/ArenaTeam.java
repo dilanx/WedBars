@@ -1,15 +1,18 @@
 package com.blockhead7360.mc.wedbars.team;
 
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
+import org.bukkit.inventory.Inventory;
 
 import com.blockhead7360.mc.wedbars.game.Generator;
 import com.blockhead7360.mc.wedbars.player.Gamer;
+import com.blockhead7360.mc.wedbars.team.traps.TeamTrap;
 
 public class ArenaTeam {
 	
 	private Team team;
 	private Location generatorLoc;
-	private int emeraldspeed;
+	private int initialIronSpeed, initialGoldSpeed, initialEmeraldSpeed;
 	private Generator ironGenerator, goldGenerator, emeraldGenerator;
 	private boolean bedExists;
 	private Location spawnLoc;
@@ -18,16 +21,22 @@ public class ArenaTeam {
 	private Gamer[] gamers;
 	
 	private boolean[] upgrades;
+	private TeamTrap trap;
 	
-	public ArenaTeam(Team team, Location spawnLoc, Location generatorLoc, int ironspeed, int goldspeed, int personalemeraldspeed, Location[] bedLoc, Gamer[] gamers) {
+	private Inventory chest;
+	
+	public ArenaTeam(Team team, Location spawnLoc, Location generatorLoc, int initialIronSpeed, int initialGoldSpeed, int personalemeraldspeed, Location[] bedLoc, Gamer[] gamers) {
 		
 		this.team = team;
 		
 		this.generatorLoc = generatorLoc;
-		this.ironGenerator = new Generator(generatorLoc, ironspeed);
-		this.goldGenerator = new Generator(generatorLoc, goldspeed);
+		
+		this.ironGenerator = new Generator(generatorLoc, initialIronSpeed);
+		this.goldGenerator = new Generator(generatorLoc, initialGoldSpeed);
 		this.emeraldGenerator = null;
-		this.emeraldspeed = personalemeraldspeed;
+		this.initialIronSpeed = initialIronSpeed;
+		this.initialGoldSpeed = initialGoldSpeed;
+		this.initialEmeraldSpeed = personalemeraldspeed;
 		
 		this.bedExists = true;
 		
@@ -36,12 +45,14 @@ public class ArenaTeam {
 		this.gamers = gamers;
 		
 		this.upgrades = new boolean[TeamUpgrade.SIZE];
+		this.trap = null;
+		chest = Bukkit.createInventory(null, 27, team.getLabel() + " team chest");
 		
 	}
 	
 	public void createEmeraldGenerator() {
 		
-		this.emeraldGenerator = new Generator(generatorLoc, emeraldspeed);
+		this.emeraldGenerator = new Generator(generatorLoc, initialEmeraldSpeed);
 		
 	}
 
@@ -140,5 +151,48 @@ public class ArenaTeam {
 		return upgrades;
 	}
 	
+	public boolean hasTrap() {
+		return trap != null;
+	}
+
+	public TeamTrap getTrap() {
+		return trap;
+	}
+
+	public void setTrap(TeamTrap trap) {
+		this.trap = trap;
+	}
+	
+	public void removeTrap() {
+		trap = null;
+	}
+
+	public int getInitialIronSpeed() {
+		return initialIronSpeed;
+	}
+
+	public void setInitialIronSpeed(int initialIronSpeed) {
+		this.initialIronSpeed = initialIronSpeed;
+	}
+
+	public int getInitialGoldSpeed() {
+		return initialGoldSpeed;
+	}
+
+	public void setInitialGoldSpeed(int initialGoldSpeed) {
+		this.initialGoldSpeed = initialGoldSpeed;
+	}
+
+	public int getInitialEmeraldSpeed() {
+		return initialEmeraldSpeed;
+	}
+
+	public void setInitialEmeraldSpeed(int initialEmeraldSpeed) {
+		this.initialEmeraldSpeed = initialEmeraldSpeed;
+	}
+	
+	public Inventory getChest() {
+		return chest;
+	}
 	
 }

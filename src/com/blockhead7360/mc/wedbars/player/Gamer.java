@@ -1,6 +1,10 @@
 package com.blockhead7360.mc.wedbars.player;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
 
 import com.blockhead7360.mc.wedbars.WedBars;
 import com.blockhead7360.mc.wedbars.team.Team;
@@ -12,6 +16,9 @@ public class Gamer {
 	private Status status;
 	private int respawningTimeLeft;
 	
+	private ItemStack[] invisArmor;
+	
+	private Map<Statistic, Integer> stats;
 	
 	public Gamer(Player player, Team team) {
 		
@@ -19,6 +26,9 @@ public class Gamer {
 		this.team = team;
 		this.status = Status.WAITING;
 		this.respawningTimeLeft = WedBars.RESPAWN_TIME;
+		this.invisArmor = null;
+		
+		stats = new HashMap<>();
 		
 	}
 
@@ -73,6 +83,45 @@ public class Gamer {
 		}
 		
 		return false;
+		
+	}
+
+	public boolean hasInvisArmor() {
+		return invisArmor != null;
+	}
+	public ItemStack[] getInvisArmor() {
+		return invisArmor;
+	}
+
+	public void setInvisArmor(ItemStack[] invisArmor) {
+		this.invisArmor = invisArmor;
+	}
+	
+	public void removeInvisArmor() {
+		invisArmor = null;
+	}
+	
+	public void setStatistic(Statistic stat, int value) {
+		
+		stats.put(stat, value);
+		
+	}
+	
+	public int getStatistic(Statistic stat) {
+		
+		if (!stats.containsKey(stat))
+			stats.put(stat, 0);
+		
+		return stats.get(stat);
+		
+	}
+	
+	public void addOneToStatistic(Statistic stat) {
+		
+		if (stats.containsKey(stat))
+			stats.put(stat, stats.get(stat) + 1);
+		else
+			stats.put(stat, 1);
 		
 	}
 	

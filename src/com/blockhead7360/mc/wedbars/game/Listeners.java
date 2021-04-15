@@ -4,13 +4,11 @@ import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.Sound;
-import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Arrow;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
@@ -26,16 +24,13 @@ import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.player.PlayerChangedWorldEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
-import org.bukkit.inventory.ItemStack;
+import org.bukkit.potion.PotionEffectType;
 
-import com.blockhead7360.mc.wedbars.Utility;
-import com.blockhead7360.mc.wedbars.Utility.EnchantmentSet;
 import com.blockhead7360.mc.wedbars.WedBars;
 import com.blockhead7360.mc.wedbars.arena.Arena;
 import com.blockhead7360.mc.wedbars.player.Gamer;
-import com.blockhead7360.mc.wedbars.player.Status;
+import com.blockhead7360.mc.wedbars.player.Statistic;
 import com.blockhead7360.mc.wedbars.team.ArenaTeam;
-import com.blockhead7360.mc.wedbars.team.Team;
 
 public class Listeners implements Listener {
 
@@ -74,63 +69,98 @@ public class Listeners implements Listener {
 
 			if (e.getClickedBlock().getType() == Material.CHEST) {
 
-				// TODO chest implementation
-				
 				e.setCancelled(true);
-				e.getPlayer().sendMessage(ChatColor.RED + "Sorry! Normal chests aren't available for use right now.");
-				e.getPlayer().sendMessage(ChatColor.GRAY + "You'll have to use your ender chest instead.");
-
+				
+				Player player = e.getPlayer();
+				
+				ArenaTeam team = WedBars.arena.getTeam(WedBars.arena.getGamer(player.getName()).getTeam());
+				player.openInventory(team.getChest());
+				player.playSound(player.getLocation(), Sound.NOTE_PLING, 1, 1);
 
 			}
 
 		}
 
 	}
-	
+
 	@EventHandler(priority = EventPriority.HIGH)
 	public void onPlayerChangedWorld(PlayerChangedWorldEvent e) {
-		
+
 		e.getPlayer().setGameMode(GameMode.ADVENTURE);
-		
+
 	}
 
 	@EventHandler
 	public void entityDamageEntity(EntityDamageByEntityEvent e) {
 
-		if (e.getDamager() instanceof Arrow && e.getEntity() instanceof Player && WedBars.arena != null) {
-
-			Player shooter = (Player) ((Arrow) e.getDamager()).getShooter();
+		if (WedBars.running && e.getEntity() instanceof Player) {
+			
 			Player player = (Player) e.getEntity();
-
-			DecimalFormat round = new DecimalFormat("##.#");
-
-			if (player.getHealth() - e.getFinalDamage() > 0) {
-				shooter.sendMessage(WedBars.arena.getGamer(player.getName()).getTeam().getChatColor() + player.getName()
-				+ ChatColor.GRAY + " is now at " + ChatColor.RED + round.format(player.getHealth() - e.getFinalDamage()) + " HP");
+			
+			if (player.hasPotionEffect(PotionEffectType.INVISIBILITY)) {
+				
+				Gamer gamer = WedBars.arena.getGamer(player.getName());
+				
+				if (gamer.hasInvisArmor()) {
+					player.getInventory().setArmorContents(gamer.getInvisArmor());
+					gamer.removeInvisArmor();
+				}
+				player.removePotionEffect(PotionEffectType.INVISIBILITY);
+				player.sendMessage(ChatColor.RED + "You were hit while invisible and lost your invisibility effect!");
+				
 			}
+			
+			if (e.getDamager() instanceof Arrow) {
+
+				Player shooter = (Player) ((Arrow) e.getDamager()).getShooter();
+				
+
+				DecimalFormat round = new DecimalFormat("##.#");
+
+				if (player.getHealth() - e.getFinalDamage() > 0) {
+					shooter.sendMessage(WedBars.arena.getGamer(player.getName()).getTeam().getChatColor() + player.getName()
+					+ ChatColor.GRAY + " is now at " + ChatColor.RED + round.format(player.getHealth() - e.getFinalDamage()) + " HP");
+				}
+
+			}
+
+
 		}
 
 	}
 
 	@EventHandler
-	public void blockPlaced(BlockPlaceEvent event) {
+	public void blockPlaced(BlockPlaceEvent e) {
 
 		if (!WedBars.running) return;
 
-		if (event.getBlock().getLocation().getY() >= WedBars.MAX_BUILD_HEIGHT) {
-			event.setCancelled(true);
-			event.getPlayer().sendMessage(ChatColor.RED + "You can't build any higher!");
+		if (e.getBlock().getLocation().getY() >= WedBars.MAX_BUILD_HEIGHT) {
+			e.setCancelled(true);
+			e.getPlayer().sendMessage(ChatColor.RED + "You can't build any higher!");
 			return;
 		}
 
-		if (event.getBlock().getType() == Material.TNT) {
-			event.getBlock().setType(Material.AIR);
-			TNTPrimed tp = (TNTPrimed)event.getBlock().getWorld().spawnEntity(event.getBlock().getLocation(), EntityType.PRIMED_TNT);
+		if (e.getBlock().getType() == Material.TNT) {
+			e.getBlock().setType(Material.AIR);
+			TNTPrimed tp = (TNTPrimed)e.getBlock().getWorld().spawnEntity(e.getBlock().getLocation(), EntityType.PRIMED_TNT);
 			tp.setFuseTicks(WedBars.TNT_FUSE);
 			return;
 		}
 
-		placedBlocks.add(event.getBlock().getLocation());
+		for (ArenaTeam team : WedBars.arena.getTeams().values()) {
+
+			if (team.getSpawnLoc().distanceSquared(e.getBlock().getLocation()) <= WedBars.SPAWN_PROTECTION_DISTANCE_SQUARED) {
+
+				e.setCancelled(true);
+				e.getPlayer().sendMessage(ChatColor.RED + "You can't place blocks there!");
+				return;
+
+			}
+
+		}
+		
+		WedBars.arena.getGamer(e.getPlayer().getName()).addOneToStatistic(Statistic.BPLACED);
+		placedBlocks.add(e.getBlock().getLocation());
 	}
 
 	@EventHandler
@@ -156,7 +186,7 @@ public class Listeners implements Listener {
 
 			}
 
-			bedGone(team, breaker);
+			GameActions.bedGone(team, breaker);
 			return;
 
 		}
@@ -177,238 +207,13 @@ public class Listeners implements Listener {
 
 	}
 
-	public void bedGone(ArenaTeam team, Gamer breaker) {
-
-		team.setBedExists(false);
-
-		for (Player player : Bukkit.getOnlinePlayers()) {
-
-			player.playSound(player.getLocation(), Sound.ENDERDRAGON_GROWL, 1, 1);
-
-		}
-
-		// TODO more messages
-
-		Team t = team.getTeam();
-
-		Bukkit.broadcastMessage(" ");
-		Bukkit.broadcastMessage("     " + ChatColor.RED + ChatColor.BOLD + "BED DESTROYED!");
-		Bukkit.broadcastMessage("     " + t.getChatColor() + t.getLabel() + ChatColor.GRAY + " team's bed was destroyed by " + breaker.getTeam().getChatColor() + breaker.getPlayer().getName() + ChatColor.GRAY + ".");
-		Bukkit.broadcastMessage(" ");
-
-		GameScoreboard.updateTeam(team);
-
-
-
-		for (Gamer gamer : team.getGamers()) Utility.sendBedBrokenTitle(gamer.getPlayer());
-
-
-
-	}
-
-	public void death(Player player, boolean disconnect) {
-
-		Gamer gamer = WedBars.arena.getGamer(player.getName());
-		boolean bedExists = WedBars.arena.getTeam(gamer.getTeam()).bedExists();
-
-
-		if (disconnect) {
-
-			Bukkit.broadcastMessage(gamer.getTeam().getChatColor() + player.getName() + ChatColor.GRAY + " disconnected.");
-			WedBars.arena.deleteGamer(gamer);
-
-		} else {
-
-			ItemStack[] armor = player.getInventory().getArmorContents();
-
-			ItemStack[] contents = player.getInventory().getContents();
-
-			player.getInventory().clear();
-
-			player.getInventory().setArmorContents(armor);
-			player.getInventory().setItem(0, Utility.createUnbreakableItemStack(Material.WOOD_SWORD, 1, ChatColor.YELLOW + "Wooden Sword"));
-
-			for (int i = 0; i < contents.length; i++) {
-
-				if (contents[i] == null) continue;
-
-				if (contents[i].getType() == Material.WOOD_PICKAXE || contents[i].getType() == Material.IRON_PICKAXE) {
-
-					player.getInventory().addItem(Utility.createEnchantedItemStack(Material.WOOD_PICKAXE, 1, ChatColor.YELLOW + "Wooden Pickaxe",
-							new EnchantmentSet[] {new EnchantmentSet(Enchantment.DIG_SPEED, 1)}));
-
-				}
-
-				else if (contents[i].getType() == Material.GOLD_PICKAXE) {
-
-					player.getInventory().addItem(Utility.createEnchantedItemStack(Material.IRON_PICKAXE, 1, ChatColor.YELLOW + "Iron Pickaxe",
-							new EnchantmentSet[] {new EnchantmentSet(Enchantment.DIG_SPEED, 2)}));
-
-
-				}
-
-				else if (contents[i].getType() == Material.DIAMOND_PICKAXE) {
-
-					player.getInventory().addItem(Utility.createEnchantedItemStack(Material.GOLD_PICKAXE, 1, ChatColor.YELLOW + "Gold Pickaxe",
-							new EnchantmentSet[] {new EnchantmentSet(Enchantment.DIG_SPEED, 3),
-									new EnchantmentSet(Enchantment.DAMAGE_ALL, 2)}));
-
-				}
-
-				else if (contents[i].getType() == Material.WOOD_AXE || contents[i].getType() == Material.STONE_AXE) {
-
-					player.getInventory().addItem(Utility.createEnchantedItemStack(Material.WOOD_AXE, 1, ChatColor.YELLOW + "Wooden Axe",
-							new EnchantmentSet[] {new EnchantmentSet(Enchantment.DIG_SPEED, 1)}));
-
-				}
-
-				else if (contents[i].getType() == Material.IRON_AXE) {
-
-					player.getInventory().addItem(Utility.createEnchantedItemStack(Material.STONE_AXE, 1, ChatColor.YELLOW + "Stone Axe",
-							new EnchantmentSet[] {new EnchantmentSet(Enchantment.DIG_SPEED, 1)}));
-
-				}
-
-				else if (contents[i].getType() == Material.DIAMOND_AXE) {
-
-					player.getInventory().addItem(Utility.createEnchantedItemStack(Material.IRON_AXE, 1, ChatColor.YELLOW + "Iron Axe",
-							new EnchantmentSet[] {new EnchantmentSet(Enchantment.DIG_SPEED, 1)}));
-
-				}
-				
-				else if (contents[i].getType() == Material.SHEARS) {
-					
-					player.getInventory().addItem(Utility.createUnbreakableItemStack(Material.SHEARS, 1, ChatColor.YELLOW + "Permanent Shears"));
-					
-				}
-
-
-			}
-
-			// i moved the death titles to the timer in Arena.java you'll see why
-
-			player.setHealth(20);
-			player.setGameMode(GameMode.SPECTATOR);
-			player.teleport(new Location(player.getWorld(), 0, 100, 0));
-
-			// TODO change messages
-
-			Player killer = player.getKiller();
-
-			if (killer == null) {
-
-				Bukkit.broadcastMessage(gamer.getTeam().getChatColor() + player.getName()
-				+ ChatColor.GRAY + " died." + (bedExists ? "" : ChatColor.RED + "" + ChatColor.BOLD + " FINAL KILL!"));
-
-			} else {
-
-				killer.playSound(killer.getLocation(), Sound.ORB_PICKUP, 1, 1);
-
-				Bukkit.broadcastMessage(gamer.getTeam().getChatColor() + player.getName()
-				+ ChatColor.GRAY + " was killed by " + WedBars.arena.getGamer(killer.getName()).getTeam().getChatColor() + killer.getName() + ChatColor.GRAY + "."
-				+ (bedExists ? "" : ChatColor.RED + "" + ChatColor.BOLD + " FINAL KILL!"));
-
-				// Give items to killer
-
-				for (ItemStack is : contents) {
-
-					if (is == null) continue;
-
-					if (is.getType() == Material.IRON_INGOT || is.getType() == Material.GOLD_INGOT || is.getType() == Material.DIAMOND
-							|| is.getType() == Material.EMERALD) {
-
-						if (killer.getInventory().firstEmpty() == -1) break;
-
-						killer.getInventory().addItem(is);
-
-					}
-
-				}
-
-				killer.updateInventory();
-
-			}
-
-		}
-
-		if (bedExists && !disconnect) {
-
-			gamer.setStatus(Status.RESPAWNING);
-			Utility.sendDeathTitle(player, WedBars.RESPAWN_TIME);
-
-		} else {
-
-			gamer.setStatus(Status.DEAD);
-			ArenaTeam team = WedBars.arena.getTeam(gamer.getTeam());
-			GameScoreboard.updateTeam(team);
-
-			int alive = 0;
-			for (Gamer g : team.getGamers()) {
-
-				if (g.getStatus() != Status.DEAD) {
-
-					alive++;
-
-				}
-
-			}
-
-			if (alive == 0) {
-
-				Team t = team.getTeam();
-				Bukkit.broadcastMessage(" ");
-				Bukkit.broadcastMessage("     " + ChatColor.RED + ChatColor.BOLD + "TEAM ELIMINATED!");
-				Bukkit.broadcastMessage("     " + t.getChatColor() + t.getLabel() + ChatColor.GRAY + " team is gone now.");
-				Bukkit.broadcastMessage(" ");
-
-			}
-
-			boolean end = WedBars.arena.checkForEndGame();
-
-			if (!end && !disconnect) {
-
-				Utility.sendDeathTitle(player, -1);
-
-			}
-
-		}
-
-		/*
-        if (!testing) {
-
-            player.setHealth(20);
-            player.setGameMode(GameMode.SPECTATOR);
-            Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "title " + player.getName() +
-                    " times 0 100 20");
-            Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "title " + player.getName() +
-                    " subtitle {\"text\":\"You will respawn in 5 seconds...\",\"color\":\"grey\"}");
-            Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "title " + player.getName() +
-                    " title {\"text\":\"You died!\",\"color\":\"red\"}");
-            player.teleport(new Location(Bukkit.getWorld("world"), 0.0, 100.0, 0.0));
-
-            //TODO: add respawn handlers and time thing
-        } else {
-
-
-            player.setHealth(20);
-            player.setGameMode(GameMode.SPECTATOR);
-            //TODO: more game logic
-            player.teleport(new Location(Bukkit.getWorld("world"), 0.0,100.0,0.0));
-            Bukkit.broadcastMessage(player.getPlayerListName() + " was killed by " +
-            	player.getKiller().getName() + ". " + ChatColor.AQUA + ChatColor.BOLD + "FINAL KILL!");
-
-        }
-		 */
-
-	}
-
 	@EventHandler
 	public void playerDeath(PlayerDeathEvent event) {
 
 		if (!WedBars.running) return;
 
 		event.setDeathMessage(null);
-		death(event.getEntity(), false);
+		GameActions.death(event.getEntity(), false);
 
 	}
 
@@ -421,7 +226,7 @@ public class Listeners implements Listener {
 
 			if (event.getPlayer().getHealth() != 0 && event.getPlayer().getGameMode() == GameMode.SURVIVAL) {
 
-				death(event.getPlayer(), false);
+				GameActions.death(event.getPlayer(), false);
 
 			}
 

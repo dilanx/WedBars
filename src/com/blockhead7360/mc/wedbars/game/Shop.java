@@ -24,10 +24,12 @@ import com.blockhead7360.mc.wedbars.WedBars;
 import com.blockhead7360.mc.wedbars.player.Gamer;
 import com.blockhead7360.mc.wedbars.team.ArenaTeam;
 import com.blockhead7360.mc.wedbars.team.TeamUpgrade;
+import com.blockhead7360.mc.wedbars.team.traps.TrapFatigue;
 
 public class Shop implements Listener {
 
 	private static ItemStack[] categories;
+	private static ItemStack[] traps;
 	private static ItemStack selected, unselected;
 
 	public static void init() {
@@ -45,8 +47,29 @@ public class Shop implements Listener {
 
 		};
 
+		traps = new ItemStack[] {
+
+				Utility.createIconItemStack(Material.IRON_PICKAXE, 1, ChatColor.YELLOW + "Miner Fatigue", "",
+						ChatColor.GRAY + "Price: " + ChatColor.AQUA + "1 diamond")
+
+		};
+
 		selected = Utility.createIconItemStack(Material.STAINED_GLASS_PANE, 1, (short) 14, ChatColor.GRAY + "Selected");
 		unselected = Utility.createIconItemStack(Material.STAINED_GLASS_PANE, 1, (short) 15, " ");
+
+	}
+
+	public static void openTrapMenu(Player player) {
+
+		Inventory inv = Bukkit.createInventory(null, 9, ChatColor.BOLD + "Trap Store");
+
+		for (ItemStack is : traps) {
+
+			inv.addItem(is);
+
+		}
+
+		player.openInventory(inv);
 
 	}
 
@@ -170,7 +193,15 @@ public class Shop implements Listener {
 
 		// trap
 
-		inv.setItem(49, Utility.createIconItemStack(Material.STAINED_GLASS, 1, (short) 7, ChatColor.GRAY + "Traps coming soon"));
+		if (team.hasTrap()) {
+
+			inv.setItem(49, team.getTrap().icon());
+
+		} else {
+
+			inv.setItem(49, Utility.createIconItemStack(Material.STAINED_GLASS, 1, (short) 7, ChatColor.WHITE + "No active trap", "", ChatColor.GRAY + "Click to purchase one."));
+
+		}
 
 		return;
 	}
@@ -224,7 +255,9 @@ public class Shop implements Listener {
 					nextPick(player),
 					Utility.createIconItemStack(Material.BOW, 1, ChatColor.YELLOW + "Bow", "",
 							ChatColor.GRAY + "Price: " + ChatColor.GOLD + "12 gold"),
-					Utility.createIconItemStack(Material.POTION, 1, ChatColor.GRAY + "Potion coming soon"),
+					Utility.createPotionItemStack(ChatColor.YELLOW + "Speed Potion" + ChatColor.GRAY + ChatColor.ITALIC + " 30s",
+							new PotionEffect(PotionEffectType.SPEED, 600, 1), "",
+							ChatColor.GRAY + "Price: " + ChatColor.GREEN + "1 emerald"),
 					Utility.createIconItemStack(Material.GOLDEN_APPLE, 1, ChatColor.YELLOW + "Golden Apple", "",
 							ChatColor.GRAY + "Price: " + ChatColor.GOLD + "3 gold"),
 					Utility.createIconItemStack(Material.WOOD, 16, ChatColor.YELLOW + "Wood", "",
@@ -237,7 +270,9 @@ public class Shop implements Listener {
 					Utility.createEnchantedItemStack(Material.BOW, 1, ChatColor.YELLOW + "Fancy Bow",
 							new EnchantmentSet[] {new EnchantmentSet(Enchantment.ARROW_DAMAGE, 1)}, "",
 							ChatColor.GRAY + "Price: " + ChatColor.GOLD + "24 gold"),
-					Utility.createIconItemStack(Material.POTION, 1, ChatColor.GRAY + "Potion coming soon"),
+					Utility.createPotionItemStack(ChatColor.YELLOW + "Jump Boost Potion" + ChatColor.GRAY + ChatColor.ITALIC + " 30s",
+							new PotionEffect(PotionEffectType.JUMP, 600, 4), "",
+							ChatColor.GRAY + "Price: " + ChatColor.GREEN + "1 emerald"),
 					Utility.createIconItemStack(Material.FIREBALL, 1, ChatColor.YELLOW + "Fireball", "",
 							ChatColor.GRAY + "Price: " + ChatColor.WHITE + "40 iron"),
 					Utility.createIconItemStack(Material.ENDER_STONE, 12, ChatColor.YELLOW + "End Stone", "",
@@ -250,9 +285,11 @@ public class Shop implements Listener {
 							ChatColor.GRAY + "Price: " + ChatColor.WHITE + "20 iron"),
 					Utility.createIconItemStack(Material.ARROW, 8, ChatColor.YELLOW + "Arrow", "",
 							ChatColor.GRAY + "Price: " + ChatColor.GOLD + "2 gold"),
-					Utility.createIconItemStack(Material.POTION, 1, ChatColor.GRAY + "Potion coming soon"),
+					Utility.createPotionItemStack(ChatColor.YELLOW + "Invisibility Potion" + ChatColor.GRAY + ChatColor.ITALIC + " 30s",
+							new PotionEffect(PotionEffectType.INVISIBILITY, 600, 1, true, false), "",
+							ChatColor.GRAY + "Price: " + ChatColor.GREEN + "2 emerald"),
 					Utility.createIconItemStack(Material.TNT, 1, ChatColor.YELLOW + "TNT", "",
-							ChatColor.GRAY + "Price: " + ChatColor.GOLD + "4 gold"),
+							ChatColor.GRAY + "Price: " + ChatColor.GOLD + "4 gold")
 
 			};
 
@@ -292,7 +329,7 @@ public class Shop implements Listener {
 							ChatColor.GRAY + "Price: " + ChatColor.WHITE + "4 iron"),
 					Utility.createIconItemStack(Material.WOOD, 16, ChatColor.YELLOW + "Wood", "",
 							ChatColor.GRAY + "Price: " + ChatColor.GOLD + "4 gold"),
-					Utility.createIconItemStack(Material.OBSIDIAN, 16, ChatColor.YELLOW + "Obby :)", "",
+					Utility.createIconItemStack(Material.OBSIDIAN, 4, ChatColor.YELLOW + "Obby :)", "",
 							ChatColor.GRAY + "Price: " + ChatColor.GREEN + "4 emerald")
 
 			};
@@ -396,9 +433,15 @@ public class Shop implements Listener {
 
 			ItemStack[] p = {
 
-					Utility.createIconItemStack(Material.POTION, 1, ChatColor.GRAY + "Potion coming soon"),
-					Utility.createIconItemStack(Material.POTION, 1, ChatColor.GRAY + "Potion coming soon"),
-					Utility.createIconItemStack(Material.POTION, 1, ChatColor.GRAY + "Potion coming soon"),
+					Utility.createPotionItemStack(ChatColor.YELLOW + "Speed Potion" + ChatColor.GRAY + ChatColor.ITALIC + " 30s",
+							new PotionEffect(PotionEffectType.SPEED, 600, 1), "",
+							ChatColor.GRAY + "Price: " + ChatColor.GREEN + "1 emerald"),
+					Utility.createPotionItemStack(ChatColor.YELLOW + "Jump Boost Potion" + ChatColor.GRAY + ChatColor.ITALIC + " 30s",
+							new PotionEffect(PotionEffectType.JUMP, 600, 4), "",
+							ChatColor.GRAY + "Price: " + ChatColor.GREEN + "1 emerald"),
+					Utility.createPotionItemStack(ChatColor.YELLOW + "Invisibility Potion" + ChatColor.GRAY + ChatColor.ITALIC + " 30s",
+							new PotionEffect(PotionEffectType.INVISIBILITY, 600, 1, true, false), "",
+							ChatColor.GRAY + "Price: " + ChatColor.GREEN + "2 emerald")
 
 			};
 
@@ -416,19 +459,20 @@ public class Shop implements Listener {
 
 					Utility.createIconItemStack(Material.GOLDEN_APPLE, 1, ChatColor.YELLOW + "Golden Apple", "",
 							ChatColor.GRAY + "Price: " + ChatColor.GOLD + "3 gold"),
-					Utility.createIconItemStack(Material.SNOW_BALL, 1, ChatColor.GRAY + "Silverfish coming soon"),
-					Utility.createIconItemStack(Material.MONSTER_EGG, 1, ChatColor.GRAY + "Iron golem coming soon"),
+					Utility.createIconItemStack(Material.SNOW_BALL, 1, ChatColor.YELLOW + "Silverfish", "",
+							ChatColor.GRAY + "Price: " + ChatColor.WHITE + "40 iron"),
+					Utility.createIconItemStack(Material.MONSTER_EGG, 1, ChatColor.YELLOW + "Gamer Golem", "",
+							ChatColor.GRAY + "Price: " + ChatColor.WHITE + "120 iron"),
 					Utility.createIconItemStack(Material.FIREBALL, 1, ChatColor.YELLOW + "Fireball", "",
 							ChatColor.GRAY + "Price: " + ChatColor.WHITE + "40 iron"),
 					Utility.createIconItemStack(Material.TNT, 1, ChatColor.YELLOW + "TNT", "",
 							ChatColor.GRAY + "Price: " + ChatColor.GOLD + "4 gold"),
 					Utility.createIconItemStack(Material.ENDER_PEARL, 1, ChatColor.YELLOW + "Ender Pearl", "",
 							ChatColor.GRAY + "Price: " + ChatColor.GREEN + "4 emerald"),
-					Utility.createIconItemStack(Material.WATER_BUCKET, 1, ChatColor.GRAY + "Water Bucket coming soon"),
-					Utility.createIconItemStack(Material.EGG, 1, ChatColor.GRAY + "Bridge Egg coming soon"),
-					Utility.createIconItemStack(Material.MILK_BUCKET, 1, ChatColor.GRAY + "Magic Milk coming soon"),
-					Utility.createIconItemStack(Material.SPONGE, 4, ChatColor.GRAY + "Sponge coming soon"),
-					Utility.createIconItemStack(Material.CHEST, 1, ChatColor.GRAY + "Popup Tower coming soon")
+					Utility.createIconItemStack(Material.EGG, 1, ChatColor.YELLOW + "Bridge Egg", "",
+							ChatColor.GRAY + "Price: " + ChatColor.GREEN + "2 emerald"),
+					Utility.createIconItemStack(Material.MILK_BUCKET, 1, ChatColor.YELLOW + "Magic Milk" + ChatColor.GRAY + ChatColor.ITALIC + " 30s", "",
+							ChatColor.GRAY + "Price: " + ChatColor.GOLD + "4 gold"),
 
 			};
 
@@ -438,7 +482,7 @@ public class Shop implements Listener {
 
 			}
 
-			for (int i = 7; i < 11; i++) {
+			for (int i = 7; i < 8; i++) {
 
 				inv.setItem(21 + i, u[i]);
 
@@ -454,12 +498,58 @@ public class Shop implements Listener {
 	public void onInventoryClick(InventoryClickEvent e) {
 
 		if (e.getSlotType() == SlotType.ARMOR) {
-			
+
 			e.setCancelled(true);
 			return;
-			
+
 		}
-		
+
+		if (e.getView().getTitle().equals(ChatColor.BOLD + "Trap Store")) {
+
+			e.setCancelled(true);
+
+			if (e.getCurrentItem() == null || e.getCurrentItem().getType() == Material.AIR) return;
+
+			if (e.getRawSlot() > 8) return;
+
+			Player player = (Player) e.getWhoClicked();
+
+			ItemStack item = e.getCurrentItem();
+			ItemMeta meta = item.getItemMeta();
+
+			if (meta.hasLore()) {
+
+				List<String> lore = item.getItemMeta().getLore();
+
+				if (lore.size() > 0) {
+
+					String[] price = ChatColor.stripColor(lore.get(lore.size() - 1)).split(" ");
+
+					int number = Integer.parseInt(price[1]);
+
+					Material type = txt2mat(price[2]);
+
+					boolean success = purchaseTrap(player, meta.getDisplayName(), number, type);
+
+					if (success) {
+
+						player.playSound(player.getLocation(), Sound.NOTE_PLING, 1, 2);
+						openTeamUpgrades(player);
+						return;
+
+					}
+
+
+				}
+
+
+			}
+
+			player.playSound(player.getLocation(), Sound.ANVIL_LAND, 1, 1);
+			return;
+
+		}
+
 		if (e.getView().getTitle().equals(ChatColor.BOLD + "Team Upgrades")) {
 
 			e.setCancelled(true);
@@ -471,6 +561,14 @@ public class Shop implements Listener {
 			Player player = (Player) e.getWhoClicked();
 
 			ItemStack item = e.getCurrentItem();
+
+			if (e.getRawSlot() == 49 && item.getType() == Material.STAINED_GLASS) {
+
+				openTrapMenu(player);
+
+				return;
+
+			}
 
 			if (item.hasItemMeta()) {
 
@@ -649,6 +747,47 @@ public class Shop implements Listener {
 
 	}
 
+	public boolean purchaseTrap(Player player, String purchase, int cost, Material type) {
+
+		Gamer gamer = WedBars.arena.getGamer(player.getName());
+		ArenaTeam team = WedBars.arena.getTeam(gamer.getTeam());
+
+		boolean has = player.getInventory().contains(type, cost);
+
+		if (!has) {
+
+			player.sendMessage(ChatColor.RED + "Not enough resources!");
+			return false;
+
+		}
+
+		String purch = ChatColor.stripColor(purchase).toLowerCase();
+
+		if (purch.contains("fatigue")) {
+
+			team.setTrap(new TrapFatigue());
+
+		}
+
+		else {
+
+			return false;
+
+		}
+
+		for (Gamer g : team.getGamers()) {
+
+			g.getPlayer().sendMessage(team.getTeam().getChatColor() + player.getName() + ChatColor.GRAY + " purchased " + purchase + ChatColor.GRAY + ".");
+
+		}
+
+		player.getInventory().removeItem(new ItemStack(type, cost));
+		player.updateInventory();
+
+		return true;
+
+	}
+
 	public boolean purchaseUpgrade(Player player, String purchase, int upgrade, int cost, Material type) {
 
 		Gamer gamer = WedBars.arena.getGamer(player.getName());
@@ -733,21 +872,20 @@ public class Shop implements Listener {
 
 
 		case TeamUpgrade.FORGE1:
-
-			double ironcalc1 = 1 / ((1.0 / team.getIronGenerator().getSpeed()) * WedBars.FORGE1);
-			System.out.println(ironcalc1);
+			double ironcalc1 = (double) team.getInitialIronSpeed() / WedBars.FORGE1;
 			team.getIronGenerator().setSpeed((int) ironcalc1);
-			double goldcalc1 = 1 / ((1.0 / team.getGoldGenerator().getSpeed()) * WedBars.FORGE1);
-			System.out.println(goldcalc1);
+			Bukkit.broadcastMessage(team.getInitialIronSpeed() + "");
+			Bukkit.broadcastMessage(ironcalc1 + "");
+			double goldcalc1 = (double) team.getInitialGoldSpeed() / WedBars.FORGE1;
 			team.getGoldGenerator().setSpeed((int) goldcalc1);
 
 			break;
 
 		case TeamUpgrade.FORGE2:
 
-			double ironcalc2 = 1 / ((1.0 / team.getIronGenerator().getSpeed()) * WedBars.FORGE2);
+			double ironcalc2 = (double) team.getInitialIronSpeed() / WedBars.FORGE2;
 			team.getIronGenerator().setSpeed((int) ironcalc2);
-			double goldcalc2 = 1 / ((1.0 / team.getGoldGenerator().getSpeed()) * WedBars.FORGE2);
+			double goldcalc2 = (double) team.getInitialIronSpeed() / WedBars.FORGE2;
 			team.getGoldGenerator().setSpeed((int) goldcalc2);
 			break;
 
@@ -758,11 +896,11 @@ public class Shop implements Listener {
 
 		case TeamUpgrade.FORGE4:
 
-			double ironcalc3 = 1 / ((1.0 / team.getIronGenerator().getSpeed()) * WedBars.FORGE4);
+			double ironcalc3 = (double) team.getInitialIronSpeed() / WedBars.FORGE4;
 			team.getIronGenerator().setSpeed((int) ironcalc3);
-			double goldcalc3 = 1 / ((1.0 / team.getGoldGenerator().getSpeed()) * WedBars.FORGE4);
+			double goldcalc3 = (double) team.getInitialIronSpeed() / WedBars.FORGE4;
 			team.getGoldGenerator().setSpeed((int) goldcalc3);
-			double emeraldcalc3 = 1 / ((1.0 / team.getEmeraldGenerator().getSpeed()) * WedBars.FORGE4);
+			double emeraldcalc3 = (double) team.getInitialEmeraldSpeed() / WedBars.FORGE4;
 			team.getEmeraldGenerator().setSpeed((int) emeraldcalc3);
 			break;
 
@@ -798,18 +936,15 @@ public class Shop implements Listener {
 			return false;
 
 		}
-		
+
 		ItemStack stack = item.clone();
 
 		boolean addItem = true;
-		
+
 		if (stack.getType() == Material.WOOL && WedBars.arena != null) {
 
-			ItemMeta meta = stack.getItemMeta();
-
 			stack = new ItemStack(Material.WOOL, stack.getAmount(), WedBars.arena.getGamer(player.getName()).getTeam().getStackColor());
-			stack.setItemMeta(meta);
-			
+
 		}
 
 		else if (stack.getType() == Material.CHAINMAIL_BOOTS) {
@@ -819,40 +954,107 @@ public class Shop implements Listener {
 				return false;
 
 			}
-			
-			player.getInventory().setLeggings(Utility.createUnbreakableItemStack(Material.CHAINMAIL_LEGGINGS, 1, ChatColor.YELLOW + "Chainmail Leggings (lmao why)"));
-			player.getInventory().setBoots(Utility.createUnbreakableItemStack(Material.CHAINMAIL_BOOTS, 1, ChatColor.YELLOW + "Chainmail Boots (lmao why)"));
+
+			ItemStack leggings = Utility.createUnbreakableItemStack(Material.CHAINMAIL_LEGGINGS, 1, ChatColor.YELLOW + "Chainmail Leggings (lmao why)");
+			ItemStack boots = Utility.createUnbreakableItemStack(Material.CHAINMAIL_BOOTS, 1, ChatColor.YELLOW + "Chainmail Boots (lmao why)");
+
+			if (player.getInventory().getChestplate().containsEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL)) {
+
+				ItemMeta chestMeta = player.getInventory().getChestplate().getItemMeta();
+				ItemMeta lMeta = leggings.getItemMeta();
+				ItemMeta bMeta = boots.getItemMeta();
+
+				for (Enchantment e : chestMeta.getEnchants().keySet()) {
+
+					int l = chestMeta.getEnchantLevel(e);
+					lMeta.addEnchant(e, l, true);
+					bMeta.addEnchant(e, l, true);
+
+				}
+
+				leggings.setItemMeta(lMeta);
+				boots.setItemMeta(bMeta);
+
+			}
+
+			player.getInventory().setLeggings(leggings);
+			player.getInventory().setBoots(boots);
 			addItem = false;
 
 		}
-		
+
 		else if (stack.getType() == Material.IRON_BOOTS) {
-			
+
 			if (player.getInventory().getBoots().getType() != Material.LEATHER_BOOTS
 					&& player.getInventory().getBoots().getType() != Material.CHAINMAIL_BOOTS) {
-				
+
 				return false;
 
 			}
 			
-			player.getInventory().setLeggings(Utility.createUnbreakableItemStack(Material.IRON_LEGGINGS, 1, ChatColor.YELLOW + "Iron Leggings"));
-			player.getInventory().setBoots(Utility.createUnbreakableItemStack(Material.IRON_BOOTS, 1, ChatColor.YELLOW + "Iron Boots"));
+			ItemStack leggings = Utility.createUnbreakableItemStack(Material.IRON_LEGGINGS, 1, ChatColor.YELLOW + "Iron Leggings");
+			ItemStack boots = Utility.createUnbreakableItemStack(Material.IRON_BOOTS, 1, ChatColor.YELLOW + "Iron Boots");
+
+			if (player.getInventory().getChestplate().containsEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL)) {
+
+				ItemMeta chestMeta = player.getInventory().getChestplate().getItemMeta();
+				ItemMeta lMeta = leggings.getItemMeta();
+				ItemMeta bMeta = boots.getItemMeta();
+
+				for (Enchantment e : chestMeta.getEnchants().keySet()) {
+
+					int l = chestMeta.getEnchantLevel(e);
+					lMeta.addEnchant(e, l, true);
+					bMeta.addEnchant(e, l, true);
+
+				}
+
+				leggings.setItemMeta(lMeta);
+				boots.setItemMeta(bMeta);
+
+			}
+
+
+			player.getInventory().setLeggings(leggings);
+			player.getInventory().setBoots(boots);
 			addItem = false;
-			
+
 		}
-		
+
 		else if (stack.getType() == Material.DIAMOND_BOOTS) {
-			
+
 			if (player.getInventory().getBoots().getType() == Material.DIAMOND_BOOTS) {
 
 				return false;
 
 			}
 			
-			player.getInventory().setLeggings(Utility.createUnbreakableItemStack(Material.DIAMOND_LEGGINGS, 1, ChatColor.YELLOW + "Diamond Leggings"));
-			player.getInventory().setBoots(Utility.createUnbreakableItemStack(Material.DIAMOND_BOOTS, 1, ChatColor.YELLOW + "Diamond Boots"));
-			addItem = false;
+			ItemStack leggings = Utility.createUnbreakableItemStack(Material.DIAMOND_LEGGINGS, 1, ChatColor.YELLOW + "Diamond Leggings");
+			ItemStack boots = Utility.createUnbreakableItemStack(Material.DIAMOND_BOOTS, 1, ChatColor.YELLOW + "Diamond Boots");
 			
+			if (player.getInventory().getChestplate().containsEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL)) {
+
+				ItemMeta chestMeta = player.getInventory().getChestplate().getItemMeta();
+				ItemMeta lMeta = leggings.getItemMeta();
+				ItemMeta bMeta = boots.getItemMeta();
+
+				for (Enchantment e : chestMeta.getEnchants().keySet()) {
+
+					int l = chestMeta.getEnchantLevel(e);
+					lMeta.addEnchant(e, l, true);
+					bMeta.addEnchant(e, l, true);
+
+				}
+
+				leggings.setItemMeta(lMeta);
+				boots.setItemMeta(bMeta);
+
+			}
+
+			player.getInventory().setLeggings(leggings);
+			player.getInventory().setBoots(boots);
+			addItem = false;
+
 		}
 
 
@@ -874,24 +1076,32 @@ public class Shop implements Listener {
 
 		}
 
-		ItemMeta meta = stack.getItemMeta();
+		if (stack.getType().isBlock()) {
 
-		if (stack.getType().toString().endsWith("_SWORD")) {
+			stack = new ItemStack(stack.getType(), stack.getAmount(), stack.getDurability());
 
-			if (WedBars.arena != null) {
+		} else {
 
-				if (WedBars.arena.getTeam(WedBars.arena.getGamer(player.getName()).getTeam()).hasUpgrade(TeamUpgrade.SWORDS)) {
+			ItemMeta meta = stack.getItemMeta();
 
-					meta.addEnchant(Enchantment.DAMAGE_ALL, 1, true);
+			if (stack.getType().toString().endsWith("_SWORD")) {
+
+				if (WedBars.arena != null) {
+
+					if (WedBars.arena.getTeam(WedBars.arena.getGamer(player.getName()).getTeam()).hasUpgrade(TeamUpgrade.SWORDS)) {
+
+						meta.addEnchant(Enchantment.DAMAGE_ALL, 1, true);
+
+					}
 
 				}
 
 			}
 
-		}
+			meta.setLore(null);
+			stack.setItemMeta(meta);
 
-		meta.setLore(null);
-		stack.setItemMeta(meta);
+		}
 
 		if (addItem) player.getInventory().addItem(stack);
 		player.getInventory().removeItem(new ItemStack(type, cost));
@@ -949,7 +1159,7 @@ public class Shop implements Listener {
 
 			nextPick = Utility.createEnchantedItemStack(Material.DIAMOND_PICKAXE, 1, ChatColor.YELLOW + "Diamond Pickaxe",
 					new EnchantmentSet[] {new EnchantmentSet(Enchantment.DIG_SPEED, 1)}, "",
-					ChatColor.GRAY + "Price: " + ChatColor.GOLD + "6 iron");
+					ChatColor.GRAY + "Price: " + ChatColor.GOLD + "6 gold");
 
 		} else if (player.getInventory().contains(Material.DIAMOND_PICKAXE)) {
 
@@ -988,7 +1198,7 @@ public class Shop implements Listener {
 
 			nextAxe = Utility.createEnchantedItemStack(Material.DIAMOND_AXE, 1, ChatColor.YELLOW + "Diamond Axe",
 					new EnchantmentSet[] {new EnchantmentSet(Enchantment.DIG_SPEED, 1)}, "",
-					ChatColor.GRAY + "Price: " + ChatColor.GOLD + "6 iron");
+					ChatColor.GRAY + "Price: " + ChatColor.GOLD + "6 gold");
 
 		} else if (player.getInventory().contains(Material.DIAMOND_AXE)) {
 

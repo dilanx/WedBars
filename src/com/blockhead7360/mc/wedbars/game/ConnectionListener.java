@@ -5,6 +5,9 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerQuitEvent;
 
 import com.blockhead7360.mc.wedbars.WedBars;
+import com.blockhead7360.mc.wedbars.player.Gamer;
+import com.blockhead7360.mc.wedbars.player.Statistic;
+import com.blockhead7360.mc.wedbars.player.Status;
 
 public class ConnectionListener implements Listener {
 	
@@ -19,10 +22,19 @@ public class ConnectionListener implements Listener {
 		
 		if (WedBars.arena != null) {
 			
-			if (WedBars.running)
-				WedBars.getListeners().death(e.getPlayer(), true);
-			else
-				WedBars.arena.deleteGamer(WedBars.arena.getGamer(e.getPlayer().getName()));
+			Gamer gamer = WedBars.arena.getGamer(e.getPlayer().getName());
+			
+			if (gamer == null || gamer.getStatus() == Status.DEAD) return;
+			
+			if (WedBars.running) {
+				
+				gamer.addOneToStatistic(Statistic.FDEATHS);
+				gamer.addOneToStatistic(Statistic.LOSSES);
+				GameActions.death(e.getPlayer(), true);
+				
+			} else {
+				WedBars.arena.deleteGamer(gamer);
+			}
 			
 		}
 		

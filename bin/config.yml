@@ -9,12 +9,12 @@ tntFuse: 60
 voidLevel: 0
 
 # How many diamonds that have yet to be picked up can sit in a generator at once.
-# (int, number of diamonds) default: 8
-maxDiamondsInGen: 8
+# (int, number of diamonds) default: 4
+maxDiamondsInGen: 4
 
 # How many emeralds that have yet to be picked up can sit in a generator at once.
-# (int, number of emeralds) default: 6
-maxEmeraldsInGen: 6
+# (int, number of emeralds) default: 2
+maxEmeraldsInGen: 2
 
 # How long the player will have to wait before being respawned if their bed is
 # not broken. (int, seconds * 10) default: 50 (5 seconds)
@@ -24,3 +24,26 @@ respawnTime: 50
 # reset process. (int, seconds) default: 10
 timeBeforeReset: 10
 
+# Powerup: Golems
+# You can set how much time golems live for (int,seconds), their targeting range
+# (int, radius blocks), and their health (int, hitpoints).
+# default life: 240, default range: 7, default health: 20
+golemLife: 240
+golemTargetDistance: 7
+golemHealth: 20
+
+# Powerup: Bugs
+# You can set how much time bugs live for (seconds), their targeting range
+# (int, radius blocks), and their health (int, hitpoints).
+# default life: 120, default range: 4, default health: 8
+bugLife: 120
+bugTargetDistance: 4
+bugHealth: 8
+
+# MySQL database information (required for stats)
+mysql:
+  enabled: false
+  host: None
+  database: None
+  user: None
+  pass: None

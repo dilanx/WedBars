@@ -1,5 +1,7 @@
 package com.blockhead7360.mc.wedbars;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
@@ -20,6 +22,7 @@ import com.blockhead7360.mc.wedbars.game.GameChat;
 import com.blockhead7360.mc.wedbars.game.Listeners;
 import com.blockhead7360.mc.wedbars.game.Powerups;
 import com.blockhead7360.mc.wedbars.game.Shop;
+import com.blockhead7360.mc.wedbars.player.GamerStats;
 import com.blockhead7360.mc.wedbars.team.Team;
 import com.blockhead7360.mc.wedbars.team.TeamAssignments;
 import com.gmail.filoghost.holographicdisplays.api.Hologram;
@@ -59,21 +62,26 @@ public class WedBars extends JavaPlugin {
 	public static final int GEN_EMERALD2 = 2;
 	public static final int GEN_EMERALD3 = 4;
 
+	public static final int SPAWN_PROTECTION_DISTANCE_SQUARED = 25;
+	public static final int TRAP_DISTANCE = 7;
 
-	//public static final int EMERALD1_SPEED = 300;
-	//public static final int DIAMOND1_SPEED = 150;
+	// not gamerTicks, these are in seconds
+	public static int TIME_BETWEEN_END_AND_RESET;
+	public static int GOLEM_LIFE = 240;
+	public static int GOLEM_ATTACK_DISTANCE = 7;
+	public static int GOLEM_HEALTH, BUG_HEALTH;
+	public static int BUG_LIFE = 120;
+	public static int BUG_ATTACK_DISTANCE = 4;
 
-	//public static final int IRON1_SPEED = 14;
 
 
-	//public static final int GOLD1_SPEED = 60;
 
+	// these are gamerTicks though
+	public static int MAX_DIAMONDS_IN_GEN, MAX_EMERALDS_IN_GEN;
+	public static int MAX_BUILD_HEIGHT, TNT_FUSE, RESPAWN_TIME, VOID_LEVEL;
 
-	// not gamerTicks, this one is seconds
-	public static int TIME_BETWEEN_END_AND_RESET = 0, MAX_DIAMONDS_IN_GEN = 0, MAX_EMERALDS_IN_GEN = 0;
-	
-	
-	public static int MAX_BUILD_HEIGHT = 0, TNT_FUSE = 0, RESPAWN_TIME = 0, VOID_LEVEL = 0;
+	//TODO i didn't put this in config
+	public static int BRIDGE_EGG_TIME = 30;
 
 
 	private static WedBars instance;
@@ -95,7 +103,7 @@ public class WedBars extends JavaPlugin {
 		instance = this;
 
 		saveDefaultConfig();
-		
+
 		MAX_BUILD_HEIGHT = getConfig().getInt("maxBuildHeight");
 		TNT_FUSE = getConfig().getInt("tntFuse");
 		TIME_BETWEEN_END_AND_RESET = getConfig().getInt("timeBeforeReset");
@@ -103,6 +111,19 @@ public class WedBars extends JavaPlugin {
 		MAX_EMERALDS_IN_GEN = getConfig().getInt("maxEmeraldsInGen");
 		VOID_LEVEL = getConfig().getInt("voidLevel");
 		RESPAWN_TIME = getConfig().getInt("respawnTime");
+		GOLEM_ATTACK_DISTANCE = getConfig().getInt("golemTargetDistance");
+		GOLEM_LIFE = getConfig().getInt("golemLife");
+		BUG_ATTACK_DISTANCE = getConfig().getInt("bugTargetDistance");
+		BUG_LIFE = getConfig().getInt("bugLife");
+		GOLEM_HEALTH = getConfig().getInt("golemHealth");
+		BUG_HEALTH = getConfig().getInt("bugHealth");
+
+		GamerStats.init(
+				getConfig().getBoolean("mysql.enabled"),
+				getConfig().getString("mysql.host"),
+				getConfig().getString("mysql.database"),
+				getConfig().getString("mysql.user"),
+				getConfig().getString("mysql.pass"));
 
 	}
 
@@ -114,44 +135,59 @@ public class WedBars extends JavaPlugin {
 
 		if (cmd.getName().equalsIgnoreCase("wedbars")) {
 
+			if (args.length == 0) {
+				sender.sendMessage(" ");
+				sender.sendMessage(ChatColor.GREEN + "" + ChatColor.BOLD + "Wed Bars " + getDescription().getVersion() + ChatColor.GRAY + " by Dilan and Jack.");
+				sender.sendMessage(ChatColor.GRAY + getDescription().getDescription());
+				sender.sendMessage(ChatColor.GRAY + getDescription().getWebsite());
+				sender.sendMessage(" ");
+				sender.sendMessage(ChatColor.GRAY + "Use " + ChatColor.GREEN + "/wb help" + ChatColor.GRAY + " for commands.");
+				sender.sendMessage(" ");
+				return true;
+			}
+
 			sender.sendMessage(" ");
-			sender.sendMessage(ChatColor.GREEN + "" + ChatColor.BOLD + "Wed Bars " + getDescription().getVersion() + ChatColor.GRAY + " by Dilan and Jack.");
-			sender.sendMessage(ChatColor.GRAY + getDescription().getDescription());
-			sender.sendMessage(ChatColor.GRAY + getDescription().getWebsite());
+			sender.sendMessage(ChatColor.GRAY + "---[ " + ChatColor.GREEN + "Wed Bars Command Help" + ChatColor.GRAY + " ]---");
+			sender.sendMessage(ChatColor.RED + "/setup" + ChatColor.GRAY + " - Setup a new arena.");
+			sender.sendMessage(ChatColor.RED + "/load" + ChatColor.GRAY + " - Load an arena.");
+			sender.sendMessage(ChatColor.RED + "/team" + ChatColor.GRAY + " - Assign teams manually.");
+			sender.sendMessage(ChatColor.RED + "/autoteam" + ChatColor.GRAY + " - Automatically randomly assign teams.");
+			sender.sendMessage(ChatColor.RED + "/start" + ChatColor.GRAY + " - Start the game.");
 			sender.sendMessage(" ");
+			return true;
 
 		}
-		
+
 		if (cmd.getName().equalsIgnoreCase("start")) {
-			
+
 			if (!sender.hasPermission("wedbars.admin")) {
 
 				sender.sendMessage("You do not have permission to use this command.");
 				return true;
 
 			}
-			
+
 			if (loadedArena == null) {
-				
+
 				sender.sendMessage("Load an arena first with /load, then assign teams with /team.");
 				return true;
-				
+
 			}
-			
+
 			if (running) {
-				
+
 				sender.sendMessage("The game is already running.");
 				return true;
-				
+
 			}
-			
+
 			if (resetting) {
-				
+
 				sender.sendMessage("The map is resetting.");
 				return true;
-				
+
 			}
-			
+
 			Arena arena = new Arena(loadedArena, teamAssignments);
 
 			if (arena.getTeams().size() < 2) {
@@ -162,9 +198,9 @@ public class WedBars extends JavaPlugin {
 			}
 
 			arena.start();
-			
+
 			return true;
-			
+
 		}
 
 		if (cmd.getName().equalsIgnoreCase("load")) {
@@ -179,6 +215,9 @@ public class WedBars extends JavaPlugin {
 			if (args.length == 0) {
 
 				sender.sendMessage("Use '/load <arena>' to load a Wed Bars arena (unloading any previously loaded one).");
+				String list = ArenaLoader.listArenas(this).toString();
+				sender.sendMessage("Available arenas: " + list.substring(1, list.length() - 1));
+
 				return true;
 
 			}
@@ -196,6 +235,88 @@ public class WedBars extends JavaPlugin {
 			teamAssignments.clear();
 
 			sender.sendMessage("Successfully loaded the arena data for " + args[0] + " (any team assignments were reset).");
+
+			return true;
+
+		}
+
+		if (cmd.getName().equalsIgnoreCase("autoteam")) {
+
+			if (!sender.hasPermission("wedbars.admin")) {
+
+				sender.sendMessage("You do not have permission to use this command.");
+				return true;
+
+			}
+
+			if (loadedArena == null) {
+
+				sender.sendMessage("Load an arena first with /load.");
+				return true;
+
+			}
+
+			if (args.length < 2) {
+
+				sender.sendMessage("/autoteam <teamOption1> <teamOption2> [<teamOption3>...]");
+				return true;
+
+			}
+
+			List<String> teamOptions = new ArrayList<String>();
+
+			for (int i = 0; i < args.length; i++) {
+
+				Team team = Team.getByLabel(args[i]);
+
+				if (team == null) {
+
+					sender.sendMessage("Unknown team: " + args[i]);
+					return true;
+
+				}
+
+				if (!loadedArena.getAllTeams().contains(team)) {
+
+					sender.sendMessage("This arena doesn't support the " + team.getLabel() + " team.");
+					return true;
+
+				}
+
+				teamOptions.add(args[i]);
+
+			}
+
+			List<Player> players = new ArrayList<Player>();
+
+			for (Player p : getServer().getOnlinePlayers()) players.add(p);
+
+			double pplPerTeam = Math.ceil((double) players.size() / (double) teamOptions.size());
+
+			Collections.shuffle(players);
+			Collections.shuffle(teamOptions);
+
+			int curPlayer = 0;
+			int curTeam = 0;
+
+			for (Player player : players) {
+
+				getServer().dispatchCommand(getServer().getConsoleSender(), "team " + teamOptions.get(curTeam) + " " + player.getName());
+				curPlayer++;
+
+				if (curPlayer >= pplPerTeam) {
+
+					curPlayer = 0;
+					curTeam++;
+
+				}
+
+			}
+
+			Bukkit.broadcastMessage(" ");
+			Bukkit.broadcastMessage(ChatColor.GRAY + "Players have been randomly assigned to teams automatically.");
+
+			getServer().dispatchCommand(getServer().getConsoleSender(), "team show");
 
 			return true;
 
@@ -231,7 +352,7 @@ public class WedBars extends JavaPlugin {
 				Bukkit.broadcastMessage(ChatColor.WHITE + "" + ChatColor.BOLD + "Team assignments for the next game");
 
 				Map<Team, List<String>> ta = teamAssignments.getTeamAssignments();
-				
+
 				if (ta.keySet().size() == 0) {
 
 					Bukkit.broadcastMessage(ChatColor.GRAY + "No teams set");
@@ -278,12 +399,12 @@ public class WedBars extends JavaPlugin {
 				return true;
 
 			}
-			
+
 			if (!loadedArena.getAllTeams().contains(team)) {
-				
+
 				sender.sendMessage("This arena doesn't support the " + team.getLabel() + " team.");
 				return true;
-				
+
 			}
 
 			Player player = getServer().getPlayer(args[1]);
@@ -488,7 +609,7 @@ public class WedBars extends JavaPlugin {
 			return true;
 
 		}
-		
+
 		if (cmd.getName().equalsIgnoreCase("teamshop")) {
 
 			if (!sender.hasPermission("wedbars.itemshop")) {
