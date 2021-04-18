@@ -49,7 +49,6 @@ public class Powerups implements Listener {
 	public static void createBridge(Egg egg) {
 		Team team = WedBars.arena.getGamer(((Player) egg.getShooter()).getName()).getTeam();
 		short stackColor = team.getStackColor();
-		//Player player = gamer.getPlayer();
 		World w = egg.getWorld();
 
 		new BukkitRunnable() {
@@ -77,8 +76,8 @@ public class Powerups implements Listener {
 				int y = previousLocation.getBlockY();
 				int z = previousLocation.getBlockZ();
 
-				for (int i = -1; i <= 1; i++) {
-					for (int j = -1; j <= 1; j++) {
+				for (int i = 0; i <= 1; i++) {
+					for (int j = 0; j <= 1; j++) {
 						
 						Location l = new Location(w, x + i, y, z + j);
 						Block b = l.getBlock();
@@ -241,6 +240,7 @@ public class Powerups implements Listener {
 		}.runTaskTimer(WedBars.getInstance(), 0, 20L);
 	}
 
+	//TODO: 2 event handlers?
 	@EventHandler
 	public void onEntityDamageByEntity(EntityDamageByEntityEvent e) {
 
