@@ -23,17 +23,18 @@ public class ArenaData {
 	private int ironSpeed;
 	private int goldSpeed;
 	private int personalEmeraldSpeed;
+	private int buildHeight;
 	
 	private List<Location> diamondGen, emeraldGen;
 	
 	public ArenaData(String name) {
 		
-		this(name, null, 0, 0, 0, 0, 0);
+		this(name, null, 0, 0, 0, 0, 0, 0);
 		
 	}
 	
 	public ArenaData(String name, Location lobby, int diamondSpeed, int emeraldSpeed,
-			int ironSpeed, int goldSpeed, int personalEmeraldSpeed) {
+			int ironSpeed, int goldSpeed, int personalEmeraldSpeed, int buildHeight) {
 		
 		this.name = name;
 		this.lobby = lobby;
@@ -46,6 +47,7 @@ public class ArenaData {
 		this.ironSpeed = ironSpeed;
 		this.goldSpeed = goldSpeed;
 		this.personalEmeraldSpeed = personalEmeraldSpeed;
+		this.buildHeight = buildHeight;
 		
 	}
 
@@ -145,6 +147,14 @@ public class ArenaData {
 
 	public void setPersonalEmeraldSpeed(int personalEmeraldSpeed) {
 		this.personalEmeraldSpeed = personalEmeraldSpeed;
+	}
+
+	public int getBuildHeight() {
+		return buildHeight;
+	}
+
+	public void setBuildHeight(int buildHeight) {
+		this.buildHeight = buildHeight;
 	}
 	
 }

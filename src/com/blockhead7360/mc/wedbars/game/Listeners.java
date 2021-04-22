@@ -136,7 +136,7 @@ public class Listeners implements Listener {
 
 		if (!WedBars.running) return;
 
-		if (e.getBlock().getLocation().getY() >= WedBars.MAX_BUILD_HEIGHT) {
+		if (e.getBlock().getLocation().getY() > WedBars.arena.getBuildHeight()) {
 			e.setCancelled(true);
 			e.getPlayer().sendMessage(ChatColor.RED + "You can't build any higher!");
 			return;

@@ -53,7 +53,6 @@ public class WedBars extends JavaPlugin {
 	// forge 3 is emeralds
 	public static final double FORGE4 = 4;
 
-
 	// gen scales
 	// n times the initial speed as set by the arena
 
@@ -78,7 +77,7 @@ public class WedBars extends JavaPlugin {
 
 	// these are gamerTicks though
 	public static int MAX_DIAMONDS_IN_GEN, MAX_EMERALDS_IN_GEN;
-	public static int MAX_BUILD_HEIGHT, TNT_FUSE, RESPAWN_TIME, VOID_LEVEL;
+	public static int TNT_FUSE, RESPAWN_TIME, VOID_LEVEL;
 
 	public static int BRIDGE_EGG_TIME;
 
@@ -88,7 +87,7 @@ public class WedBars extends JavaPlugin {
 	private static Listeners listeners;
 
 	public void onEnable() {
-
+		
 		listeners = new Listeners();
 		getServer().getPluginManager().registerEvents(listeners, this);
 		getServer().getPluginManager().registerEvents(new Powerups(), this);
@@ -100,7 +99,7 @@ public class WedBars extends JavaPlugin {
 		Shop.init();
 
 		instance = this;
-
+		
 		saveDefaultConfig();
 
 		MAX_BUILD_HEIGHT = getConfig().getInt("maxBuildHeight");
@@ -532,56 +531,6 @@ public class WedBars extends JavaPlugin {
 						return true;
 
 					}
-
-					// TEMPORARY
-
-					//					World world = getServer().getWorld("world");
-					//
-					//					Generator[] emeralds = {
-					//							new Generator(new Location(world, 12.5, 78, -11.5), EMERALD1_SPEED),
-					//							new Generator(new Location(world, -11.5, 78, -11.5), EMERALD1_SPEED),
-					//							new Generator(new Location(world, -11.5, 78, 12.5), EMERALD1_SPEED),
-					//							new Generator(new Location(world, 12.5, 78, 12.5), EMERALD1_SPEED)
-					//
-					//					};
-					//
-					//					Generator[] diamonds = {
-					//							new Generator(new Location(world, 0.5, 64, 52.5), DIAMOND1_SPEED),
-					//							new Generator(new Location(world, 52.5, 64, 0.5), DIAMOND1_SPEED),
-					//							new Generator(new Location(world, 0.5, 64, -51.5), DIAMOND1_SPEED),
-					//							new Generator(new Location(world, -51.5, 64, 0.5), DIAMOND1_SPEED)
-					//					};
-					//
-					//					ArenaTeam gray = new ArenaTeam(Team.GRAY,
-					//							new Location(world, -72, 66, -33),
-					//							new Location(world, -77, 66, -32),
-					//							1, 1,
-					//							new Location[]{new Location(world, -65, 66, -33), new Location(world, -64, 66, -33)},
-					//							new Gamer[]{new Gamer(getServer().getPlayer("shark_pog"), Team.GRAY)});
-					//
-					//					ArenaTeam green = new ArenaTeam(Team.GREEN,
-					//							new Location(world, 72, 66, -33),
-					//							new Location(world, 77, 66, -34),
-					//							1, 1,
-					//							new Location[]{new Location(world, 65, 66, -33), new Location(world, 64, 66, -33)},
-					//							new Gamer[]{new Gamer(getServer().getPlayer("ComputerCart"), Team.GREEN)});
-					//
-					//					ArenaTeam yellow = new ArenaTeam(Team.YELLOW,
-					//							new Location(world, 72, 66, 33),
-					//							new Location(world, 77, 66, 32),
-					//							1, 1,
-					//							new Location[]{new Location(world, 65, 66, 33), new Location(world, 64, 66, 33)},
-					//							new Gamer[]{new Gamer(getServer().getPlayer("Faience"), Team.YELLOW)});
-					//
-					//					ArenaTeam white = new ArenaTeam(Team.WHITE,
-					//							new Location(world, -33, 66, 72),
-					//							new Location(world, -32, 66, 77),
-					//							1, 1,
-					//							new Location[]{new Location(world, -33, 66, 65), new Location(world, -33, 66, 64)},
-					//							new Gamer[]{new Gamer(getServer().getPlayer("aromazx"), Team.WHITE)});
-					//
-					//					Arena arena = new Arena(new ArenaTeam[] {gray, green, yellow, white}, diamonds, emeralds);
-					//					arena.start();
 
 				}
 

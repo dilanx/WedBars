@@ -70,9 +70,10 @@ public class ArenaLoader {
 		int is = config.getInt("ironspeed");
 		int gs = config.getInt("goldspeed");
 		int pes = config.getInt("personalemeraldspeed");
+		int bh = config.getInt("buildheight");
 		
 		
-		ArenaData ad = new ArenaData(name, lobby, ds, es, is, gs, pes);
+		ArenaData ad = new ArenaData(name, lobby, ds, es, is, gs, pes, bh);
 
 		for (String key : config.getConfigurationSection("diamond").getKeys(false)) {
 
@@ -127,6 +128,7 @@ public class ArenaLoader {
 		config.set("ironspeed", data.getIronSpeed());
 		config.set("goldspeed", data.getGoldSpeed());
 		config.set("personalemeraldspeed", data.getPersonalEmeraldSpeed());
+		config.set("bh", data.getBuildHeight());
 
 		List<Location> diamondGen = data.getDiamondGen();
 

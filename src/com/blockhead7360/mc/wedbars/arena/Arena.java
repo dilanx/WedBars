@@ -50,6 +50,7 @@ public class Arena {
 	private Map<Team, ArenaTeam> teams;
 	private Map<String, Gamer> gamers;
 	private int initialDiamondSpeed, initialEmeraldSpeed;
+	private int buildHeight;
 	private Generator[] diamonds;
 	private Generator[] emeralds;
 
@@ -60,6 +61,7 @@ public class Arena {
 		this.stage = 0;
 		this.initialDiamondSpeed = data.getDiamondSpeed();
 		this.initialEmeraldSpeed = data.getEmeraldSpeed();
+		this.buildHeight = data.getBuildHeight();
 
 		List<Location> dg = data.getDiamondGen();
 		int ds = data.getDiamondSpeed();
@@ -811,6 +813,10 @@ public class Arena {
 
 		return null;
 
+	}
+	
+	public int getBuildHeight() {
+		return buildHeight;
 	}
 
 

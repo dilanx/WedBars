@@ -86,10 +86,6 @@ public class Powerups implements Listener {
 
 							b.setType(Material.WOOL);
 							b.setData((byte) stackColor);
-
-//							Wool w = (Wool) b.getState().getData();
-//							w.setColor(blockColor);
-//							b.getState().setData(w);
 							
 							WedBars.getListeners().getPlacedBlocks().add(l);
 
@@ -282,7 +278,7 @@ public class Powerups implements Listener {
 		}
 
 	}
-
+	
 	@EventHandler
 	public void onPlayerInteract(PlayerInteractEvent e) {
 
