@@ -166,6 +166,7 @@ public class Listeners implements Listener {
 			// This is done kinda weird based on my internet findings but
 			// using NMS is probably the easiest way to go about it.
 			Block block = Block.getByName("glass");
+			//TODO: add beds to be indestructable
 
 			try {
 				Field field = Block.class.getDeclaredField("durability");

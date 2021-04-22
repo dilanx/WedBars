@@ -75,6 +75,7 @@ public class Powerups implements Listener {
 				int x = previousLocation.getBlockX();
 				int y = previousLocation.getBlockY();
 				int z = previousLocation.getBlockZ();
+				int max = WedBars.arena.getBuildHeight();
 
 				for (int i = 0; i <= 1; i++) {
 					for (int j = 0; j <= 1; j++) {
@@ -82,7 +83,7 @@ public class Powerups implements Listener {
 						Location l = new Location(w, x + i, y, z + j);
 						Block b = l.getBlock();
 						
-						if (b.getType() == Material.AIR) {
+						if (b.getType() == Material.AIR || !(y > max)) {
 
 							b.setType(Material.WOOL);
 							b.setData((byte) stackColor);

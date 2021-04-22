@@ -417,6 +417,7 @@ public class SetupWizard implements Listener {
 				
 			}
 
+
 			if (msg.equalsIgnoreCase("checklist") || msg.equalsIgnoreCase("cl")) {
 
 				player.sendMessage(" ");
