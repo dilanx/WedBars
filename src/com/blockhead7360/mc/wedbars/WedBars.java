@@ -80,8 +80,7 @@ public class WedBars extends JavaPlugin {
 	public static int MAX_DIAMONDS_IN_GEN, MAX_EMERALDS_IN_GEN;
 	public static int MAX_BUILD_HEIGHT, TNT_FUSE, RESPAWN_TIME, VOID_LEVEL;
 
-	//TODO i didn't put this in config
-	public static int BRIDGE_EGG_TIME = 30;
+	public static int BRIDGE_EGG_TIME;
 
 
 	private static WedBars instance;
@@ -117,6 +116,7 @@ public class WedBars extends JavaPlugin {
 		BUG_LIFE = getConfig().getInt("bugLife");
 		GOLEM_HEALTH = getConfig().getInt("golemHealth");
 		BUG_HEALTH = getConfig().getInt("bugHealth");
+		BRIDGE_EGG_TIME = getConfig().getInt("eggTime");
 
 		GamerStats.init(
 				getConfig().getBoolean("mysql.enabled"),

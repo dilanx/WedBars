@@ -40,6 +40,11 @@ bugLife: 120
 bugTargetDistance: 4
 bugHealth: 8
 
+# Powerup: Bridge Eggs
+# Set the max time eggs will be live for. (int, seconds * 10)
+# Default: 30
+eggTime: 30
+
 # MySQL database information (required for stats)
 mysql:
   enabled: false
