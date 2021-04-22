@@ -1,9 +1,11 @@
 package com.blockhead7360.mc.wedbars.game;
 
+import java.lang.reflect.Field;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 
+import net.minecraft.server.v1_8_R3.Block;
 import org.bukkit.ChatColor;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
@@ -156,6 +158,23 @@ public class Listeners implements Listener {
 				return;
 
 			}
+
+		}
+
+		if (e.getBlock().getType() == Material.GLASS) {
+
+			// This is done kinda weird based on my internet findings but
+			// using NMS is probably the easiest way to go about it.
+			Block block = Block.getByName("glass");
+
+			try {
+				Field field = Block.class.getDeclaredField("durability");
+				field.setAccessible(true);
+				field.set(block, 3000f);
+			} catch (NoSuchFieldException | IllegalAccessException exce) {
+				exce.printStackTrace();
+			}
+			//TODO: egg limits (global?)
 
 		}
 		
