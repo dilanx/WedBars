@@ -102,7 +102,6 @@ public class WedBars extends JavaPlugin {
 		
 		saveDefaultConfig();
 
-		MAX_BUILD_HEIGHT = getConfig().getInt("maxBuildHeight");
 		TNT_FUSE = getConfig().getInt("tntFuse");
 		TIME_BETWEEN_END_AND_RESET = getConfig().getInt("timeBeforeReset");
 		MAX_DIAMONDS_IN_GEN = getConfig().getInt("maxDiamondsInGen");

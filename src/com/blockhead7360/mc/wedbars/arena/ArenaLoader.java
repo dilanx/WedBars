@@ -128,7 +128,7 @@ public class ArenaLoader {
 		config.set("ironspeed", data.getIronSpeed());
 		config.set("goldspeed", data.getGoldSpeed());
 		config.set("personalemeraldspeed", data.getPersonalEmeraldSpeed());
-		config.set("bh", data.getBuildHeight());
+		config.set("buildheight", data.getBuildHeight());
 
 		List<Location> diamondGen = data.getDiamondGen();
 
