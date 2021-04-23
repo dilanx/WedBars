@@ -83,7 +83,7 @@ public class Powerups implements Listener {
 						Location l = new Location(w, x + i, y, z + j);
 						Block b = l.getBlock();
 						
-						if (b.getType() == Material.AIR || !(y > max)) {
+						if (b.getType() == Material.AIR && y <= max) {
 
 							b.setType(Material.WOOL);
 							b.setData((byte) stackColor);

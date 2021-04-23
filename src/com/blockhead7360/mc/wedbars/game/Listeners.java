@@ -190,8 +190,10 @@ public class Listeners implements Listener {
 
 		// TODO switch this to bed when ready
 
-		if (event.getBlock().getType() == Material.CAKE_BLOCK) {
-
+		if (event.getBlock().getType() == Material.BED_BLOCK) {
+			
+			event.setCancelled(true);
+			
 			Arena arena = WedBars.arena;
 
 			Gamer breaker = arena.getGamer(event.getPlayer().getName());
@@ -200,11 +202,11 @@ public class Listeners implements Listener {
 
 			if (team == null) {
 
-				event.setCancelled(true);
 				event.getPlayer().sendMessage(ChatColor.RED + "Imagine trying to break your own bed (L).");
 				return;
 
 			}
+			
 
 			GameActions.bedGone(team, breaker);
 			return;

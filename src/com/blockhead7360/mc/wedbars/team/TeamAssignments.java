@@ -5,6 +5,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 
 public class TeamAssignments {
@@ -78,6 +80,9 @@ public class TeamAssignments {
 		}
 		
 		player.setPlayerListName(team.getChatColor() + player.getName());
+		
+		Bukkit.broadcastMessage(team.getChatColor() + player.getName() + ChatColor.GRAY + " is now a member of the "
+				+ team.getChatColor() + ChatColor.BOLD + team.getLabel() + ChatColor.GRAY + " team.");
 
 	}
 

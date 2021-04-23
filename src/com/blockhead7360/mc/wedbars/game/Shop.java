@@ -75,7 +75,11 @@ public class Shop implements Listener {
 
 	public static void openTeamUpgrades(Player player) {
 
-		if (WedBars.arena == null) return;
+		if (WedBars.arena == null) {
+			
+			player.sendMessage(ChatColor.RED + "The game needs to be running to use this.");
+			return;
+		}
 
 		Inventory inv = Bukkit.createInventory(null, 54, ChatColor.BOLD + "Team Upgrades");
 
@@ -1095,6 +1099,8 @@ public class Shop implements Listener {
 					}
 
 				}
+				
+				player.getInventory().remove(Material.WOOD_SWORD);
 
 			}
 

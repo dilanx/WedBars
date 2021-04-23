@@ -106,9 +106,9 @@ public class Arena {
 				g[i] = gamer;
 
 				// load stats
-				
+
 				GamerStats.updateGamerWithStats(gamer, false);
-				
+
 				gamers.put(players.get(i), gamer);
 
 			}
@@ -126,11 +126,26 @@ public class Arena {
 
 	}
 
+	public void stop() {
+
+		WedBars.running = false;
+		WedBars.arena = null;
+
+		for (Player player : Bukkit.getOnlinePlayers()) {
+
+			player.setGameMode(GameMode.SPECTATOR);
+			player.removePotionEffect(PotionEffectType.FAST_DIGGING);
+			player.getInventory().clear();
+
+		}
+
+	}
+
 	/* 10 PER SECOND */
 
 	public void start() {
 
-
+		WedBars.starting = false;
 		WedBars.running = true;
 		WedBars.arena = this;
 
@@ -172,11 +187,7 @@ public class Arena {
 
 		for (ArenaTeam at : teams.values()) {
 
-			for (Location l : at.getBedLoc()) {
-
-				l.getBlock().setType(Material.CAKE_BLOCK);
-
-			}
+			ArenaBed.placeBed(at.getBedLoc());
 
 		}
 
@@ -247,7 +258,7 @@ public class Arena {
 					return;
 
 				}
-				
+
 				// Teams
 
 				for (ArenaTeam at : teams.values()) {
@@ -325,16 +336,16 @@ public class Arena {
 							}
 
 						}
-						
+
 						if (gamer.hasInvisArmor() && gamer.getStatus() == Status.ALIVE) {
-							
+
 							if (!player.hasPotionEffect(PotionEffectType.INVISIBILITY)) {
-								
+
 								player.getInventory().setArmorContents(gamer.getInvisArmor());
 								gamer.removeInvisArmor();
-								
+
 							}
-							
+
 						}
 
 					}
@@ -583,14 +594,14 @@ public class Arena {
 						loc.getBlock().setType(Material.AIR);
 
 					}
-					
+
 					team.setBedExists(false);
 					GameScoreboard.updateTeam(team);
-					
+
 					for (Gamer g : team.getGamers()) {
-						
+
 						Titles.allBedsBroken(g.getPlayer());
-						
+
 					}
 
 				}
@@ -613,11 +624,11 @@ public class Arena {
 			GameScoreboard.updateStatus(ChatColor.RED + "" + ChatColor.BOLD + "game end");
 
 		}
-		
+
 		else if (stage == 5) {
-			
+
 			//TODO
-			
+
 		}
 
 	}
@@ -687,11 +698,11 @@ public class Arena {
 				}
 
 			}
-			
+
 			for (Gamer gamer : gamers.values()) {
-				
+
 				GamerStats.sendGamerData(gamer, false);
-				
+
 			}
 
 			GameScoreboard.updateStatus(ChatColor.GRAY + "map reset");
@@ -707,6 +718,8 @@ public class Arena {
 					if (time <= 0) {
 
 						cancel();
+						
+						WedBars.arena = null;
 
 						for (Player player : Bukkit.getOnlinePlayers()) {
 
@@ -714,12 +727,11 @@ public class Arena {
 							player.setGameMode(GameMode.ADVENTURE);
 							player.removePotionEffect(PotionEffectType.FAST_DIGGING);
 							player.getInventory().clear();
-							WedBars.arena = null;
 
 						}
 
-						resetBlocks();
-
+						resetBlocks(true);
+						
 					}
 
 					time--;
@@ -736,7 +748,7 @@ public class Arena {
 
 	}
 
-	public void resetBlocks() {
+	public static void resetBlocks(boolean auto) {
 
 		WedBars.resetting = true;
 
@@ -757,6 +769,7 @@ public class Arena {
 					Bukkit.broadcastMessage(ChatColor.GRAY + "Map reset complete!");
 					Bukkit.broadcastMessage(" ");
 					WedBars.resetting = false;
+					if (auto) anotherGame();
 					return;
 
 				}
@@ -766,6 +779,13 @@ public class Arena {
 			}
 
 		}.runTaskTimer(WedBars.getInstance(), 0, 1L);
+
+	}
+
+	public static void anotherGame() {
+
+		WedBars.teamAssignments.clear();
+		ArenaAutoStart.begin(WedBars.loadedArena, true);
 
 	}
 
@@ -814,7 +834,7 @@ public class Arena {
 		return null;
 
 	}
-	
+
 	public int getBuildHeight() {
 		return buildHeight;
 	}

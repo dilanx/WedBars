@@ -17,9 +17,9 @@ import com.blockhead7360.mc.wedbars.team.Team;
 public class ArenaLoader {
 
 	public static List<String> listArenas(WedBars plugin){
-		
+
 		List<String> list = new ArrayList<>();
-		
+
 		File folder = new File(plugin.getDataFolder(), "arenas");
 		if (!folder.exists()) {
 
@@ -27,19 +27,19 @@ public class ArenaLoader {
 			return null;
 
 		}
-		
+
 		for (File file : folder.listFiles()) {
-			
+
 			String name = file.getName();
-			
+
 			if (name.endsWith(".yml")) list.add(name.substring(0, name.length() - 4));
-			
+
 		}
-		
+
 		return list;
-		
+
 	}
-	
+
 	public static ArenaData loadArena(WedBars plugin, String name) {
 
 		File folder = new File(plugin.getDataFolder(), "arenas");
@@ -64,27 +64,31 @@ public class ArenaLoader {
 		}
 
 		Location lobby = (Location) config.get("lobby");
-		
+
 		int ds = config.getInt("diamondspeed");
 		int es = config.getInt("emeraldspeed");
 		int is = config.getInt("ironspeed");
 		int gs = config.getInt("goldspeed");
 		int pes = config.getInt("personalemeraldspeed");
 		int bh = config.getInt("buildheight");
-		
-		
+
+
 		ArenaData ad = new ArenaData(name, lobby, ds, es, is, gs, pes, bh);
 
-		for (String key : config.getConfigurationSection("diamond").getKeys(false)) {
+		if (config.isConfigurationSection("diamond")) {
+			for (String key : config.getConfigurationSection("diamond").getKeys(false)) {
 
-			ad.addDiamondGen((Location) config.get("diamond." + key));
+				ad.addDiamondGen((Location) config.get("diamond." + key));
 
+			}
 		}
 
-		for (String key : config.getConfigurationSection("emerald").getKeys(false)) {
+		if (config.isConfigurationSection("emerald")) {
+			for (String key : config.getConfigurationSection("emerald").getKeys(false)) {
 
-			ad.addEmeraldGen((Location) config.get("emerald." + key));
-			
+				ad.addEmeraldGen((Location) config.get("emerald." + key));
+
+			}
 		}
 
 		for (Team team : Team.values()) {
@@ -145,27 +149,27 @@ public class ArenaLoader {
 			config.set("emerald." + i, emeraldGen.get(i));
 
 		}
-		
+
 		for (Team team : data.getAllTeams()) {
-			
+
 			String t = team.toString();
 			ArenaTeamData atd = data.getTeamData(team);
-			
+
 			config.set("team." + t + ".spawn", atd.getSpawn());
 			config.set("team." + t + ".gen", atd.getGenerator());
 			Location[] bed = atd.getBed();
 			config.set("team." + t + ".bed0", bed[0]);
 			config.set("team." + t + ".bed1", bed[1]);
-			
+
 		}
-		
+
 		try {
 			config.save(file);
 		} catch (IOException e) {
 			e.printStackTrace();
 			return false;
 		}
-		
+
 		return true;
 
 

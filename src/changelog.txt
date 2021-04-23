@@ -1,6 +1,6 @@
 
 
-1.0 beta 2
+
 - added traps
 - added heal pool functionality
 - generator is less jank
@@ -14,3 +14,8 @@
 - added bridge egg
 - added team chest (test this)
 - added stats (mysql)
+
+apr 23 21
+- game can start automatically now (pog)
+- cakes replaced with beds
+- fixed some issues (like wood swords disappear when purchasing other type of sword)
