@@ -6,7 +6,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.logging.Logger;
 
-import com.blockhead7360.mc.wedbars.team.ArenaTeam;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
@@ -695,24 +694,7 @@ public class WedBars extends JavaPlugin {
 
 			}
 
-			//TODO: this could probably be organized better. the aim is that if servers wanna use cmds and not
-			// npcs, it should only let them use the command in a team spawn. since npcs execute cmds as player,
-			// this should not break anything
-			Player player = (Player) sender;
-			Location ploc = player.getLocation();
-			for (ArenaTeam team : WedBars.arena.getTeams().values()) {
-
-				if (team.getSpawnLoc().distanceSquared(ploc) >= WedBars.SPAWN_PROTECTION_DISTANCE_SQUARED) {
-
-					player.sendMessage(ChatColor.RED + "You can only open the shop in a team's spawn.");
-					return true;
-
-				}
-
-			}
-
-			// changed this to use PLayer player from above vs casting again
-			Shop.openItemShop(player);
+			Shop.openItemShop((Player) sender);
 			return true;
 
 		}
@@ -733,20 +715,7 @@ public class WedBars extends JavaPlugin {
 
 			}
 
-			Player player = (Player) sender;
-			Location ploc = player.getLocation();
-			for (ArenaTeam team : WedBars.arena.getTeams().values()) {
-
-				if (team.getSpawnLoc().distanceSquared(ploc) >= WedBars.SPAWN_PROTECTION_DISTANCE_SQUARED) {
-
-					player.sendMessage(ChatColor.RED + "You can only open the shop in a team's spawn.");
-					return true;
-
-				}
-
-			}
-
-			Shop.openTeamUpgrades(player);
+			Shop.openTeamUpgrades((Player) sender);
 			return true;
 
 		}
