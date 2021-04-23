@@ -702,7 +702,7 @@ public class WedBars extends JavaPlugin {
 			Location ploc = player.getLocation();
 			for (ArenaTeam team : WedBars.arena.getTeams().values()) {
 
-				if (team.getSpawnLoc().distanceSquared(ploc) <= WedBars.SPAWN_PROTECTION_DISTANCE_SQUARED) {
+				if (team.getSpawnLoc().distanceSquared(ploc) >= WedBars.SPAWN_PROTECTION_DISTANCE_SQUARED) {
 
 					player.sendMessage(ChatColor.RED + "You can only open the shop in a team's spawn.");
 					return true;
@@ -737,7 +737,7 @@ public class WedBars extends JavaPlugin {
 			Location ploc = player.getLocation();
 			for (ArenaTeam team : WedBars.arena.getTeams().values()) {
 
-				if (team.getSpawnLoc().distanceSquared(ploc) <= WedBars.SPAWN_PROTECTION_DISTANCE_SQUARED) {
+				if (team.getSpawnLoc().distanceSquared(ploc) >= WedBars.SPAWN_PROTECTION_DISTANCE_SQUARED) {
 
 					player.sendMessage(ChatColor.RED + "You can only open the shop in a team's spawn.");
 					return true;
