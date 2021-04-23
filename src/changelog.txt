@@ -19,3 +19,9 @@ apr 23 21
 - game can start automatically now (pog)
 - cakes replaced with beds
 - fixed some issues (like wood swords disappear when purchasing other type of sword)
+- (jack) realized i forgot about changelogs
+- added info about the documentation page to the config
+- glass is now blast proof, though tnt can glitch through if placed right (will fix)
+- bridge eggs will not generate over build limit
+- build limit changed to be per-arena
+- restricted players to only open shops if at a team base (if using commands vs npcs)
