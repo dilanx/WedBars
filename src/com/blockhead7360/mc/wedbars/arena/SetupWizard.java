@@ -231,7 +231,7 @@ public class SetupWizard implements Listener {
 				
 				String name = setup.getName();
 
-				ArenaLoader.saveArena(WedBars.getInstance(), name, setup);
+				ArenaLoader.saveArena(WedBars.getInstance(), name, setup, player.getName());
 				
 				settingUp = null;
 				setup = null;

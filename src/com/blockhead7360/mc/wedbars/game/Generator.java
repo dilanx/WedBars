@@ -1,6 +1,9 @@
 package com.blockhead7360.mc.wedbars.game;
 
 import org.bukkit.Location;
+import org.bukkit.inventory.ItemStack;
+
+import com.blockhead7360.mc.wedbars.api.events.GeneratorSpawnItemEvent;
 
 public class Generator {
 	
@@ -48,6 +51,18 @@ public class Generator {
 		}
 		
 		return false;
+	}
+	
+	public void spawnItem(ItemStack item) {
+		
+		GeneratorSpawnItemEvent gsie = new GeneratorSpawnItemEvent(this, item);
+		
+		if (gsie.isCancelled()) return;
+		
+		location.getWorld().dropItem(location, item);
+		
+		
+		
 	}
 
 	public int getCurTimeLeft() {

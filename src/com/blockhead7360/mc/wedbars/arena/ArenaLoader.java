@@ -5,12 +5,15 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 
 import com.blockhead7360.mc.wedbars.WedBars;
+import com.blockhead7360.mc.wedbars.api.events.ArenaLoadEvent;
+import com.blockhead7360.mc.wedbars.api.events.ArenaSaveEvent;
 import com.blockhead7360.mc.wedbars.team.ArenaTeamData;
 import com.blockhead7360.mc.wedbars.team.Team;
 
@@ -40,7 +43,7 @@ public class ArenaLoader {
 
 	}
 
-	public static ArenaData loadArena(WedBars plugin, String name) {
+	public static ArenaData loadArena(WedBars plugin, String name, String loader) {
 
 		File folder = new File(plugin.getDataFolder(), "arenas");
 		if (!folder.exists()) {
@@ -107,13 +110,16 @@ public class ArenaLoader {
 			ad.setTeamData(team, new ArenaTeamData(team, spawnLoc, generatorLoc, bedLoc));
 
 		}
+		
+		ArenaLoadEvent ale = new ArenaLoadEvent(ad, loader);
+		Bukkit.getPluginManager().callEvent(ale);
 
 		return ad;
 
 
 	}
 
-	public static boolean saveArena(WedBars plugin, String name, ArenaData data) {
+	public static boolean saveArena(WedBars plugin, String name, ArenaData data, String saver) {
 
 		File folder = new File(plugin.getDataFolder(), "arenas");
 		if (!folder.exists()) {
@@ -169,9 +175,11 @@ public class ArenaLoader {
 			e.printStackTrace();
 			return false;
 		}
+		
+		ArenaSaveEvent ase = new ArenaSaveEvent(data, saver);
+		Bukkit.getPluginManager().callEvent(ase);
 
 		return true;
-
 
 	}
 

@@ -173,9 +173,9 @@ public class WedBars extends JavaPlugin {
 
 			sender.sendMessage(" ");
 			sender.sendMessage(ChatColor.GRAY + "---[ " + ChatColor.GREEN + "Wed Bars Command Help" + ChatColor.GRAY + " ]---");
+			sender.sendMessage(ChatColor.WHITE + "/team" + ChatColor.GRAY + " - Select a team or assign teams manually.");
 			sender.sendMessage(ChatColor.RED + "/setup" + ChatColor.GRAY + " - Setup a new arena.");
 			sender.sendMessage(ChatColor.RED + "/load" + ChatColor.GRAY + " - Load an arena.");
-			sender.sendMessage(ChatColor.RED + "/team" + ChatColor.GRAY + " - Assign teams manually.");
 			sender.sendMessage(ChatColor.RED + "/autoteam" + ChatColor.GRAY + " - Automatically randomly assign teams.");
 			sender.sendMessage(ChatColor.RED + "/start" + ChatColor.GRAY + " - Start the game.");
 			sender.sendMessage(ChatColor.RED + "/end" + ChatColor.GRAY + " - Force stop the game.");
@@ -227,7 +227,7 @@ public class WedBars extends JavaPlugin {
 
 			Bukkit.broadcastMessage(ChatColor.WHITE + sender.getName() + ChatColor.GRAY + " started the game.");
 
-			arena.start();
+			arena.start(true);
 
 			return true;
 
@@ -320,7 +320,7 @@ public class WedBars extends JavaPlugin {
 
 			}
 
-			ArenaData data = ArenaLoader.loadArena(this, args[0]);
+			ArenaData data = ArenaLoader.loadArena(this, args[0], sender.getName());
 
 			if (data == null) {
 
@@ -598,7 +598,7 @@ public class WedBars extends JavaPlugin {
 
 			SetupWizard.settingUp = (Player) sender;
 
-			ArenaData data = ArenaLoader.loadArena(this, args[0]);
+			ArenaData data = ArenaLoader.loadArena(this, args[0], sender.getName());
 
 			if (data == null) {
 

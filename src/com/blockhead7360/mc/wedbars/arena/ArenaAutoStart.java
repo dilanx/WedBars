@@ -7,6 +7,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.GameMode;
 import org.bukkit.Material;
+import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -46,8 +47,6 @@ public class ArenaAutoStart implements Listener {
 			player.sendMessage(" ");
 
 		}
-		
-		
 
 	}
 
@@ -117,10 +116,12 @@ public class ArenaAutoStart implements Listener {
 			e.setCancelled(true);
 
 			Player player = (Player) e.getWhoClicked();
-
+			player.playSound(player.getLocation(), Sound.NOTE_PLING, 1, 1);
+			
 			Team selected = Team.getByLabel(ChatColor.stripColor(e.getCurrentItem().getItemMeta().getDisplayName()));
 
 			WedBars.teamAssignments.assign(player, selected);
+			
 			updateTeams();
 			return;
 
@@ -194,7 +195,7 @@ public class ArenaAutoStart implements Listener {
 					}
 
 					Arena arena = new Arena(data, WedBars.teamAssignments);
-					arena.start();
+					arena.start(false);
 
 					return;
 

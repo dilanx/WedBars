@@ -14,6 +14,8 @@ import org.bukkit.potion.PotionEffectType;
 import com.blockhead7360.mc.wedbars.Utility;
 import com.blockhead7360.mc.wedbars.Utility.EnchantmentSet;
 import com.blockhead7360.mc.wedbars.WedBars;
+import com.blockhead7360.mc.wedbars.api.events.BedGoneEvent;
+import com.blockhead7360.mc.wedbars.api.events.GamerDeathEvent;
 import com.blockhead7360.mc.wedbars.player.Gamer;
 import com.blockhead7360.mc.wedbars.player.GamerStats;
 import com.blockhead7360.mc.wedbars.player.Statistic;
@@ -26,7 +28,18 @@ import com.blockhead7360.mc.wedbars.team.TeamUpgrade;
 public class GameActions {
 
 	public static void bedGone(ArenaTeam team, Gamer breaker) {
+		
+		BedGoneEvent bge = new BedGoneEvent(team, breaker);
+		Bukkit.getPluginManager().callEvent(bge);
+		
+		if (bge.isCancelled()) return;
+		
+		for (Location lx : team.getBedLoc()) {
 
+			lx.getBlock().setType(Material.AIR);
+
+		}
+		
 		team.setBedExists(false);
 
 		for (Player player : Bukkit.getOnlinePlayers()) {
@@ -43,7 +56,6 @@ public class GameActions {
 		Bukkit.broadcastMessage(" ");
 
 		GameScoreboard.updateTeam(team);
-
 
 		breaker.addOneToStatistic(Statistic.BKILLS);
 		
@@ -264,6 +276,9 @@ public class GameActions {
 			}
 
 		}
+		
+		GamerDeathEvent gde = new GamerDeathEvent(gamer, bedExists, disconnect);
+		Bukkit.getPluginManager().callEvent(gde);
 
 	}
 

@@ -5,7 +5,7 @@ import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 
-import net.minecraft.server.v1_8_R3.Block;
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
@@ -29,10 +29,15 @@ import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.potion.PotionEffectType;
 
 import com.blockhead7360.mc.wedbars.WedBars;
+import com.blockhead7360.mc.wedbars.api.events.GamerBlockBreakEvent;
+import com.blockhead7360.mc.wedbars.api.events.GamerBlockPlaceEvent;
+import com.blockhead7360.mc.wedbars.api.events.GamerOpenTeamChestEvent;
 import com.blockhead7360.mc.wedbars.arena.Arena;
 import com.blockhead7360.mc.wedbars.player.Gamer;
 import com.blockhead7360.mc.wedbars.player.Statistic;
 import com.blockhead7360.mc.wedbars.team.ArenaTeam;
+
+import net.minecraft.server.v1_8_R3.Block;
 
 public class Listeners implements Listener {
 
@@ -72,12 +77,21 @@ public class Listeners implements Listener {
 			if (e.getClickedBlock().getType() == Material.CHEST) {
 
 				e.setCancelled(true);
-				
+
 				Player player = e.getPlayer();
+
+				Gamer gamer = WedBars.arena.getGamer(player.getName());
+				ArenaTeam team = WedBars.arena.getTeam(gamer.getTeam());
 				
-				ArenaTeam team = WedBars.arena.getTeam(WedBars.arena.getGamer(player.getName()).getTeam());
+				GamerOpenTeamChestEvent gotce = new GamerOpenTeamChestEvent(gamer, team, team.getChest(), e.getClickedBlock().getLocation());
+				Bukkit.getPluginManager().callEvent(gotce);
+				
+				if (gotce.isCancelled()) return;
+				
 				player.openInventory(team.getChest());
 				player.playSound(player.getLocation(), Sound.NOTE_PLING, 1, 1);
+				
+				
 
 			}
 
@@ -96,32 +110,52 @@ public class Listeners implements Listener {
 	public void entityDamageEntity(EntityDamageByEntityEvent e) {
 
 		if (WedBars.running && e.getEntity() instanceof Player) {
-			
+
 			Player player = (Player) e.getEntity();
-			
+
 			if (player.hasPotionEffect(PotionEffectType.INVISIBILITY)) {
-				
+
 				Gamer gamer = WedBars.arena.getGamer(player.getName());
-				
+
 				if (gamer.hasInvisArmor()) {
 					player.getInventory().setArmorContents(gamer.getInvisArmor());
 					gamer.removeInvisArmor();
 				}
 				player.removePotionEffect(PotionEffectType.INVISIBILITY);
 				player.sendMessage(ChatColor.RED + "You were hit while invisible and lost your invisibility effect!");
-				
+
 			}
-			
+
 			if (e.getDamager() instanceof Arrow) {
 
 				Player shooter = (Player) ((Arrow) e.getDamager()).getShooter();
-				
+
+				if (WedBars.arena.getGamer(shooter.getName()).getTeam() == WedBars.arena.getGamer(player.getName()).getTeam()) {
+
+					e.setCancelled(true);
+					return;
+
+				}
+
 
 				DecimalFormat round = new DecimalFormat("##.#");
 
 				if (player.getHealth() - e.getFinalDamage() > 0) {
 					shooter.sendMessage(WedBars.arena.getGamer(player.getName()).getTeam().getChatColor() + player.getName()
 					+ ChatColor.GRAY + " is now at " + ChatColor.RED + round.format(player.getHealth() - e.getFinalDamage()) + " HP");
+				}
+
+			}
+
+			if (e.getDamager() instanceof Player) {
+				
+				Player damager = (Player) e.getDamager();
+				
+				if (WedBars.arena.getGamer(damager.getName()).getTeam() == WedBars.arena.getGamer(player.getName()).getTeam()) {
+
+					e.setCancelled(true);
+					return;
+
 				}
 
 			}
@@ -160,6 +194,16 @@ public class Listeners implements Listener {
 			}
 
 		}
+		
+		Gamer gamer = WedBars.arena.getGamer(e.getPlayer().getName());
+		
+		GamerBlockPlaceEvent gbpe = new GamerBlockPlaceEvent(gamer, e);
+		Bukkit.getPluginManager().callEvent(gbpe);
+		
+		if (gbpe.isCancelled()) {
+			e.setCancelled(true);
+			return;
+		}
 
 		if (e.getBlock().getType() == Material.GLASS) {
 
@@ -176,35 +220,34 @@ public class Listeners implements Listener {
 			}
 
 		}
-		
-		WedBars.arena.getGamer(e.getPlayer().getName()).addOneToStatistic(Statistic.BPLACED);
+
+		gamer.addOneToStatistic(Statistic.BPLACED);
 		placedBlocks.add(e.getBlock().getLocation());
 	}
 
 	@EventHandler
-	public void blockBreak(BlockBreakEvent event) {
+	public void blockBreak(BlockBreakEvent e) {
 
 		if (!WedBars.running) return;
 
 		// TODO switch this to bed when ready
 
-		if (event.getBlock().getType() == Material.BED_BLOCK) {
-			
-			event.setCancelled(true);
-			
+		if (e.getBlock().getType() == Material.BED_BLOCK) {
+
+			e.setCancelled(true);
+
 			Arena arena = WedBars.arena;
 
-			Gamer breaker = arena.getGamer(event.getPlayer().getName());
+			Gamer breaker = arena.getGamer(e.getPlayer().getName());
 
-			ArenaTeam team = arena.whoseBed(breaker, event.getBlock().getLocation());
+			ArenaTeam team = arena.whoseBed(breaker, e.getBlock().getLocation());
 
 			if (team == null) {
 
-				event.getPlayer().sendMessage(ChatColor.RED + "Imagine trying to break your own bed (L).");
+				e.getPlayer().sendMessage(ChatColor.RED + "Imagine trying to break your own bed (L).");
 				return;
 
 			}
-			
 
 			GameActions.bedGone(team, breaker);
 			return;
@@ -213,17 +256,26 @@ public class Listeners implements Listener {
 
 		boolean found = false;
 		for (int i = 0; i < placedBlocks.size(); i++) {
-			if (event.getBlock().getLocation().equals(placedBlocks.get(i))) {
+			if (e.getBlock().getLocation().equals(placedBlocks.get(i))) {
 				found = true;
 				placedBlocks.remove(i);
 				break;
 			}
 		}
 		if (!found) {
-			event.setCancelled(true);
-			event.getPlayer().sendMessage(ChatColor.RED + "You can only break blocks placed by players!");
+			e.setCancelled(true);
+			e.getPlayer().sendMessage(ChatColor.RED + "You can only break blocks placed by players!");
+			return;
 		}
-
+		
+		Gamer breaker = WedBars.arena.getGamer(e.getPlayer().getName());
+		
+		GamerBlockBreakEvent gbbe = new GamerBlockBreakEvent(breaker, e);
+		Bukkit.getPluginManager().callEvent(gbbe);
+		if (gbbe.isCancelled()) {
+			e.setCancelled(true);
+			return;
+		}
 
 	}
 

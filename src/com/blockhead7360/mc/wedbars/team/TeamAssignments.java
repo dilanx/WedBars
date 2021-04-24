@@ -9,6 +9,8 @@ import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 
+import com.blockhead7360.mc.wedbars.api.events.PlayerChangeTeamEvent;
+
 public class TeamAssignments {
 
 	private Map<Team, List<String>> ta;
@@ -65,6 +67,11 @@ public class TeamAssignments {
 
 	public void assign(Player player, Team team) {
 
+		PlayerChangeTeamEvent pcte = new PlayerChangeTeamEvent(player, team, this);
+		Bukkit.getPluginManager().callEvent(pcte);
+		
+		if (pcte.isCancelled()) return;
+		
 		unassign(player);
 
 		if (!ta.containsKey(team)) {
