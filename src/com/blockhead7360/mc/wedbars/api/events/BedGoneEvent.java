@@ -18,11 +18,19 @@ public class BedGoneEvent extends Event implements Cancellable {
 		this.breaker = breaker;
 		this.isCancelled = false;
 	}
-	
+
+	/**
+	 * Fetches the team that got their bed destroyed.
+	 * @return an ArenaTeam
+	 */
 	public ArenaTeam getTeam() {
 		return team;
 	}
 
+	/**
+	 * Fetches the Gamer who broke the team's bed.
+	 * @return a Gamer
+	 */
 	public Gamer getBreaker() {
 		return breaker;
 	}
@@ -38,10 +46,18 @@ public class BedGoneEvent extends Event implements Cancellable {
 		return HANDLERS;
 	}
 
+	/**
+	 * Checks if the BedGoneEvent was cancelled.
+	 * @return boolean isCancelled
+	 */
 	public boolean isCancelled() {
 		return isCancelled;
 	}
 
+	/**
+	 * Cancels the BedGoneEvent.
+	 * @param isCancelled
+	 */
 	public void setCancelled(boolean isCancelled) {
 		this.isCancelled = isCancelled;
 	}

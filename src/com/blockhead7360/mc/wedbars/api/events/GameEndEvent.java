@@ -19,14 +19,26 @@ public class GameEndEvent extends Event {
 		this.winner = winner;
 	}
 
+	/**
+	 * Fetches the ArenaData for the game that just ended.
+	 * @return ArenaData
+	 */
 	public ArenaData getArenaData() {
 		return arenaData;
 	}
 
+	/**
+	 * Fetches the team assignments for the game that just ended.
+	 * @return TeamAssignments
+	 */
 	public TeamAssignments getTeamAssignments() {
 		return teamAssignments;
 	}
 
+	/**
+	 * Fetches the winning team from the game that just ended.
+	 * @return an ArenaTeam
+	 */
 	public ArenaTeam getWinner() {
 		return winner;
 	}

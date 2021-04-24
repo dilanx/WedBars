@@ -15,7 +15,17 @@ public class GamerPurchaseItemEvent extends Event {
 	private ItemStack item;
 	private Material costType;
 	private int costAmount;
-	
+
+	/**
+	 * Event triggered when a Gamer purchases an Item from the itemshop. Note that the itemshop and teamshop use two
+	 * different handlers. Since implementing shops into the arena is done through NPCs not handled by WedBars, the
+	 * plugin has no way of knowing which shop on the map things were purchased from.
+	 * @param player
+	 * @param gamer
+	 * @param item
+	 * @param costType
+	 * @param costAmount
+	 */
 	public GamerPurchaseItemEvent(Player player, Gamer gamer, ItemStack item, Material costType, int costAmount) {
 		this.player = player;
 		this.gamer = gamer;
@@ -36,10 +46,19 @@ public class GamerPurchaseItemEvent extends Event {
 		return item;
 	}
 
+	/**
+	 * Fetches the type of currency used for the item (ex. iron, gold, diamond, emerald, etc).
+	 * @return a Material
+	 */
 	public Material getCostType() {
 		return costType;
 	}
 
+	/**
+	 * Returns an int of the amount of the material that was spent on the purchased item.
+	 * @return an int
+	 * @see #getCostType()
+	 */
 	public int getCostAmount() {
 		return costAmount;
 	}

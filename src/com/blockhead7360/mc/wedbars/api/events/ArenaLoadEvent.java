@@ -15,9 +15,14 @@ public class ArenaLoadEvent extends Event {
 		this.loader = loader;
 	}
 
+	/**
+	 * Fetches ArenaData for the arena that was just loaded.
+	 * @return the ArenaData for the Arena
+	 */
 	public ArenaData getArena() {
 		return arena;
 	}
+
 
 	public String getLoader() {
 		return loader;

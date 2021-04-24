@@ -25,18 +25,36 @@ public class GamerOpenTeamChestEvent extends Event implements Cancellable {
 		this.isCancelled = false;
 	}
 
+	/**
+	 * Fetches the gamer that opened the team chest. Note that the team chest is a normal chest on each island
+	 * and is a seperate thing from the personal EnderChest that players also have access to.
+	 * @return a Gamer
+	 */
 	public Gamer getGamer() {
 		return gamer;
 	}
 
+	/**
+	 * Fetches the team who owns the chest that was just opened. Each team has a team chest at their base, and can only
+	 * be opened by the owning team until they are eliminated.
+	 * @return an ArenaTeam
+	 */
 	public ArenaTeam getTeam() {
 		return team;
 	}
 
+	/**
+	 * Fetches the inventory of the team chest that was just opened.
+	 * @return an Inventory
+	 */
 	public Inventory getChestInventory() {
 		return chestInventory;
 	}
 
+	/**
+	 * Fetches the location of the team chest.
+	 * @return a Location
+	 */
 	public Location getChestLocation() {
 		return chestLocation;
 	}

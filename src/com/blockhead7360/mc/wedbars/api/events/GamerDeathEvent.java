@@ -17,14 +17,29 @@ public class GamerDeathEvent extends Event {
 		this.didDisconnect = didDisconnect;
 	}
 
+	/**
+	 * Fetched the Gamer that just died.
+	 * @return Gamer
+	 */
 	public Gamer getGamer() {
 		return gamer;
 	}
 
+	/**
+	 * Checks if the player is currently respawning. If true, this means that the player has just died but still has a
+	 * bed, and is currently in spectator mode waiting to respawn.
+	 * @return boolean
+	 */
 	public boolean isRespawning() {
 		return isRespawning;
 	}
 
+	/**
+	 * Checks if the player that died also disconnected. Players that leave and then rejoin an active game will be
+	 * treated as if they died, so if they have a bed they will have to wait before getting back in the game. If they
+	 * don't have a bed, they will be permanently dead upon login.
+	 * @return boolean
+	 */
 	public boolean isDidDisconnect() {
 		return didDisconnect;
 	}

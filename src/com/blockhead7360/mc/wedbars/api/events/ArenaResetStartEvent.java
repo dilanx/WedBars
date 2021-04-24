@@ -7,13 +7,18 @@ import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
 
 public class ArenaResetStartEvent extends Event {
-	
+
 	private List<Location> blockList;
 	
 	public ArenaResetStartEvent(List<Location> blockList) {
 		this.blockList = blockList;
 	}
 
+	/**
+	 * Fetches the list of locations of blocks that were placed during the game
+	 * for the auto reset to clean up.
+	 * @return a List of Locations of blocks
+	 */
 	public List<Location> getBlockList() {
 		return blockList;
 	}

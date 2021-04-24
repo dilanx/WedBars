@@ -19,10 +19,21 @@ public class GamerBlockBreakEvent extends Event implements Cancellable {
 		this.isCancelled = false;
 	}
 
+	/**
+	 * Fetches the Gamer who broke the block. Note that this is different than the standard BlockBreakEvent in that
+	 * it's triggered by Gamers in WedBars, so it will only start working during an active game. You'll have to decide
+	 * which event type is best for your use case.
+	 * @return a Gamer
+	 * @see #getBlockBreakEvent()
+	 */
 	public Gamer getGamer() {
 		return gamer;
 	}
 
+	/**
+	 * Fetches the standard Bukkit BlockBreakEvent associated with this GamerBlockBreakEvent.
+	 * @return a BlockBreakEvent
+	 */
 	public BlockBreakEvent getBlockBreakEvent() {
 		return blockBreakEvent;
 	}
@@ -38,10 +49,18 @@ public class GamerBlockBreakEvent extends Event implements Cancellable {
 		return HANDLERS;
 	}
 
+	/**
+	 * Checks if the GamerBlockBreakEvent was cancelled.
+	 * @return boolean isCancelled
+	 */
 	public boolean isCancelled() {
 		return isCancelled;
 	}
 
+	/**
+	 * Sets a GamerBlockBreakEvent to be cancelled.
+	 * @param isCancelled
+	 */
 	public void setCancelled(boolean isCancelled) {
 		this.isCancelled = isCancelled;
 	}

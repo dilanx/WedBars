@@ -19,10 +19,21 @@ public class GamerBlockPlaceEvent extends Event implements Cancellable {
 		this.isCancelled = false;
 	}
 
+	/**
+	 * Fetches the Gamer who placed the block. Note that this is different than the standard BlockPlaceEvent in that
+	 * it's triggered by Gamers in WedBars, so it will only start working during an active game. You'll have to decide
+	 * which event type is best for your use case.
+	 * @return a Gamer
+	 * @see #getBlockPlaceEvent()
+	 */
 	public Gamer getGamer() {
 		return gamer;
 	}
 
+	/**
+	 * Fetches the standard Bukkit BlockPlaceEvent associated with this GamerBlockBreakEvent.
+	 * @return a BlockPlaceEvent
+	 */
 	public BlockPlaceEvent getBlockPlaceEvent() {
 		return blockPlaceEvent;
 	}
@@ -38,10 +49,18 @@ public class GamerBlockPlaceEvent extends Event implements Cancellable {
 		return HANDLERS;
 	}
 
+	/**
+	 * Checks if the GamerBlockPlaceEvent was cancelled.
+	 * @return boolean isCancelled
+	 */
 	public boolean isCancelled() {
 		return isCancelled;
 	}
 
+	/**
+	 * Sets a GamerBlockPlaceEvent to be cancelled.
+	 * @param isCancelled
+	 */
 	public void setCancelled(boolean isCancelled) {
 		this.isCancelled = isCancelled;
 	}

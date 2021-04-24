@@ -26,6 +26,10 @@ public class GameStartEvent extends Event {
 		return teamAssignments;
 	}
 
+	/**
+	 * Checks if the game was started by WedBars's auto start feature or manually by an admin using /start.
+	 * @return a boolean
+	 */
 	public boolean wasDoneManually() {
 		return wasDoneManually;
 	}

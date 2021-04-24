@@ -15,6 +15,10 @@ public class ArenaSaveEvent extends Event {
 		this.saver = saver;
 	}
 
+	/**
+	 * Fetches the ArenaData for the arena that was just saved.
+	 * @return ArenaData for the saved arena
+	 */
 	public ArenaData getArena() {
 		return arena;
 	}

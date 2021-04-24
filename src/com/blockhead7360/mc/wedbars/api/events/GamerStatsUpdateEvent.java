@@ -14,7 +14,7 @@ public class GamerStatsUpdateEvent extends Event implements Cancellable {
 	private int statBefore;
 	private int statAfter;
 	private boolean isCancelled;
-	
+
 	public GamerStatsUpdateEvent(Gamer gamer, Statistic statistic, int statBefore, int statAfter) {
 		this.gamer = gamer;
 		this.statistic = statistic;
@@ -27,6 +27,11 @@ public class GamerStatsUpdateEvent extends Event implements Cancellable {
 		return gamer;
 	}
 
+	/**
+	 * Fetches the type of stat that was modified
+	 * @return a Statistic
+	 * @see Statistic
+	 */
 	public Statistic getStatistic() {
 		return statistic;
 	}

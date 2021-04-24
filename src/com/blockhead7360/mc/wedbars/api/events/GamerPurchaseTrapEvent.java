@@ -12,7 +12,15 @@ public class GamerPurchaseTrapEvent extends Event {
 	private String trapName;
 	private Material costType;
 	private int costAmount;
-	
+
+	/**
+	 * Event triggered when players purchase traps for their team. Traps are defensive buffs that will activate once
+	 * a member of an enemy team enters the area of the defending team's island.
+	 * @param gamer
+	 * @param trapName
+	 * @param costType
+	 * @param costAmount
+	 */
 	public GamerPurchaseTrapEvent(Gamer gamer, String trapName, Material costType, int costAmount) {
 		this.gamer = gamer;
 		this.trapName = trapName;
@@ -20,6 +28,11 @@ public class GamerPurchaseTrapEvent extends Event {
 		this.costAmount = costAmount;
 	}
 
+	/**
+	 * Returns the Gamer that purchased the trap. Remember that players are able to purchase traps anywhere there is
+	 * a team upgrade shop available, even on other team islands.
+	 * @return a Gamer
+	 */
 	public Gamer getGamer() {
 		return gamer;
 	}
