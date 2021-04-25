@@ -35,8 +35,7 @@ public class GamerOpenTeamChestEvent extends Event implements Cancellable {
 	}
 
 	/**
-	 * Fetches the team who owns the chest that was just opened. Each team has a team chest at their base, and can only
-	 * be opened by the owning team until they are eliminated.
+	 * Fetches the team who owns the chest that was just opened.
 	 * @return an ArenaTeam
 	 */
 	public ArenaTeam getTeam() {
