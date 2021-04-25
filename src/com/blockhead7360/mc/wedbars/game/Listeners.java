@@ -178,7 +178,7 @@ public class Listeners implements Listener {
 
 		if (e.getBlock().getType() == Material.TNT) {
 			e.getBlock().setType(Material.AIR);
-			TNTPrimed tp = (TNTPrimed)e.getBlock().getWorld().spawnEntity(e.getBlock().getLocation(), EntityType.PRIMED_TNT);
+			TNTPrimed tp = (TNTPrimed)e.getBlock().getWorld().spawnEntity(e.getBlockPlaced().getLocation(), EntityType.PRIMED_TNT);
 			tp.setFuseTicks(WedBars.TNT_FUSE);
 			return;
 		}

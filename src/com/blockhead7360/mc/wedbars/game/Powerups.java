@@ -2,6 +2,7 @@ package com.blockhead7360.mc.wedbars.game;
 
 import java.util.List;
 
+import net.minecraft.server.v1_8_R3.Explosion;
 import org.bukkit.Effect;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -356,20 +357,21 @@ public class Powerups implements Listener {
 	public void onEntityExplode(EntityExplodeEvent e) {
 
 		if (e.getEntity() instanceof Fireball) {
+
 			e.setCancelled(true);
-			TNTPrimed t = (TNTPrimed) e.getLocation().getWorld().spawnEntity(e.getLocation(), EntityType.PRIMED_TNT);
-			t.setFuseTicks(0);
+			e.getEntity().getWorld().createExplosion(e.getEntity().getLocation(), 3);
 			return;
 		}
 
-		if (e.getEntity() instanceof TNTPrimed) {
+		//So the idea here is that we replace the fireball with an explosion and then return, that explosion
+		//would create another EntityExplodeEVent which will then behave like tnt below
+		if (e.getEntity() instanceof TNTPrimed || e.getEntity() instanceof Explosion) {
 
 			e.setCancelled(true);
 
 			e.getLocation().getWorld().playEffect(e.getLocation(), Effect.EXPLOSION_LARGE, 1);
 
 			List<Block> blocks = e.blockList();
-			//TODO: fix behavior with glass and bed
 			for (Block b : blocks) {
 
 				List<Location> locs = WedBars.getListeners().getPlacedBlocks();

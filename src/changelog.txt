@@ -25,3 +25,9 @@ apr 23 21
 - bridge eggs will not generate over build limit
 - build limit changed to be per-arena
 - restricted players to only open shops if at a team base (if using commands vs npcs)
+
+april 23 21 (pm)
+- fireball behavior changed. will now spawn an explosion (not primedtnt) so that we can
+control how it will explode. they still go fast though.
+- changed spawning of primed tnt from tnt placement to spawn in the same block that the
+tnt would be rather than other location idk
