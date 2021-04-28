@@ -1,4 +1,4 @@
-# WedBars Documentation
+# WedBars Setup Documentation
 
 Okay so you already know Wed Bars is the coolest game to exist ever. Here's how you set it up.
 
