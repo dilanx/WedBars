@@ -364,7 +364,9 @@ public class Shop implements Listener {
 							ChatColor.GRAY + "Price: " + ChatColor.GOLD + "7 gold"),
 					Utility.createIconItemStack(Material.DIAMOND_SWORD, 1, ChatColor.YELLOW + "Diamond Sword", "",
 							ChatColor.GRAY + "Price: " + ChatColor.GREEN + "4 emerald"),
-					Utility.createIconItemStack(Material.STICK, 1, ChatColor.GRAY + "Knockback Stick coming soon")
+					Utility.createEnchantedItemStack(Material.STICK, 1, ChatColor.YELLOW + "Knockback Stick",
+							new EnchantmentSet[] {new EnchantmentSet(Enchantment.KNOCKBACK, 1)}, "",
+							ChatColor.GRAY + "Price: " + ChatColor.GOLD + "5 gold")
 
 			};
 
