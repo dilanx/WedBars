@@ -964,6 +964,12 @@ public class Shop implements Listener {
 			stack = new ItemStack(Material.WOOL, stack.getAmount(), WedBars.arena.getGamer(player.getName()).getTeam().getStackColor());
 
 		}
+		
+		else if (stack.getType() == Material.GLASS && WedBars.arena != null) {
+			
+			stack = new ItemStack(Material.STAINED_GLASS, stack.getAmount(), WedBars.arena.getGamer(player.getName()).getTeam().getStackColor());
+			
+		}
 
 		else if (stack.getType() == Material.CHAINMAIL_BOOTS) {
 

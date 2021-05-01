@@ -34,7 +34,7 @@ public class WedBars extends JavaPlugin {
 
 	// gamerTicks = 10 per second
 
-
+	
 	public static boolean running = false;
 	public static boolean resetting = false;
 	public static boolean starting = false;

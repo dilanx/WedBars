@@ -19,7 +19,7 @@ public class PlayerChangeTeamEvent extends Event implements Cancellable {
 		this.player = player;
 		this.team = team;
 		this.previousTeamAssignments = previousTeamAssignments;
-		this.isCancelled = true;
+		this.isCancelled = false;
 	}
 
 	public Player getPlayer() {
