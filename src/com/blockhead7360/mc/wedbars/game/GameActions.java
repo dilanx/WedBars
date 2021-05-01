@@ -81,24 +81,21 @@ public class GameActions {
 
 		} else {
 
-			ItemStack[] armor;
-
-			if (gamer.hasInvisArmor()) {
-
-				armor = gamer.getInvisArmor();
-				gamer.removeInvisArmor();
-
-			} else {
-
-				armor = player.getInventory().getArmorContents();
-
-			}
+			ItemStack[] armor = player.getInventory().getArmorContents();
 
 			ItemStack[] contents = player.getInventory().getContents();
 
 			player.getInventory().clear();
 
 			player.getInventory().setArmorContents(armor);
+			
+			if (gamer.hasInvisArmor()) {
+				
+				player.getInventory().setArmorContents(gamer.getInvisArmor());
+				gamer.removeInvisArmor();
+				
+			}
+			
 
 			if (WedBars.arena.getTeam(gamer.getTeam()).hasUpgrade(TeamUpgrade.SWORDS))
 				player.getInventory().setItem(0, Utility.createEnchantedItemStack(Material.WOOD_SWORD, 1, ChatColor.YELLOW + "Wooden Sword",

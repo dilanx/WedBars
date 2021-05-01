@@ -2,7 +2,6 @@ package com.blockhead7360.mc.wedbars.game;
 
 import java.util.List;
 
-import net.minecraft.server.v1_8_R3.Explosion;
 import org.bukkit.Effect;
 import org.bukkit.Location;
 import org.bukkit.Material;
