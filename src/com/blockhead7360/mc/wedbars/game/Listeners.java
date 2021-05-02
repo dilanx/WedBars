@@ -1,6 +1,5 @@
 package com.blockhead7360.mc.wedbars.game;
 
-import java.lang.reflect.Field;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
@@ -12,7 +11,9 @@ import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.entity.Arrow;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
+import org.bukkit.entity.Item;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.TNTPrimed;
 import org.bukkit.event.EventHandler;
@@ -26,6 +27,9 @@ import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.player.PlayerChangedWorldEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
+import org.bukkit.event.player.PlayerPickupItemEvent;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.metadata.MetadataValue;
 import org.bukkit.potion.PotionEffectType;
 
 import com.blockhead7360.mc.wedbars.WedBars;
@@ -36,8 +40,6 @@ import com.blockhead7360.mc.wedbars.arena.Arena;
 import com.blockhead7360.mc.wedbars.player.Gamer;
 import com.blockhead7360.mc.wedbars.player.Statistic;
 import com.blockhead7360.mc.wedbars.team.ArenaTeam;
-
-import net.minecraft.server.v1_8_R3.Block;
 
 public class Listeners implements Listener {
 
@@ -65,6 +67,56 @@ public class Listeners implements Listener {
 
 		placedBlocks.remove(index);
 
+	}
+	
+	@EventHandler
+	public void onPlayerPickupItem(PlayerPickupItemEvent e) {
+		
+		if (!WedBars.running) return;
+		
+		Item item = e.getItem();
+		
+		List<MetadataValue> mdv = item.getMetadata("gen");
+		if (mdv.isEmpty() || !mdv.get(0).asBoolean()) return;
+		
+		item.removeMetadata("gen", WedBars.getInstance());
+		
+		ItemStack stack = e.getItem().getItemStack();
+		
+		if (stack.getType() != Material.IRON_INGOT && stack.getType() != Material.GOLD_INGOT) return;
+		
+		Player player = e.getPlayer();
+		Arena arena = WedBars.arena;
+		
+		for (ArenaTeam at : arena.getTeams().values()) {
+			
+			Location genLoc = at.getIronGenerator().getLocation();
+			
+			if (genLoc.distanceSquared(player.getLocation()) <= 4) {
+				
+				for (Entity nearby : player.getNearbyEntities(2, 2, 2)) {
+					
+					if (nearby instanceof Player) {
+						
+						Player n = (Player) nearby;
+						
+						if (n.getInventory().firstEmpty() > -1) {
+							
+							n.getInventory().addItem(stack);
+							n.updateInventory();
+							
+						}
+						
+					}
+					
+				}
+				
+				return;
+				
+			}
+			
+		}
+		
 	}
 
 	@EventHandler
@@ -205,21 +257,21 @@ public class Listeners implements Listener {
 			return;
 		}
 
-		if (e.getBlock().getType() == Material.GLASS) {
-
-			// This is done kinda weird based on my internet findings but
-			// using NMS is probably the easiest way to go about it.
-			Block block = Block.getByName("glass");
-
-			try {
-				Field field = Block.class.getDeclaredField("durability");
-				field.setAccessible(true);
-				field.set(block, 3000f);
-			} catch (NoSuchFieldException | IllegalAccessException exce) {
-				exce.printStackTrace();
-			}
-
-		}
+//		if (e.getBlock().getType() == Material.GLASS) {
+//
+//			// This is done kinda weird based on my internet findings but
+//			// using NMS is probably the easiest way to go about it.
+//			Block block = Block.getByName("glass");
+//
+//			try {
+//				Field field = Block.class.getDeclaredField("durability");
+//				field.setAccessible(true);
+//				field.set(block, 3000f);
+//			} catch (NoSuchFieldException | IllegalAccessException exce) {
+//				exce.printStackTrace();
+//			}
+//
+//		}
 
 		gamer.addOneToStatistic(Statistic.BPLACED);
 		placedBlocks.add(e.getBlock().getLocation());

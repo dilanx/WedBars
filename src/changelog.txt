@@ -15,7 +15,7 @@
 - added team chest (test this)
 - added stats (mysql)
 
-apr 23 21
+apr 23 21 (am)
 - game can start automatically now (pog)
 - cakes replaced with beds
 - fixed some issues (like wood swords disappear when purchasing other type of sword)
@@ -31,3 +31,9 @@ april 23 21 (pm)
 control how it will explode. they still go fast though.
 - changed spawning of primed tnt from tnt placement to spawn in the same block that the
 tnt would be rather than other location idk
+
+may 1 21 (pm)
+- fixed invis armor disappearing on death
+- fireball behavior should work now
+- generator split
+- all gens start with 1 item

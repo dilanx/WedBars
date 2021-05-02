@@ -917,7 +917,7 @@ public class Shop implements Listener {
 			team.getIronGenerator().setSpeed((int) ironcalc3);
 			double goldcalc3 = (double) team.getInitialIronSpeed() / WedBars.FORGE4;
 			team.getGoldGenerator().setSpeed((int) goldcalc3);
-			double emeraldcalc3 = (double) team.getInitialEmeraldSpeed() / WedBars.FORGE4;
+			double emeraldcalc3 = (double) team.getInitialEmeraldSpeed() / WedBars.FORGE2;
 			team.getEmeraldGenerator().setSpeed((int) emeraldcalc3);
 			break;
 

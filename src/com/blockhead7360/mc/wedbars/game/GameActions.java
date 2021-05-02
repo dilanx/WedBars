@@ -80,21 +80,30 @@ public class GameActions {
 			WedBars.arena.deleteGamer(gamer);
 
 		} else {
-
+			
 			ItemStack[] armor = player.getInventory().getArmorContents();
+			
+			if (gamer.hasInvisArmor()) {
+				
+				armor = new ItemStack[4];
+				
+				ItemStack[] invis = gamer.getInvisArmor();
+				
+				for (int i = 0; i < invis.length; i++) {
+					
+					armor[i] = invis[i].clone();
+					
+				}
+				
+				gamer.removeInvisArmor();
+				
+			}
 
 			ItemStack[] contents = player.getInventory().getContents();
 
 			player.getInventory().clear();
 
 			player.getInventory().setArmorContents(armor);
-			
-			if (gamer.hasInvisArmor()) {
-				
-				player.getInventory().setArmorContents(gamer.getInvisArmor());
-				gamer.removeInvisArmor();
-				
-			}
 			
 
 			if (WedBars.arena.getTeam(gamer.getTeam()).hasUpgrade(TeamUpgrade.SWORDS))
