@@ -3,10 +3,12 @@ package com.blockhead7360.mc.wedbars.player;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
 import com.blockhead7360.mc.wedbars.WedBars;
+import com.blockhead7360.mc.wedbars.api.events.GamerStatsUpdateEvent;
 import com.blockhead7360.mc.wedbars.team.Team;
 
 public class Gamer {
@@ -103,6 +105,11 @@ public class Gamer {
 	
 	public void setStatistic(Statistic stat, int value) {
 		
+		GamerStatsUpdateEvent gsue = new GamerStatsUpdateEvent(this, stat, getStatistic(stat), value);
+		Bukkit.getPluginManager().callEvent(gsue);
+		
+		if (gsue.isCancelled()) return;
+		
 		stats.put(stat, value);
 		
 	}
@@ -118,10 +125,7 @@ public class Gamer {
 	
 	public void addOneToStatistic(Statistic stat) {
 		
-		if (stats.containsKey(stat))
-			stats.put(stat, stats.get(stat) + 1);
-		else
-			stats.put(stat, 1);
+		setStatistic(stat, getStatistic(stat) + 1);
 		
 	}
 	

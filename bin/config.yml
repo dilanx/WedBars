@@ -1,5 +1,7 @@
-# Sets the max build height for players during the game (int, in blocks) default: 90
-maxBuildHeight: 90
+# Welcome, fellow server admin, to the CONFIG ZONE. Here you can tweak many aspects
+# of the game to your liking. If something gets messed up, just delete the file and
+# the plugin will generate a new one on startup. For help with WedBars, see our
+# documentation: https://github.com/dilanx/WedBars/blob/main/DOCUMENTATION.md
 
 # Sets the fuse time for tnt once placed (int, in ticks) default: 60
 tntFuse: 60
@@ -40,7 +42,13 @@ bugLife: 120
 bugTargetDistance: 4
 bugHealth: 8
 
+# Powerup: Bridge Eggs
+# Set the max time eggs will be live for. (int, seconds * 10)
+# Default: 30
+eggTime: 30
+
 # MySQL database information (required for stats)
+# More info on this can be found at https://github.com/dilanx/WedBars/blob/main/DOCUMENTATION.md#player-statistics
 mysql:
   enabled: false
   host: None

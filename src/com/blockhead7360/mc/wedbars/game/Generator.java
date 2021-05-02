@@ -1,6 +1,12 @@
 package com.blockhead7360.mc.wedbars.game;
 
 import org.bukkit.Location;
+import org.bukkit.entity.Item;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.metadata.FixedMetadataValue;
+
+import com.blockhead7360.mc.wedbars.WedBars;
+import com.blockhead7360.mc.wedbars.api.events.GeneratorSpawnItemEvent;
 
 public class Generator {
 	
@@ -13,7 +19,7 @@ public class Generator {
 		
 		this.location = location;
 		this.speed = speed;
-		this.curTimeLeft = speed;
+		this.curTimeLeft = 1;
 		
 	}
 
@@ -48,6 +54,19 @@ public class Generator {
 		}
 		
 		return false;
+	}
+	
+	public void spawnItem(ItemStack item) {
+		
+		GeneratorSpawnItemEvent gsie = new GeneratorSpawnItemEvent(this, item);
+		
+		if (gsie.isCancelled()) return;
+		
+		Item i = location.getWorld().dropItem(location, item);
+		i.setMetadata("gen", new FixedMetadataValue(WedBars.getInstance(), true));
+		
+		
+		
 	}
 
 	public int getCurTimeLeft() {

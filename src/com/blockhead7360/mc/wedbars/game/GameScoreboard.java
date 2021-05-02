@@ -51,7 +51,7 @@ public class GameScoreboard {
 		
 	}
 	
-	public static void start(ArenaTeam[] teams) {
+	public static void start(String arenaName, ArenaTeam[] teams) {
 		
 		sb = Bukkit.getScoreboardManager().getNewScoreboard();
 		Objective o = sb.registerNewObjective("health", "health");
@@ -71,8 +71,8 @@ public class GameScoreboard {
 			
 		}
 		
-		obj.getScore(ChatColor.GRAY + "WB " + WedBars.getInstance().getDescription().getVersion())
-		.setScore(15);
+		obj.getScore(ChatColor.GRAY + "WB " + WedBars.getInstance().getDescription().getVersion()
+				+ " | " + arenaName).setScore(15);
 		obj.getScore(" ").setScore(14);
 		status = "None1";
 		time = "None2";

@@ -14,6 +14,8 @@ import org.bukkit.potion.PotionEffectType;
 import com.blockhead7360.mc.wedbars.Utility;
 import com.blockhead7360.mc.wedbars.Utility.EnchantmentSet;
 import com.blockhead7360.mc.wedbars.WedBars;
+import com.blockhead7360.mc.wedbars.api.events.BedGoneEvent;
+import com.blockhead7360.mc.wedbars.api.events.GamerDeathEvent;
 import com.blockhead7360.mc.wedbars.player.Gamer;
 import com.blockhead7360.mc.wedbars.player.GamerStats;
 import com.blockhead7360.mc.wedbars.player.Statistic;
@@ -26,7 +28,18 @@ import com.blockhead7360.mc.wedbars.team.TeamUpgrade;
 public class GameActions {
 
 	public static void bedGone(ArenaTeam team, Gamer breaker) {
+		
+		BedGoneEvent bge = new BedGoneEvent(team, breaker);
+		Bukkit.getPluginManager().callEvent(bge);
+		
+		if (bge.isCancelled()) return;
+		
+		for (Location lx : team.getBedLoc()) {
 
+			lx.getBlock().setType(Material.AIR);
+
+		}
+		
 		team.setBedExists(false);
 
 		for (Player player : Bukkit.getOnlinePlayers()) {
@@ -43,7 +56,6 @@ public class GameActions {
 		Bukkit.broadcastMessage(" ");
 
 		GameScoreboard.updateTeam(team);
-
 
 		breaker.addOneToStatistic(Statistic.BKILLS);
 		
@@ -68,18 +80,23 @@ public class GameActions {
 			WedBars.arena.deleteGamer(gamer);
 
 		} else {
-
-			ItemStack[] armor;
-
+			
+			ItemStack[] armor = player.getInventory().getArmorContents();
+			
 			if (gamer.hasInvisArmor()) {
-
-				armor = gamer.getInvisArmor();
+				
+				armor = new ItemStack[4];
+				
+				ItemStack[] invis = gamer.getInvisArmor();
+				
+				for (int i = 0; i < invis.length; i++) {
+					
+					armor[i] = invis[i].clone();
+					
+				}
+				
 				gamer.removeInvisArmor();
-
-			} else {
-
-				armor = player.getInventory().getArmorContents();
-
+				
 			}
 
 			ItemStack[] contents = player.getInventory().getContents();
@@ -87,6 +104,7 @@ public class GameActions {
 			player.getInventory().clear();
 
 			player.getInventory().setArmorContents(armor);
+			
 
 			if (WedBars.arena.getTeam(gamer.getTeam()).hasUpgrade(TeamUpgrade.SWORDS))
 				player.getInventory().setItem(0, Utility.createEnchantedItemStack(Material.WOOD_SWORD, 1, ChatColor.YELLOW + "Wooden Sword",
@@ -264,6 +282,9 @@ public class GameActions {
 			}
 
 		}
+		
+		GamerDeathEvent gde = new GamerDeathEvent(gamer, bedExists, disconnect);
+		Bukkit.getPluginManager().callEvent(gde);
 
 	}
 

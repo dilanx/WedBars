@@ -49,7 +49,6 @@ public class Powerups implements Listener {
 	public static void createBridge(Egg egg) {
 		Team team = WedBars.arena.getGamer(((Player) egg.getShooter()).getName()).getTeam();
 		short stackColor = team.getStackColor();
-		//Player player = gamer.getPlayer();
 		World w = egg.getWorld();
 
 		new BukkitRunnable() {
@@ -76,21 +75,18 @@ public class Powerups implements Listener {
 				int x = previousLocation.getBlockX();
 				int y = previousLocation.getBlockY();
 				int z = previousLocation.getBlockZ();
+				int max = WedBars.arena.getBuildHeight();
 
-				for (int i = -1; i <= 1; i++) {
-					for (int j = -1; j <= 1; j++) {
+				for (int i = 0; i <= 1; i++) {
+					for (int j = 0; j <= 1; j++) {
 						
 						Location l = new Location(w, x + i, y, z + j);
 						Block b = l.getBlock();
 						
-						if (b.getType() == Material.AIR) {
+						if (b.getType() == Material.AIR && y <= max) {
 
 							b.setType(Material.WOOL);
 							b.setData((byte) stackColor);
-
-//							Wool w = (Wool) b.getState().getData();
-//							w.setColor(blockColor);
-//							b.getState().setData(w);
 							
 							WedBars.getListeners().getPlacedBlocks().add(l);
 
@@ -241,6 +237,7 @@ public class Powerups implements Listener {
 		}.runTaskTimer(WedBars.getInstance(), 0, 20L);
 	}
 
+	//TODO: 2 event handlers?
 	@EventHandler
 	public void onEntityDamageByEntity(EntityDamageByEntityEvent e) {
 
@@ -282,7 +279,7 @@ public class Powerups implements Listener {
 		}
 
 	}
-
+	
 	@EventHandler
 	public void onPlayerInteract(PlayerInteractEvent e) {
 
@@ -359,20 +356,25 @@ public class Powerups implements Listener {
 	public void onEntityExplode(EntityExplodeEvent e) {
 
 		if (e.getEntity() instanceof Fireball) {
+
 			e.setCancelled(true);
-			TNTPrimed t = (TNTPrimed) e.getLocation().getWorld().spawnEntity(e.getLocation(), EntityType.PRIMED_TNT);
-			t.setFuseTicks(0);
+			e.getEntity().getWorld().createExplosion(e.getEntity().getLocation(), 3);
 			return;
 		}
 
-		if (e.getEntity() instanceof TNTPrimed) {
+		//So the idea here is that we replace the fireball with an explosion and then return, that explosion
+		//would create another EntityExplodeEVent which will then behave like tnt below
+		// inatnceof Explosion
+		
+		// lmao actually jack it turns out an explosion isn't a separate entity in bukkit
+		
+		if (e.getEntity() == null || e.getEntity() instanceof TNTPrimed) {
 
 			e.setCancelled(true);
 
 			e.getLocation().getWorld().playEffect(e.getLocation(), Effect.EXPLOSION_LARGE, 1);
 
 			List<Block> blocks = e.blockList();
-			//TODO: fix behavior with glass and bed
 			for (Block b : blocks) {
 
 				List<Location> locs = WedBars.getListeners().getPlacedBlocks();

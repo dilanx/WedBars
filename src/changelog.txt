@@ -1,6 +1,6 @@
 
 
-1.0 beta 2
+
 - added traps
 - added heal pool functionality
 - generator is less jank
@@ -14,3 +14,26 @@
 - added bridge egg
 - added team chest (test this)
 - added stats (mysql)
+
+apr 23 21 (am)
+- game can start automatically now (pog)
+- cakes replaced with beds
+- fixed some issues (like wood swords disappear when purchasing other type of sword)
+- (jack) realized i forgot about changelogs
+- added info about the documentation page to the config
+- glass is now blast proof, though tnt can glitch through if placed right (will fix)
+- bridge eggs will not generate over build limit
+- build limit changed to be per-arena
+- restricted players to only open shops if at a team base (if using commands vs npcs)
+
+april 23 21 (pm)
+- fireball behavior changed. will now spawn an explosion (not primedtnt) so that we can
+control how it will explode. they still go fast though.
+- changed spawning of primed tnt from tnt placement to spawn in the same block that the
+tnt would be rather than other location idk
+
+may 1 21 (pm)
+- fixed invis armor disappearing on death
+- fireball behavior should work now
+- generator split
+- all gens start with 1 item

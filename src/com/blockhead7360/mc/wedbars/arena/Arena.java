@@ -24,6 +24,12 @@ import org.bukkit.scheduler.BukkitRunnable;
 
 import com.blockhead7360.mc.wedbars.Utility;
 import com.blockhead7360.mc.wedbars.WedBars;
+import com.blockhead7360.mc.wedbars.api.events.ArenaResetEndEvent;
+import com.blockhead7360.mc.wedbars.api.events.ArenaResetStartEvent;
+import com.blockhead7360.mc.wedbars.api.events.GameEndEvent;
+import com.blockhead7360.mc.wedbars.api.events.GameStartEvent;
+import com.blockhead7360.mc.wedbars.api.events.GamerRespawnEvent;
+import com.blockhead7360.mc.wedbars.api.events.TrapActivateEvent;
 import com.blockhead7360.mc.wedbars.game.GameScoreboard;
 import com.blockhead7360.mc.wedbars.game.Generator;
 import com.blockhead7360.mc.wedbars.player.Gamer;
@@ -50,8 +56,12 @@ public class Arena {
 	private Map<Team, ArenaTeam> teams;
 	private Map<String, Gamer> gamers;
 	private int initialDiamondSpeed, initialEmeraldSpeed;
+	private int buildHeight;
 	private Generator[] diamonds;
 	private Generator[] emeralds;
+
+	private ArenaData data;
+	private TeamAssignments ta;
 
 	public Arena(ArenaData data, TeamAssignments teamAssignments) {
 
@@ -60,6 +70,10 @@ public class Arena {
 		this.stage = 0;
 		this.initialDiamondSpeed = data.getDiamondSpeed();
 		this.initialEmeraldSpeed = data.getEmeraldSpeed();
+		this.buildHeight = data.getBuildHeight();
+
+		this.data = data;
+		this.ta = teamAssignments;
 
 		List<Location> dg = data.getDiamondGen();
 		int ds = data.getDiamondSpeed();
@@ -104,9 +118,9 @@ public class Arena {
 				g[i] = gamer;
 
 				// load stats
-				
+
 				GamerStats.updateGamerWithStats(gamer, false);
-				
+
 				gamers.put(players.get(i), gamer);
 
 			}
@@ -124,11 +138,26 @@ public class Arena {
 
 	}
 
+	public void stop() {
+
+		WedBars.running = false;
+		WedBars.arena = null;
+
+		for (Player player : Bukkit.getOnlinePlayers()) {
+
+			player.setGameMode(GameMode.SPECTATOR);
+			player.removePotionEffect(PotionEffectType.FAST_DIGGING);
+			player.getInventory().clear();
+
+		}
+
+	}
+
 	/* 10 PER SECOND */
 
-	public void start() {
+	public void start(boolean manual) {
 
-
+		WedBars.starting = false;
 		WedBars.running = true;
 		WedBars.arena = this;
 
@@ -162,7 +191,7 @@ public class Arena {
 
 
 
-		GameScoreboard.start(teams.values().toArray(new ArenaTeam[0]));
+		GameScoreboard.start(data.getName(), teams.values().toArray(new ArenaTeam[0]));
 		GameScoreboard.updateStatus(ChatColor.AQUA + "" + ChatColor.BOLD + "Diamond 2");
 		time = 3000;
 
@@ -170,11 +199,7 @@ public class Arena {
 
 		for (ArenaTeam at : teams.values()) {
 
-			for (Location l : at.getBedLoc()) {
-
-				l.getBlock().setType(Material.CAKE_BLOCK);
-
-			}
+			ArenaBed.placeBed(at.getBedLoc());
 
 		}
 
@@ -233,6 +258,12 @@ public class Arena {
 			h.appendTextLine(ChatColor.WHITE + "Spawning in " + ChatColor.RED + "{emerald" + i + "}");
 		}
 
+
+		// invoke event
+
+		GameStartEvent gse = new GameStartEvent(data, ta, manual);
+		Bukkit.getPluginManager().callEvent(gse);
+
 		// start game
 
 		new BukkitRunnable() {
@@ -245,7 +276,7 @@ public class Arena {
 					return;
 
 				}
-				
+
 				// Teams
 
 				for (ArenaTeam at : teams.values()) {
@@ -263,7 +294,11 @@ public class Arena {
 
 							if (p.getGameMode() != GameMode.SURVIVAL) continue;
 
-							if (getGamer(p.getName()).getTeam() == at.getTeam()) {
+							Gamer g = getGamer(p.getName());
+
+							if (g == null) continue;
+
+							if (g.getTeam() == at.getTeam()) {
 
 								if (healPool) {
 
@@ -275,17 +310,23 @@ public class Arena {
 
 								if (hasTrap && !p.hasPotionEffect(PotionEffectType.WATER_BREATHING)) {
 
-									for (Gamer gamer : at.getGamers()) {
+									TrapActivateEvent tae = new TrapActivateEvent(g, at, at.getTrap());
 
-										Player player = gamer.getPlayer();
-										Titles.trapTriggered(player);
-										player.playSound(player.getLocation(), Sound.WITHER_SPAWN, 1, 1);
+									if (!tae.isCancelled()) {
 
+										for (Gamer gamer : at.getGamers()) {
+
+											Player player = gamer.getPlayer();
+											Titles.trapTriggered(player);
+											player.playSound(player.getLocation(), Sound.WITHER_SPAWN, 1, 1);
+
+										}
+
+										at.getTrap().activate(p);
+										at.removeTrap();
+										hasTrap = false;
+										
 									}
-
-									at.getTrap().activate(p);
-									at.removeTrap();
-									hasTrap = false;
 
 								}
 
@@ -311,6 +352,9 @@ public class Arena {
 
 								Titles.death(player, -2);
 
+								GamerRespawnEvent gre = new GamerRespawnEvent(gamer);
+								Bukkit.getPluginManager().callEvent(gre);
+
 							} else {
 
 								int timeLeft = gamer.getRespawningTimeLeft();
@@ -323,16 +367,16 @@ public class Arena {
 							}
 
 						}
-						
+
 						if (gamer.hasInvisArmor() && gamer.getStatus() == Status.ALIVE) {
-							
+
 							if (!player.hasPotionEffect(PotionEffectType.INVISIBILITY)) {
-								
+
 								player.getInventory().setArmorContents(gamer.getInvisArmor());
 								gamer.removeInvisArmor();
-								
+
 							}
-							
+
 						}
 
 					}
@@ -341,22 +385,14 @@ public class Arena {
 
 					Generator i = at.getIronGenerator();
 
-					if (i.passTime()) {
-
-						world.dropItem(i.getLocation(), new ItemStack(Material.IRON_INGOT, 1));
-
-					}
+					if (i.passTime()) i.spawnItem(new ItemStack(Material.IRON_INGOT, 1));
 
 
 					// Gold gen
 
 					Generator g = at.getGoldGenerator();
 
-					if (g.passTime()) {
-
-						world.dropItem(g.getLocation(), new ItemStack(Material.GOLD_INGOT, 1));
-
-					}
+					if (g.passTime()) g.spawnItem(new ItemStack(Material.GOLD_INGOT, 1));
 
 
 					// Emerald gen if unlocked
@@ -365,11 +401,7 @@ public class Arena {
 
 					if (e != null) {
 
-						if (e.passTime()) {
-
-							world.dropItem(e.getLocation(), new ItemStack(Material.EMERALD, 1));
-
-						}
+						if (e.passTime()) e.spawnItem(new ItemStack(Material.EMERALD, 1));
 
 					}
 
@@ -400,7 +432,7 @@ public class Arena {
 
 						}
 
-						if (alreadyThere < WedBars.MAX_DIAMONDS_IN_GEN) world.dropItem(d.getLocation(), new ItemStack(Material.DIAMOND, 1));
+						if (alreadyThere < WedBars.MAX_DIAMONDS_IN_GEN) d.spawnItem(new ItemStack(Material.DIAMOND, 1));
 
 					}
 
@@ -431,7 +463,7 @@ public class Arena {
 
 						}
 
-						if (alreadyThere < WedBars.MAX_EMERALDS_IN_GEN) world.dropItem(e.getLocation(), new ItemStack(Material.EMERALD, 1));
+						if (alreadyThere < WedBars.MAX_EMERALDS_IN_GEN) e.spawnItem(new ItemStack(Material.EMERALD, 1));
 
 					}
 
@@ -581,14 +613,14 @@ public class Arena {
 						loc.getBlock().setType(Material.AIR);
 
 					}
-					
+
 					team.setBedExists(false);
 					GameScoreboard.updateTeam(team);
-					
+
 					for (Gamer g : team.getGamers()) {
-						
+
 						Titles.allBedsBroken(g.getPlayer());
-						
+
 					}
 
 				}
@@ -611,11 +643,11 @@ public class Arena {
 			GameScoreboard.updateStatus(ChatColor.RED + "" + ChatColor.BOLD + "game end");
 
 		}
-		
+
 		else if (stage == 5) {
-			
+
 			//TODO
-			
+
 		}
 
 	}
@@ -643,15 +675,23 @@ public class Arena {
 
 			WedBars.running = false;
 
+			ArenaTeam winner = null;
+
 			if (alive.size() == 0) {
 
 				// error
 				Bukkit.broadcastMessage("Error??");
-				return true;
+
+			} else {
+
+				winner = alive.get(0);
 
 			}
 
-			ArenaTeam winner = alive.get(0);
+			GameEndEvent gee = new GameEndEvent(data, ta, winner);
+			Bukkit.getPluginManager().callEvent(gee);
+
+			if (winner == null) return true;
 
 			for (ArenaTeam team : teams.values()) {
 
@@ -685,11 +725,11 @@ public class Arena {
 				}
 
 			}
-			
+
 			for (Gamer gamer : gamers.values()) {
-				
+
 				GamerStats.sendGamerData(gamer, false);
-				
+
 			}
 
 			GameScoreboard.updateStatus(ChatColor.GRAY + "map reset");
@@ -706,17 +746,18 @@ public class Arena {
 
 						cancel();
 
+						WedBars.arena = null;
+
 						for (Player player : Bukkit.getOnlinePlayers()) {
 
 							player.teleport(lobby);
 							player.setGameMode(GameMode.ADVENTURE);
 							player.removePotionEffect(PotionEffectType.FAST_DIGGING);
 							player.getInventory().clear();
-							WedBars.arena = null;
 
 						}
 
-						resetBlocks();
+						resetBlocks(true);
 
 					}
 
@@ -734,13 +775,17 @@ public class Arena {
 
 	}
 
-	public void resetBlocks() {
+	public static void resetBlocks(boolean auto) {
 
 		WedBars.resetting = true;
 
 		Bukkit.broadcastMessage(" ");
 		Bukkit.broadcastMessage(ChatColor.GRAY + "The map is resetting...");
 		Bukkit.broadcastMessage(" ");
+		
+		ArenaResetStartEvent arse = new ArenaResetStartEvent(WedBars.getListeners().getPlacedBlocks());
+		Bukkit.getPluginManager().callEvent(arse);
+		
 
 		new BukkitRunnable() {
 
@@ -755,6 +800,11 @@ public class Arena {
 					Bukkit.broadcastMessage(ChatColor.GRAY + "Map reset complete!");
 					Bukkit.broadcastMessage(" ");
 					WedBars.resetting = false;
+					
+					ArenaResetEndEvent aree = new ArenaResetEndEvent();
+					Bukkit.getPluginManager().callEvent(aree);
+					
+					if (auto) anotherGame();
 					return;
 
 				}
@@ -764,6 +814,13 @@ public class Arena {
 			}
 
 		}.runTaskTimer(WedBars.getInstance(), 0, 1L);
+
+	}
+
+	public static void anotherGame() {
+
+		WedBars.teamAssignments.clear();
+		ArenaAutoStart.begin(WedBars.loadedArena, true);
 
 	}
 
@@ -795,12 +852,6 @@ public class Arena {
 
 					if (at.getTeam() == gamer.getTeam()) return null;
 
-					for (Location lx : at.getBedLoc()) {
-
-						lx.getBlock().setType(Material.AIR);
-
-					}
-
 					return at;
 
 				}
@@ -811,6 +862,10 @@ public class Arena {
 
 		return null;
 
+	}
+
+	public int getBuildHeight() {
+		return buildHeight;
 	}
 
 

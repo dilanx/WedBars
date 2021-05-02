@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.GameMode;
 import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.enchantments.Enchantment;
@@ -21,6 +22,9 @@ import org.bukkit.potion.PotionEffectType;
 import com.blockhead7360.mc.wedbars.Utility;
 import com.blockhead7360.mc.wedbars.Utility.EnchantmentSet;
 import com.blockhead7360.mc.wedbars.WedBars;
+import com.blockhead7360.mc.wedbars.api.events.GamerPurchaseItemEvent;
+import com.blockhead7360.mc.wedbars.api.events.GamerPurchaseTeamUpgradeEvent;
+import com.blockhead7360.mc.wedbars.api.events.GamerPurchaseTrapEvent;
 import com.blockhead7360.mc.wedbars.player.Gamer;
 import com.blockhead7360.mc.wedbars.team.ArenaTeam;
 import com.blockhead7360.mc.wedbars.team.TeamUpgrade;
@@ -75,7 +79,13 @@ public class Shop implements Listener {
 
 	public static void openTeamUpgrades(Player player) {
 
-		if (WedBars.arena == null) return;
+		if (WedBars.arena == null) {
+			
+			player.sendMessage(ChatColor.RED + "The game needs to be running to use this.");
+			return;
+		}
+		
+		if (player.getGameMode() == GameMode.SPECTATOR) return;
 
 		Inventory inv = Bukkit.createInventory(null, 54, ChatColor.BOLD + "Team Upgrades");
 
@@ -207,6 +217,8 @@ public class Shop implements Listener {
 	}
 
 	public static void openItemShop(Player player) {
+		
+		if (player.getGameMode() == GameMode.SPECTATOR) return;
 
 		Inventory inv = Bukkit.createInventory(null, 54, ChatColor.BOLD + "Item Store");
 
@@ -352,7 +364,9 @@ public class Shop implements Listener {
 							ChatColor.GRAY + "Price: " + ChatColor.GOLD + "7 gold"),
 					Utility.createIconItemStack(Material.DIAMOND_SWORD, 1, ChatColor.YELLOW + "Diamond Sword", "",
 							ChatColor.GRAY + "Price: " + ChatColor.GREEN + "4 emerald"),
-					Utility.createIconItemStack(Material.STICK, 1, ChatColor.GRAY + "Knockback Stick coming soon")
+					Utility.createEnchantedItemStack(Material.STICK, 1, ChatColor.YELLOW + "Knockback Stick",
+							new EnchantmentSet[] {new EnchantmentSet(Enchantment.KNOCKBACK, 1)}, "",
+							ChatColor.GRAY + "Price: " + ChatColor.GOLD + "5 gold")
 
 			};
 
@@ -783,6 +797,9 @@ public class Shop implements Listener {
 
 		player.getInventory().removeItem(new ItemStack(type, cost));
 		player.updateInventory();
+		
+		GamerPurchaseTrapEvent gpte = new GamerPurchaseTrapEvent(gamer, purch, type, cost);
+		Bukkit.getPluginManager().callEvent(gpte);
 
 		return true;
 
@@ -900,7 +917,7 @@ public class Shop implements Listener {
 			team.getIronGenerator().setSpeed((int) ironcalc3);
 			double goldcalc3 = (double) team.getInitialIronSpeed() / WedBars.FORGE4;
 			team.getGoldGenerator().setSpeed((int) goldcalc3);
-			double emeraldcalc3 = (double) team.getInitialEmeraldSpeed() / WedBars.FORGE4;
+			double emeraldcalc3 = (double) team.getInitialEmeraldSpeed() / WedBars.FORGE2;
 			team.getEmeraldGenerator().setSpeed((int) emeraldcalc3);
 			break;
 
@@ -914,6 +931,9 @@ public class Shop implements Listener {
 
 		player.getInventory().removeItem(new ItemStack(type, cost));
 		player.updateInventory();
+		
+		GamerPurchaseTeamUpgradeEvent gptue = new GamerPurchaseTeamUpgradeEvent(gamer, upgrade, type, cost);
+		Bukkit.getPluginManager().callEvent(gptue);
 
 		return true;
 
@@ -939,12 +959,18 @@ public class Shop implements Listener {
 
 		ItemStack stack = item.clone();
 
-		boolean addItem = true;
+		boolean isNotArmor = true;
 
 		if (stack.getType() == Material.WOOL && WedBars.arena != null) {
 
 			stack = new ItemStack(Material.WOOL, stack.getAmount(), WedBars.arena.getGamer(player.getName()).getTeam().getStackColor());
 
+		}
+		
+		else if (stack.getType() == Material.GLASS && WedBars.arena != null) {
+			
+			stack = new ItemStack(Material.STAINED_GLASS, stack.getAmount(), WedBars.arena.getGamer(player.getName()).getTeam().getStackColor());
+			
 		}
 
 		else if (stack.getType() == Material.CHAINMAIL_BOOTS) {
@@ -979,7 +1005,7 @@ public class Shop implements Listener {
 
 			player.getInventory().setLeggings(leggings);
 			player.getInventory().setBoots(boots);
-			addItem = false;
+			isNotArmor = false;
 
 		}
 
@@ -1017,7 +1043,7 @@ public class Shop implements Listener {
 
 			player.getInventory().setLeggings(leggings);
 			player.getInventory().setBoots(boots);
-			addItem = false;
+			isNotArmor = false;
 
 		}
 
@@ -1053,7 +1079,7 @@ public class Shop implements Listener {
 
 			player.getInventory().setLeggings(leggings);
 			player.getInventory().setBoots(boots);
-			addItem = false;
+			isNotArmor = false;
 
 		}
 
@@ -1095,6 +1121,8 @@ public class Shop implements Listener {
 					}
 
 				}
+				
+				player.getInventory().remove(Material.WOOD_SWORD);
 
 			}
 
@@ -1102,10 +1130,16 @@ public class Shop implements Listener {
 			stack.setItemMeta(meta);
 
 		}
-
-		if (addItem) player.getInventory().addItem(stack);
+		
+		if (isNotArmor) player.getInventory().addItem(stack);
 		player.getInventory().removeItem(new ItemStack(type, cost));
 		player.updateInventory();
+		
+		Gamer gamer = null;
+		if (WedBars.arena != null) gamer = WedBars.arena.getGamer(player.getName());
+		
+		GamerPurchaseItemEvent gpie = new GamerPurchaseItemEvent(player, gamer, stack, type, cost);
+		Bukkit.getPluginManager().callEvent(gpie);
 
 		return true;
 

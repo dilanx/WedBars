@@ -182,6 +182,7 @@ public class SetupWizard implements Listener {
 				player.sendMessage(ChatColor.WHITE + "ironspeed <speed>" + ChatColor.GRAY + " - set the initial iron generator speed (seconds * 10)");
 				player.sendMessage(ChatColor.WHITE + "goldspeed <speed>" + ChatColor.GRAY + " - set the initial gold generator speed (seconds * 10)");
 				player.sendMessage(ChatColor.WHITE + "personalemeraldspeed <speed>" + ChatColor.GRAY + " - set the island emerald generator speed (seconds * 10)");
+				player.sendMessage(ChatColor.WHITE + "buildheight <height>" + ChatColor.GRAY + " - the highest y level at which players can build");
 				player.sendMessage(ChatColor.WHITE + "save" + ChatColor.GRAY + " - save the arena data");
 				player.sendMessage(ChatColor.WHITE + "cancel" + ChatColor.GRAY + " - cancel this");
 				player.sendMessage(ChatColor.WHITE + "help | ?" + ChatColor.GRAY + " - show this message");
@@ -216,6 +217,10 @@ public class SetupWizard implements Listener {
 				if (setup.getPersonalEmeraldSpeed() == 0) {
 					okay = false;
 				}
+				
+				if (setup.getBuildHeight() == 0) {
+					okay = false;
+				}
 
 				if (!okay) {
 
@@ -226,7 +231,7 @@ public class SetupWizard implements Listener {
 				
 				String name = setup.getName();
 
-				ArenaLoader.saveArena(WedBars.getInstance(), name, setup);
+				ArenaLoader.saveArena(WedBars.getInstance(), name, setup, player.getName());
 				
 				settingUp = null;
 				setup = null;
@@ -394,6 +399,24 @@ public class SetupWizard implements Listener {
 				return;
 
 			}
+			
+			if (msg.startsWith("buildheight")) {
+				
+				int number = getNumberArgument(msg);
+
+				if (number == -1) {
+
+					player.sendMessage(ChatColor.RED + "Fail!" + ChatColor.WHITE + " Make sure you provide an integer greater than 0.");
+					return;
+
+				}
+
+				setup.setBuildHeight(number);
+				player.sendMessage(ChatColor.GREEN + "Success!" + ChatColor.WHITE + " The arena build height has been set to " + number + ".");
+				return;
+				
+			}
+
 
 			if (msg.equalsIgnoreCase("checklist") || msg.equalsIgnoreCase("cl")) {
 
@@ -441,8 +464,15 @@ public class SetupWizard implements Listener {
 				} else {
 					pes = ChatColor.GREEN + "Island emerald speed set" + ChatColor.GRAY;
 				}
+				
+				String bh = null;
+				if (setup.getBuildHeight() == 0) {
+					bh = ChatColor.GRAY + "Build height not set";
+				} else {
+					bh = ChatColor.GREEN + "Build height set" + ChatColor.GRAY;
+				}
 
-				player.sendMessage(ChatColor.WHITE + "Arena Setup: " + lobby + ", " + ds + ", " + es + ", " + is + ", " + gs + ", " + pes);
+				player.sendMessage(ChatColor.WHITE + "Arena Setup: " + lobby + ", " + ds + ", " + es + ", " + is + ", " + gs + ", " + pes + ", " + bh);
 
 				player.sendMessage(ChatColor.WHITE + "Generator Setup: "
 						+ ChatColor.AQUA + setup.getDiamondGen().size() + " diamond gen" + ChatColor.GRAY + ", "
@@ -475,7 +505,6 @@ public class SetupWizard implements Listener {
 
 			player.sendMessage(ChatColor.RED + "Unknown command." + ChatColor.WHITE + " Type 'help' for help.");
 			return;
-
 
 		}
 

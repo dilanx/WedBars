@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
+import java.util.logging.Logger;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -14,6 +15,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import com.blockhead7360.mc.wedbars.arena.Arena;
+import com.blockhead7360.mc.wedbars.arena.ArenaAutoStart;
 import com.blockhead7360.mc.wedbars.arena.ArenaData;
 import com.blockhead7360.mc.wedbars.arena.ArenaLoader;
 import com.blockhead7360.mc.wedbars.arena.SetupWizard;
@@ -32,9 +34,10 @@ public class WedBars extends JavaPlugin {
 
 	// gamerTicks = 10 per second
 
-
+	
 	public static boolean running = false;
 	public static boolean resetting = false;
+	public static boolean starting = false;
 	public static Arena arena = null;
 
 	public static ArenaData loadedArena = null;
@@ -53,14 +56,13 @@ public class WedBars extends JavaPlugin {
 	// forge 3 is emeralds
 	public static final double FORGE4 = 4;
 
-
 	// gen scales
 	// n times the initial speed as set by the arena
 
 	public static final int GEN_DIAMOND2 = 2;
 	public static final int GEN_DIAMOND3 = 4;
 	public static final int GEN_EMERALD2 = 2;
-	public static final int GEN_EMERALD3 = 4;
+	//public static final int GEN_EMERALD3 = 4;
 
 	public static final int SPAWN_PROTECTION_DISTANCE_SQUARED = 25;
 	public static final int TRAP_DISTANCE = 7;
@@ -74,14 +76,14 @@ public class WedBars extends JavaPlugin {
 	public static int BUG_ATTACK_DISTANCE = 4;
 
 
-
+	// seconds
+	public static int LOBBY_START = 10;
 
 	// these are gamerTicks though
 	public static int MAX_DIAMONDS_IN_GEN, MAX_EMERALDS_IN_GEN;
-	public static int MAX_BUILD_HEIGHT, TNT_FUSE, RESPAWN_TIME, VOID_LEVEL;
+	public static int TNT_FUSE, RESPAWN_TIME, VOID_LEVEL;
 
-	//TODO i didn't put this in config
-	public static int BRIDGE_EGG_TIME = 30;
+	public static int BRIDGE_EGG_TIME;
 
 
 	private static WedBars instance;
@@ -89,7 +91,15 @@ public class WedBars extends JavaPlugin {
 	private static Listeners listeners;
 
 	public void onEnable() {
-
+		
+		Logger l = getLogger();
+		
+		l.info(" ");
+		l.info("Wed Bars version " + getDescription().getVersion());
+		l.info("created by Dilan and Jack because why not");
+		l.info(" ");
+		
+		l.info("Registering event listeners...");
 		listeners = new Listeners();
 		getServer().getPluginManager().registerEvents(listeners, this);
 		getServer().getPluginManager().registerEvents(new Powerups(), this);
@@ -97,14 +107,18 @@ public class WedBars extends JavaPlugin {
 		getServer().getPluginManager().registerEvents(new SetupWizard(), this);
 		getServer().getPluginManager().registerEvents(new ConnectionListener(), this);
 		getServer().getPluginManager().registerEvents(new GameChat(), this);
-
+		getServer().getPluginManager().registerEvents(new ArenaAutoStart(), this);
+		
+		l.info("Initializing item shop...");
 		Shop.init();
 
+		
 		instance = this;
 
+		l.info("Loading configuration...");
+		
 		saveDefaultConfig();
 
-		MAX_BUILD_HEIGHT = getConfig().getInt("maxBuildHeight");
 		TNT_FUSE = getConfig().getInt("tntFuse");
 		TIME_BETWEEN_END_AND_RESET = getConfig().getInt("timeBeforeReset");
 		MAX_DIAMONDS_IN_GEN = getConfig().getInt("maxDiamondsInGen");
@@ -117,13 +131,24 @@ public class WedBars extends JavaPlugin {
 		BUG_LIFE = getConfig().getInt("bugLife");
 		GOLEM_HEALTH = getConfig().getInt("golemHealth");
 		BUG_HEALTH = getConfig().getInt("bugHealth");
+		BRIDGE_EGG_TIME = getConfig().getInt("eggTime");
 
+		
+		boolean sql = getConfig().getBoolean("mysql.enabled");
+		
+		if (sql)
+			l.info("Connecting to MySQL server...");
+		
 		GamerStats.init(
-				getConfig().getBoolean("mysql.enabled"),
+				sql,
 				getConfig().getString("mysql.host"),
 				getConfig().getString("mysql.database"),
 				getConfig().getString("mysql.user"),
 				getConfig().getString("mysql.pass"));
+		
+		l.info(" ");
+		l.info("Loading complete (poggers)!");
+		l.info(" ");
 
 	}
 
@@ -148,11 +173,13 @@ public class WedBars extends JavaPlugin {
 
 			sender.sendMessage(" ");
 			sender.sendMessage(ChatColor.GRAY + "---[ " + ChatColor.GREEN + "Wed Bars Command Help" + ChatColor.GRAY + " ]---");
+			sender.sendMessage(ChatColor.WHITE + "/team" + ChatColor.GRAY + " - Select a team or assign teams manually.");
 			sender.sendMessage(ChatColor.RED + "/setup" + ChatColor.GRAY + " - Setup a new arena.");
 			sender.sendMessage(ChatColor.RED + "/load" + ChatColor.GRAY + " - Load an arena.");
-			sender.sendMessage(ChatColor.RED + "/team" + ChatColor.GRAY + " - Assign teams manually.");
 			sender.sendMessage(ChatColor.RED + "/autoteam" + ChatColor.GRAY + " - Automatically randomly assign teams.");
 			sender.sendMessage(ChatColor.RED + "/start" + ChatColor.GRAY + " - Start the game.");
+			sender.sendMessage(ChatColor.RED + "/end" + ChatColor.GRAY + " - Force stop the game.");
+			sender.sendMessage(ChatColor.RED + "/reset" + ChatColor.GRAY + "- Reset all blocks placed.");
 			sender.sendMessage(" ");
 			return true;
 
@@ -188,16 +215,79 @@ public class WedBars extends JavaPlugin {
 
 			}
 
-			Arena arena = new Arena(loadedArena, teamAssignments);
 
-			if (arena.getTeams().size() < 2) {
+			if (teamAssignments.getTeamAssignments().size() < 2) {
 
 				sender.sendMessage("You must have two or more teams in order to start a game.");
 				return true;
 
 			}
+			
+			Arena arena = new Arena(loadedArena, teamAssignments);
 
-			arena.start();
+			Bukkit.broadcastMessage(ChatColor.WHITE + sender.getName() + ChatColor.GRAY + " started the game.");
+
+			arena.start(true);
+
+			return true;
+
+		}
+
+		if (cmd.getName().equalsIgnoreCase("end")) {
+
+			if (!sender.hasPermission("wedbars.admin")) {
+
+				sender.sendMessage("You do not have permission to use this command.");
+				return true;
+
+			}
+
+			if (starting) {
+
+				Bukkit.broadcastMessage(ChatColor.WHITE + sender.getName() + ChatColor.GRAY + " canceled game start.");
+				starting = false;
+				return true;
+
+			}
+
+			if (!running) {
+
+				sender.sendMessage("The game isn't running.");
+				return true;
+
+			}
+
+			Bukkit.broadcastMessage(ChatColor.WHITE + sender.getName() + ChatColor.GRAY + " stopped the game.");
+
+			arena.stop();
+
+			return true;
+
+		}
+
+		if (cmd.getName().equalsIgnoreCase("reset")) {
+
+			if (!sender.hasPermission("wedbars.admin")) {
+
+				sender.sendMessage("You do not have permission to use this command.");
+				return true;
+
+			}
+
+			if (resetting) {
+
+				sender.sendMessage("The arena is already resetting.");
+				return true;
+
+			}
+			
+			if (WedBars.arena == null) {
+				
+			}
+
+			Bukkit.broadcastMessage(ChatColor.WHITE + sender.getName() + ChatColor.GRAY + " manually initiated an arena reset.");
+
+			Arena.resetBlocks(false);
 
 			return true;
 
@@ -212,6 +302,14 @@ public class WedBars extends JavaPlugin {
 
 			}
 
+			if (starting) {
+
+				sender.sendMessage("You can't load another arena when the game is already about to start.");
+				sender.sendMessage("Use '/end' to cancel game start.");
+				return true;
+
+			}
+
 			if (args.length == 0) {
 
 				sender.sendMessage("Use '/load <arena>' to load a Wed Bars arena (unloading any previously loaded one).");
@@ -222,7 +320,7 @@ public class WedBars extends JavaPlugin {
 
 			}
 
-			ArenaData data = ArenaLoader.loadArena(this, args[0]);
+			ArenaData data = ArenaLoader.loadArena(this, args[0], sender.getName());
 
 			if (data == null) {
 
@@ -235,6 +333,12 @@ public class WedBars extends JavaPlugin {
 			teamAssignments.clear();
 
 			sender.sendMessage("Successfully loaded the arena data for " + args[0] + " (any team assignments were reset).");
+			
+			for (Player p : Bukkit.getOnlinePlayers()) {
+				p.closeInventory();
+			}
+			
+			ArenaAutoStart.begin(data, true);
 
 			return true;
 
@@ -245,6 +349,14 @@ public class WedBars extends JavaPlugin {
 			if (!sender.hasPermission("wedbars.admin")) {
 
 				sender.sendMessage("You do not have permission to use this command.");
+				return true;
+
+			}
+
+			if (starting) {
+
+				sender.sendMessage("You can't assign teams when the game is already about to start.");
+				sender.sendMessage("Use '/end' to cancel game start.");
 				return true;
 
 			}
@@ -324,9 +436,38 @@ public class WedBars extends JavaPlugin {
 
 		if (cmd.getName().equalsIgnoreCase("team")) {
 
-			if (!sender.hasPermission("wedbars.admin")) {
+			if (args.length == 0 || !sender.hasPermission("wedbars.admin")) {
 
-				sender.sendMessage("You can't assign yourself a team yet, sorry! An admin will do it for you.");
+				if (loadedArena == null) {
+
+					sender.sendMessage("There is no arena loaded on this server.");
+					return true;
+
+				}
+
+				if (starting || running || resetting) {
+
+					sender.sendMessage("You can't change teams now!");
+					return true;
+
+				}
+
+				if (!(sender instanceof Player)) {
+
+					sender.sendMessage("You must be a player to select your own team. Use '/team help' for possible console commands.");
+					return true;
+
+				}
+
+				ArenaAutoStart.selectTeam((Player) sender);
+				return true;
+
+			}
+
+			if (starting) {
+
+				sender.sendMessage("You can't assign teams when the game is already about to start.");
+				sender.sendMessage("Use '/end' to cancel game start.");
 				return true;
 
 			}
@@ -338,7 +479,7 @@ public class WedBars extends JavaPlugin {
 
 			}
 
-			if (args.length == 0) {
+			if (args[0].equalsIgnoreCase("help")) {
 
 				sender.sendMessage("/team <team> <player>");
 				sender.sendMessage("/team show");
@@ -346,7 +487,7 @@ public class WedBars extends JavaPlugin {
 
 			}
 
-			if (args[0].equalsIgnoreCase("show")) {
+			else if (args[0].equalsIgnoreCase("show")) {
 
 				Bukkit.broadcastMessage(" ");
 				Bukkit.broadcastMessage(ChatColor.WHITE + "" + ChatColor.BOLD + "Team assignments for the next game");
@@ -417,9 +558,7 @@ public class WedBars extends JavaPlugin {
 			}
 
 			teamAssignments.assign(player, team);
-
-			Bukkit.broadcastMessage(team.getChatColor() + player.getName() + ChatColor.GRAY + " is now a member of the "
-					+ team.getChatColor() + ChatColor.BOLD + team.getLabel() + ChatColor.GRAY + " team.");
+			ArenaAutoStart.updateTeams();
 
 			return true;
 
@@ -459,7 +598,7 @@ public class WedBars extends JavaPlugin {
 
 			SetupWizard.settingUp = (Player) sender;
 
-			ArenaData data = ArenaLoader.loadArena(this, args[0]);
+			ArenaData data = ArenaLoader.loadArena(this, args[0], sender.getName());
 
 			if (data == null) {
 
@@ -532,56 +671,6 @@ public class WedBars extends JavaPlugin {
 						return true;
 
 					}
-
-					// TEMPORARY
-
-					//					World world = getServer().getWorld("world");
-					//
-					//					Generator[] emeralds = {
-					//							new Generator(new Location(world, 12.5, 78, -11.5), EMERALD1_SPEED),
-					//							new Generator(new Location(world, -11.5, 78, -11.5), EMERALD1_SPEED),
-					//							new Generator(new Location(world, -11.5, 78, 12.5), EMERALD1_SPEED),
-					//							new Generator(new Location(world, 12.5, 78, 12.5), EMERALD1_SPEED)
-					//
-					//					};
-					//
-					//					Generator[] diamonds = {
-					//							new Generator(new Location(world, 0.5, 64, 52.5), DIAMOND1_SPEED),
-					//							new Generator(new Location(world, 52.5, 64, 0.5), DIAMOND1_SPEED),
-					//							new Generator(new Location(world, 0.5, 64, -51.5), DIAMOND1_SPEED),
-					//							new Generator(new Location(world, -51.5, 64, 0.5), DIAMOND1_SPEED)
-					//					};
-					//
-					//					ArenaTeam gray = new ArenaTeam(Team.GRAY,
-					//							new Location(world, -72, 66, -33),
-					//							new Location(world, -77, 66, -32),
-					//							1, 1,
-					//							new Location[]{new Location(world, -65, 66, -33), new Location(world, -64, 66, -33)},
-					//							new Gamer[]{new Gamer(getServer().getPlayer("shark_pog"), Team.GRAY)});
-					//
-					//					ArenaTeam green = new ArenaTeam(Team.GREEN,
-					//							new Location(world, 72, 66, -33),
-					//							new Location(world, 77, 66, -34),
-					//							1, 1,
-					//							new Location[]{new Location(world, 65, 66, -33), new Location(world, 64, 66, -33)},
-					//							new Gamer[]{new Gamer(getServer().getPlayer("ComputerCart"), Team.GREEN)});
-					//
-					//					ArenaTeam yellow = new ArenaTeam(Team.YELLOW,
-					//							new Location(world, 72, 66, 33),
-					//							new Location(world, 77, 66, 32),
-					//							1, 1,
-					//							new Location[]{new Location(world, 65, 66, 33), new Location(world, 64, 66, 33)},
-					//							new Gamer[]{new Gamer(getServer().getPlayer("Faience"), Team.YELLOW)});
-					//
-					//					ArenaTeam white = new ArenaTeam(Team.WHITE,
-					//							new Location(world, -33, 66, 72),
-					//							new Location(world, -32, 66, 77),
-					//							1, 1,
-					//							new Location[]{new Location(world, -33, 66, 65), new Location(world, -33, 66, 64)},
-					//							new Gamer[]{new Gamer(getServer().getPlayer("aromazx"), Team.WHITE)});
-					//
-					//					Arena arena = new Arena(new ArenaTeam[] {gray, green, yellow, white}, diamonds, emeralds);
-					//					arena.start();
 
 				}
 

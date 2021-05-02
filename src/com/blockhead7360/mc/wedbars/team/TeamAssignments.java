@@ -5,7 +5,11 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
+
+import com.blockhead7360.mc.wedbars.api.events.PlayerChangeTeamEvent;
 
 public class TeamAssignments {
 
@@ -63,6 +67,11 @@ public class TeamAssignments {
 
 	public void assign(Player player, Team team) {
 
+		PlayerChangeTeamEvent pcte = new PlayerChangeTeamEvent(player, team, this);
+		Bukkit.getPluginManager().callEvent(pcte);
+		
+		if (pcte.isCancelled()) return;
+		
 		unassign(player);
 
 		if (!ta.containsKey(team)) {
@@ -78,6 +87,9 @@ public class TeamAssignments {
 		}
 		
 		player.setPlayerListName(team.getChatColor() + player.getName());
+		
+		Bukkit.broadcastMessage(team.getChatColor() + player.getName() + ChatColor.GRAY + " is now a member of the "
+				+ team.getChatColor() + ChatColor.BOLD + team.getLabel() + ChatColor.GRAY + " team.");
 
 	}
 
