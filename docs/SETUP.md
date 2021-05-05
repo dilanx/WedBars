@@ -1,4 +1,4 @@
-# WedBars Documentation
+# WedBars Setup Documentation
 
 Okay so you already know Wed Bars is the coolest game to exist ever. Here's how you set it up.
 
@@ -29,26 +29,27 @@ Okay, let's set up an arena.
 3. Repeat step 2 but with `emeraldgen` for your emerald generators. Once again, you can use `cleargens` to remove all diamond and emerald generators.
 4. Set the initial diamond generator spawn interval with `diamondspeed <speed>`, where the speed is the amount of seconds between diamond spawns times 10 (for example, if you want a diamond to spawn once every 30 seconds, you'd type 'diamondspeed 300').
 5. Repeat step 4 but with `emeraldspeed <speed>` for the initial emerald generator spawn interval.
+6. Now, set the maximum build height with `buildheight <y-level>`.
 
 Now, let's set up some team values.
 
-6. Set the initial iron generator spawn interval for team islands with `ironspeed <speed>` (speed is still the amount of seconds between spawns times 10).
-7. Repeat step 6 but with `goldspeed <speed>` for the initial gold generator spawn interval.
-8. Repeat step 7 but with `personalemeraldspeed <speed>` for the initial team island emerald generator spawn interval (for when the emerald forge team upgrade is unlocked).
+7. Set the initial iron generator spawn interval for team islands with `ironspeed <speed>` (speed is still the amount of seconds between spawns times 10).
+8. Repeat step 6 but with `goldspeed <speed>` for the initial gold generator spawn interval.
+9. Repeat step 7 but with `personalemeraldspeed <speed>` for the initial team island emerald generator spawn interval (for when the emerald forge team upgrade is unlocked).
 
 Okay, now we'll set up the team islands themselves.
 
-9. Type `team <teamColor>` (teamColor is the color of the team you're setting up lmao - check [here](https://github.com/dilanx/WedBars/blob/main/src/com/blockhead7360/mc/wedbars/team/Team.java) for possible team colors) to enter the team island setup wizard. Now, you can use `help`/`?` and `checklist`/`cl` and they'll display information specifically for the team setup. You can also type `cancel` to go back.
-10. Stand in the exact position and face the exact direction you want players to be teleported to when they spawn at their island and type `spawn`.
-11. Stand in the exact position where you want the island generator to be and type `generator` or `gen`.
-12. Look at one of the halves of the island's bed (make sure your crosshair highlights it) and type `bed0`.
-13. Look at the other half and type `bed1`.
-14. Type `done` to save the team data. Now, type `checklist` and you'll see that the team is listed as set up.
-15. Repeat steps 9-14 for every team you want in the arena. You'll need at least two.
+10. Type `team <teamColor>` (teamColor is the color of the team you're setting up lmao - check [here](https://github.com/dilanx/WedBars/blob/main/src/com/blockhead7360/mc/wedbars/team/Team.java) for possible team colors) to enter the team island setup wizard. Now, you can use `help`/`?` and `checklist`/`cl` and they'll display information specifically for the team setup. You can also type `cancel` to go back.
+11. Stand in the exact position and face the exact direction you want players to be teleported to when they spawn at their island and type `spawn`.
+12. Stand in the exact position where you want the island generator to be and type `generator` or `gen`.
+13. Look at one of the halves of the island's bed (make sure your crosshair highlights it) and type `bed0`.
+14. Look at the other half and type `bed1`.
+15. Type `done` to save the team data. Now, type `checklist` and you'll see that the team is listed as set up.
+16. Repeat steps 9-14 for every team you want in the arena. You'll need at least two.
 
 Almost done!
 
-16. Type `save` to save the arena. You'll exit the setup wizard automatically. All done! If you ever need to modify anything, you can run `/setup <name>` with the same arena name and it'll take you back into the wizard but with everything set already.
+17. Type `save` to save the arena. You'll exit the setup wizard automatically. All done! If you ever need to modify anything, you can run `/setup <name>` with the same arena name and it'll take you back into the wizard but with everything set already.
 
 ## Setting up NPCs
 If you want to use NPCs for item and team upgrade shops, you can use Citizens. Here's how you do it.
