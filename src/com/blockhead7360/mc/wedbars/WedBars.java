@@ -43,7 +43,6 @@ public class WedBars extends JavaPlugin {
 	public static ArenaData loadedArena = null;
 	public static TeamAssignments teamAssignments = new TeamAssignments();
 
-
 	// speeds (interval between spawns in 10*seconds)
 
 
