@@ -321,7 +321,8 @@ public class Arena {
 											player.playSound(player.getLocation(), Sound.WITHER_SPAWN, 1, 1);
 
 										}
-
+										
+										p.sendMessage(ChatColor.RED + "You activated a trap!");
 										at.getTrap().activate(p);
 										at.removeTrap();
 										hasTrap = false;

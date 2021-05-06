@@ -617,66 +617,6 @@ public class WedBars extends JavaPlugin {
 
 		}
 
-		if (cmd.getName().equalsIgnoreCase("test")) {
-
-			if (!sender.hasPermission("wedbars.admin")) {
-
-				sender.sendMessage("You do not have permission to use this command.");
-				return true;
-
-			}
-
-			if (args.length > 0) {
-
-				if (args[0].equalsIgnoreCase("fb")) {
-
-					Powerups.launchFireball((Player) sender);
-					return true;
-
-				}
-
-				if (args[0].equalsIgnoreCase("shop")) {
-
-					Shop.openItemShop((Player) sender);
-					return true;
-
-				}
-
-				if (args[0].equalsIgnoreCase("golem")) {
-
-					if (!running) {
-						sender.sendMessage("No");
-						return true;
-					}
-
-					Powerups.spawnGolem(arena.getGamer(sender.getName()));
-					return true;
-
-				}
-
-				if (args[0].equalsIgnoreCase("hg")) {
-
-					Hologram h = HologramsAPI.createHologram(this, new Location(getServer().getWorld("world"), 63, 68, -36));
-					h.appendTextLine("test");
-
-
-				}
-
-				if (args[0].equalsIgnoreCase("start")) {
-
-					if (resetting || running) {
-
-						sender.sendMessage("Already running or resetting");
-						return true;
-
-					}
-
-				}
-
-			}
-
-		}
-
 		if (cmd.getName().equalsIgnoreCase("itemshop")) {
 
 			if (!sender.hasPermission("wedbars.itemshop")) {
