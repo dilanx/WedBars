@@ -81,6 +81,9 @@ Run `/autoteam <teamOption1> <teamOption2> [<teamOption3>...]` *(wedbars.admin)*
 ## Start the game manually
 Run `/start` *(wedbars.admin)* to start the game.
 
+## End the game manually
+Run `/end` *(wedbars.admin)* to end the game or cancel the auto start countdown.
+
 ## Player Statistics
 If you checked out the config, you'll notice there's a 'mysql' section. This is for Wed Bars's [MySQL](https://www.mysql.com/)-enabled player statistics system (disabled by default). By changing the `mysql > enabled` value to `true` in the config and filling out the other fields with your database information, you'll be able to have player stats save. You'll need a new table in your database called `wb_stats` with a `uuid` column and a column for all the statistics shown [here](https://github.com/dilanx/WedBars/blob/main/src/com/blockhead7360/mc/wedbars/player/Statistic.java) (the columns will need to have the exact same names as the ones shown there except in lower case).
 
