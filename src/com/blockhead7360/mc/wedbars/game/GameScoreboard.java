@@ -51,6 +51,12 @@ public class GameScoreboard {
 		
 	}
 	
+	public static void end() {
+		
+		obj.unregister();
+		
+	}
+	
 	public static void start(String arenaName, ArenaTeam[] teams) {
 		
 		sb = Bukkit.getScoreboardManager().getNewScoreboard();

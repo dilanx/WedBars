@@ -5,6 +5,7 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Random;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -386,14 +387,14 @@ public class Arena {
 
 					Generator i = at.getIronGenerator();
 
-					if (i.passTime()) i.spawnItem(new ItemStack(Material.IRON_INGOT, 1));
+					if (i.passTime()) i.spawnItem(new ItemStack(Material.IRON_INGOT, 1), false);
 
 
 					// Gold gen
 
 					Generator g = at.getGoldGenerator();
 
-					if (g.passTime()) g.spawnItem(new ItemStack(Material.GOLD_INGOT, 1));
+					if (g.passTime()) g.spawnItem(new ItemStack(Material.GOLD_INGOT, 1), false);
 
 
 					// Emerald gen if unlocked
@@ -402,7 +403,7 @@ public class Arena {
 
 					if (e != null) {
 
-						if (e.passTime()) e.spawnItem(new ItemStack(Material.EMERALD, 1));
+						if (e.passTime()) e.spawnItem(new ItemStack(Material.EMERALD, 1), false);
 
 					}
 
@@ -433,7 +434,7 @@ public class Arena {
 
 						}
 
-						if (alreadyThere < WedBars.MAX_DIAMONDS_IN_GEN) d.spawnItem(new ItemStack(Material.DIAMOND, 1));
+						if (alreadyThere < WedBars.MAX_DIAMONDS_IN_GEN) d.spawnItem(new ItemStack(Material.DIAMOND, 1), false);
 
 					}
 
@@ -464,7 +465,7 @@ public class Arena {
 
 						}
 
-						if (alreadyThere < WedBars.MAX_EMERALDS_IN_GEN) e.spawnItem(new ItemStack(Material.EMERALD, 1));
+						if (alreadyThere < WedBars.MAX_EMERALDS_IN_GEN) e.spawnItem(new ItemStack(Material.EMERALD, 1), false);
 
 					}
 
@@ -732,6 +733,15 @@ public class Arena {
 				GamerStats.sendGamerData(gamer, false);
 
 			}
+			
+			Collection<Hologram> hg = HologramsAPI.getHolograms(WedBars.getInstance());
+			for (Hologram h : hg) {
+				
+				h.delete();
+				
+			}
+			
+			HologramsAPI.unregisterPlaceholders(WedBars.getInstance());
 
 			GameScoreboard.updateStatus(ChatColor.GRAY + "map reset");
 
@@ -820,7 +830,18 @@ public class Arena {
 
 	public static void anotherGame() {
 
+		GameScoreboard.end();
 		WedBars.teamAssignments.clear();
+		
+		List<String> arenas = ArenaLoader.listArenas(WedBars.getInstance());
+		arenas.remove(WedBars.loadedArena.getName());
+		
+		Random r = new Random();
+		
+		String nextArena = arenas.get(r.nextInt(arenas.size()));
+		
+		WedBars.loadedArena = ArenaLoader.loadArena(WedBars.getInstance(), nextArena, "Auto Starter");
+		
 		ArenaAutoStart.begin(WedBars.loadedArena, true);
 
 	}

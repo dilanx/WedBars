@@ -42,8 +42,8 @@ Okay, now we'll set up the team islands themselves.
 10. Type `team <teamColor>` (teamColor is the color of the team you're setting up lmao - check [here](https://github.com/dilanx/WedBars/blob/main/src/com/blockhead7360/mc/wedbars/team/Team.java) for possible team colors) to enter the team island setup wizard. Now, you can use `help`/`?` and `checklist`/`cl` and they'll display information specifically for the team setup. You can also type `cancel` to go back.
 11. Stand in the exact position and face the exact direction you want players to be teleported to when they spawn at their island and type `spawn`.
 12. Stand in the exact position where you want the island generator to be and type `generator` or `gen`.
-13. Look at one of the halves of the island's bed (make sure your crosshair highlights it) and type `bed0`.
-14. Look at the other half and type `bed1`.
+13. Look at the bottom half of the island's bed (make sure your crosshair highlights it) and type `bed0`.
+14. Look at the top half and type `bed1`.
 15. Type `done` to save the team data. Now, type `checklist` and you'll see that the team is listed as set up.
 16. Repeat steps 9-14 for every team you want in the arena. You'll need at least two.
 
