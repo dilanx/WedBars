@@ -154,9 +154,17 @@ public class WedBars extends JavaPlugin {
 				sender.sendMessage(" ");
 				return true;
 			} else if (args.length == 1 && args[0].equalsIgnoreCase("reload")) {
+
+				if (!sender.hasPermission("wedbars.admin")) {
+					sender.sendMessage("You do not have permission to use this command.");
+					return true;
+				}
+
 				reloadConfig();
 				pullConfigValues();
 				sender.sendMessage(ChatColor.GREEN + "Reloaded the WedBars config. Note: this command only reloads config values.");
+				return true;
+
 			}
 
 			sender.sendMessage(" ");
