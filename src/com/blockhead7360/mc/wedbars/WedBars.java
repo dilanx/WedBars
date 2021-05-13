@@ -51,33 +51,33 @@ public class WedBars extends JavaPlugin {
 	// forge scales
 	// n times the initial interval as set by the arena
 
-	public static final double FORGE1 = 1.5;
-	public static final double FORGE2 = 2;
+	public static double FORGE1 = 1.5;
+	public static double FORGE2 = 2;
 	// forge 3 is emeralds
-	public static final double FORGE4 = 4;
+	public static double FORGE4 = 4;
 
 	// gen scales
 	// n times the initial speed as set by the arena
 
-	public static final int GEN_DIAMOND2 = 2;
-	public static final int GEN_DIAMOND3 = 4;
-	public static final int GEN_EMERALD2 = 2;
+	public static int GEN_DIAMOND2 = 2;
+	public static int GEN_DIAMOND3 = 4;
+	public static int GEN_EMERALD2 = 2;
 	//public static final int GEN_EMERALD3 = 4;
 
-	public static final int SPAWN_PROTECTION_DISTANCE_SQUARED = 25;
-	public static final int TRAP_DISTANCE = 7;
+	public static int SPAWN_PROTECTION_DISTANCE_SQUARED;
+	public static int TRAP_DISTANCE;
 
 	// not gamerTicks, these are in seconds
 	public static int TIME_BETWEEN_END_AND_RESET;
-	public static int GOLEM_LIFE = 240;
-	public static int GOLEM_ATTACK_DISTANCE = 7;
+	public static int GOLEM_LIFE;
+	public static int GOLEM_ATTACK_DISTANCE;
 	public static int GOLEM_HEALTH, BUG_HEALTH;
-	public static int BUG_LIFE = 120;
-	public static int BUG_ATTACK_DISTANCE = 4;
+	public static int BUG_LIFE ;
+	public static int BUG_ATTACK_DISTANCE;
 
 
 	// seconds
-	public static int LOBBY_START = 10;
+	public static int LOBBY_START;
 
 	// these are gamerTicks though
 	public static int MAX_DIAMONDS_IN_GEN, MAX_EMERALDS_IN_GEN;
@@ -119,19 +119,7 @@ public class WedBars extends JavaPlugin {
 		
 		saveDefaultConfig();
 
-		TNT_FUSE = getConfig().getInt("tntFuse");
-		TIME_BETWEEN_END_AND_RESET = getConfig().getInt("timeBeforeReset");
-		MAX_DIAMONDS_IN_GEN = getConfig().getInt("maxDiamondsInGen");
-		MAX_EMERALDS_IN_GEN = getConfig().getInt("maxEmeraldsInGen");
-		VOID_LEVEL = getConfig().getInt("voidLevel");
-		RESPAWN_TIME = getConfig().getInt("respawnTime");
-		GOLEM_ATTACK_DISTANCE = getConfig().getInt("golemTargetDistance");
-		GOLEM_LIFE = getConfig().getInt("golemLife");
-		BUG_ATTACK_DISTANCE = getConfig().getInt("bugTargetDistance");
-		BUG_LIFE = getConfig().getInt("bugLife");
-		GOLEM_HEALTH = getConfig().getInt("golemHealth");
-		BUG_HEALTH = getConfig().getInt("bugHealth");
-		BRIDGE_EGG_TIME = getConfig().getInt("eggTime");
+		pullConfigValues();
 
 		
 		boolean sql = getConfig().getBoolean("mysql.enabled");
@@ -169,6 +157,10 @@ public class WedBars extends JavaPlugin {
 				sender.sendMessage(ChatColor.GRAY + "Use " + ChatColor.GREEN + "/wb help" + ChatColor.GRAY + " for commands.");
 				sender.sendMessage(" ");
 				return true;
+			} else if (args.length == 1 && args[0].equalsIgnoreCase("reload")) {
+				reloadConfig();
+				pullConfigValues();
+				sender.sendMessage(ChatColor.GREEN + "Reloaded the WedBars config. Note: this command only reloads config values.");
 			}
 
 			sender.sendMessage(" ");
@@ -180,6 +172,7 @@ public class WedBars extends JavaPlugin {
 			sender.sendMessage(ChatColor.RED + "/start" + ChatColor.GRAY + " - Start the game.");
 			sender.sendMessage(ChatColor.RED + "/end" + ChatColor.GRAY + " - Force stop the game.");
 			sender.sendMessage(ChatColor.RED + "/reset" + ChatColor.GRAY + "- Reset all blocks placed.");
+			sender.sendMessage(ChatColor.RED + "/wedbars reload" + ChatColor.GRAY + "- Reloads all variables from config.");
 			sender.sendMessage(" ");
 			return true;
 
@@ -722,6 +715,27 @@ public class WedBars extends JavaPlugin {
 
 		return true;
 
+	}
+
+	public void pullConfigValues() {
+
+		TNT_FUSE = getConfig().getInt("tntFuse");
+		TIME_BETWEEN_END_AND_RESET = getConfig().getInt("timeBeforeReset");
+		MAX_DIAMONDS_IN_GEN = getConfig().getInt("maxDiamondsInGen");
+		MAX_EMERALDS_IN_GEN = getConfig().getInt("maxEmeraldsInGen");
+		VOID_LEVEL = getConfig().getInt("voidLevel");
+		//TODO: check this out, i chose this since i thought it would be simplest and ints squared are always ints
+		// so casting should not be an issue. there could be a batter way tho idk i just took ap csa
+		SPAWN_PROTECTION_DISTANCE_SQUARED = (int)Math.pow(getConfig().getInt("spawnProtection"), 2);
+		TRAP_DISTANCE = getConfig().getInt("trapDistance");
+		RESPAWN_TIME = getConfig().getInt("respawnTime") * 10;
+		GOLEM_ATTACK_DISTANCE = getConfig().getInt("golemTargetDistance");
+		GOLEM_LIFE = getConfig().getInt("golemLife");
+		BUG_ATTACK_DISTANCE = getConfig().getInt("bugTargetDistance");
+		BUG_LIFE = getConfig().getInt("bugLife");
+		GOLEM_HEALTH = getConfig().getInt("golemHealth");
+		BUG_HEALTH = getConfig().getInt("bugHealth");
+		BRIDGE_EGG_TIME = getConfig().getInt("eggTime") * 10;
 	}
 
 	public static WedBars getInstance() {
