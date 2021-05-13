@@ -22,7 +22,7 @@ maxEmeraldsInGen: 2
 # (int, radius in blocks) default: 5
 spawnProtection: 5
 
-# Radius around island spawn where enemy players that enter will trigger traps
+# Half of box centered around bed where enemy players trigger traps.
 # (int, radius in blocks) default: 7
 trapDistance: 7
 

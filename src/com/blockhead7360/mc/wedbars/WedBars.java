@@ -670,7 +670,7 @@ public class WedBars extends JavaPlugin {
 		VOID_LEVEL = getConfig().getInt("voidLevel");
 		//TODO: check this out, i chose this since i thought it would be simplest and ints squared are always ints
 		// so casting should not be an issue. there could be a batter way tho idk i just took ap csa
-		SPAWN_PROTECTION_DISTANCE_SQUARED = (int)Math.pow(getConfig().getInt("spawnProtection"), 2);
+		SPAWN_PROTECTION_DISTANCE_SQUARED = (int) Math.pow(getConfig().getInt("spawnProtection"), 2);
 		TRAP_DISTANCE = getConfig().getInt("trapDistance");
 		RESPAWN_TIME = getConfig().getInt("respawnTime") * 10;
 		GOLEM_ATTACK_DISTANCE = getConfig().getInt("golemTargetDistance");
