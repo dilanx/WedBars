@@ -8,7 +8,6 @@ import java.util.logging.Logger;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
-import org.bukkit.Location;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -27,8 +26,6 @@ import com.blockhead7360.mc.wedbars.game.Shop;
 import com.blockhead7360.mc.wedbars.player.GamerStats;
 import com.blockhead7360.mc.wedbars.team.Team;
 import com.blockhead7360.mc.wedbars.team.TeamAssignments;
-import com.gmail.filoghost.holographicdisplays.api.Hologram;
-import com.gmail.filoghost.holographicdisplays.api.HologramsAPI;
 
 public class WedBars extends JavaPlugin {
 
@@ -42,7 +39,6 @@ public class WedBars extends JavaPlugin {
 
 	public static ArenaData loadedArena = null;
 	public static TeamAssignments teamAssignments = new TeamAssignments();
-
 
 	// speeds (interval between spawns in 10*seconds)
 
@@ -608,66 +604,6 @@ public class WedBars extends JavaPlugin {
 			sender.sendMessage(ChatColor.YELLOW + "Existing arena setup!" + ChatColor.GRAY + " You're editing an existing arena named " + args[0] + "."
 					+ " Type 'help' into the chat to get started or 'cancel' to cancel.");
 			return true;
-
-		}
-
-		if (cmd.getName().equalsIgnoreCase("test")) {
-
-			if (!sender.hasPermission("wedbars.admin")) {
-
-				sender.sendMessage("You do not have permission to use this command.");
-				return true;
-
-			}
-
-			if (args.length > 0) {
-
-				if (args[0].equalsIgnoreCase("fb")) {
-
-					Powerups.launchFireball((Player) sender);
-					return true;
-
-				}
-
-				if (args[0].equalsIgnoreCase("shop")) {
-
-					Shop.openItemShop((Player) sender);
-					return true;
-
-				}
-
-				if (args[0].equalsIgnoreCase("golem")) {
-
-					if (!running) {
-						sender.sendMessage("No");
-						return true;
-					}
-
-					Powerups.spawnGolem(arena.getGamer(sender.getName()));
-					return true;
-
-				}
-
-				if (args[0].equalsIgnoreCase("hg")) {
-
-					Hologram h = HologramsAPI.createHologram(this, new Location(getServer().getWorld("world"), 63, 68, -36));
-					h.appendTextLine("test");
-
-
-				}
-
-				if (args[0].equalsIgnoreCase("start")) {
-
-					if (resetting || running) {
-
-						sender.sendMessage("Already running or resetting");
-						return true;
-
-					}
-
-				}
-
-			}
 
 		}
 

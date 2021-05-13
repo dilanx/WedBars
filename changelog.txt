@@ -1,4 +1,4 @@
-
+WedBars Changelog 
 
 
 - added traps
@@ -37,3 +37,12 @@ may 1 21 (pm)
 - fireball behavior should work now
 - generator split
 - all gens start with 1 item
+
+may 6 21 (am)
+- notifies the player that triggered a trap (not just the team whose trap it is)
+- drop ender chest items in team gen on final death
+- drop team chest items in team gen on elimination
+
+may 6 21 (pm)
+- chest open and close sound implemented
+- random arena selection on new game

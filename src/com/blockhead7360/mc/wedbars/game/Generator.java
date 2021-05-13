@@ -1,11 +1,9 @@
 package com.blockhead7360.mc.wedbars.game;
 
 import org.bukkit.Location;
-import org.bukkit.entity.Item;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.metadata.FixedMetadataValue;
+import org.bukkit.inventory.meta.ItemMeta;
 
-import com.blockhead7360.mc.wedbars.WedBars;
 import com.blockhead7360.mc.wedbars.api.events.GeneratorSpawnItemEvent;
 
 public class Generator {
@@ -56,14 +54,27 @@ public class Generator {
 		return false;
 	}
 	
-	public void spawnItem(ItemStack item) {
+	public void spawnItem(ItemStack item, boolean hasItemMeta) {
 		
 		GeneratorSpawnItemEvent gsie = new GeneratorSpawnItemEvent(this, item);
 		
 		if (gsie.isCancelled()) return;
 		
-		Item i = location.getWorld().dropItem(location, item);
-		i.setMetadata("gen", new FixedMetadataValue(WedBars.getInstance(), true));
+		ItemMeta meta = item.getItemMeta();
+		
+		if (hasItemMeta) {
+			
+			meta.setDisplayName(meta.getDisplayName() + " *");
+			
+		} else {
+			
+			meta.setDisplayName(" *");
+			
+		}
+		
+		item.setItemMeta(meta);
+		
+		location.getWorld().dropItem(location, item);
 		
 		
 		

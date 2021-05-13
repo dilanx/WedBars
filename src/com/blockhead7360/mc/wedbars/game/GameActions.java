@@ -6,8 +6,10 @@ import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.Sound;
+import org.bukkit.World;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffectType;
 
@@ -218,6 +220,9 @@ public class GameActions {
 
 				if (!bedExists) {
 					kGamer.addOneToStatistic(Statistic.FKILLS);
+					
+					killer.sendMessage(ChatColor.GRAY + "If " + player.getName() + " had any items in their ender chest, they've been dropped in their generator.");
+					
 				}
 
 			}
@@ -242,6 +247,23 @@ public class GameActions {
 			}
 			ArenaTeam team = WedBars.arena.getTeam(gamer.getTeam());
 			GameScoreboard.updateTeam(team);
+			
+			// drop ender chest items in gen
+			
+			Inventory echest = gamer.getPlayer().getEnderChest();
+			Location teamGen = team.getIronGenerator().getLocation();
+			World w = teamGen.getWorld();
+			
+			for (ItemStack is : echest.getContents()) {
+				
+				if (is != null) {
+					
+					w.dropItem(teamGen, is);
+					
+				}
+				
+			}
+			
 
 			int alive = 0;
 			for (Gamer g : team.getGamers()) {
@@ -264,6 +286,20 @@ public class GameActions {
 
 				for (Gamer g : team.getGamers())
 					g.addOneToStatistic(Statistic.LOSSES);
+				
+				// drop team chest items in generator
+				
+				Inventory tchest = team.getChest();
+				
+				for (ItemStack is : tchest.getContents()) {
+					
+					if (is != null) {
+						
+						w.dropItem(teamGen, is);
+						
+					}
+					
+				}
 
 			}
 

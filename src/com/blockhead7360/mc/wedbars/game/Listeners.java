@@ -13,7 +13,6 @@ import org.bukkit.Sound;
 import org.bukkit.entity.Arrow;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
-import org.bukkit.entity.Item;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.TNTPrimed;
 import org.bukkit.event.EventHandler;
@@ -24,12 +23,13 @@ import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
+import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.event.player.PlayerChangedWorldEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.event.player.PlayerPickupItemEvent;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.metadata.MetadataValue;
+import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.potion.PotionEffectType;
 
 import com.blockhead7360.mc.wedbars.WedBars;
@@ -74,16 +74,29 @@ public class Listeners implements Listener {
 		
 		if (!WedBars.running) return;
 		
-		Item item = e.getItem();
-		
-		List<MetadataValue> mdv = item.getMetadata("gen");
-		if (mdv.isEmpty() || !mdv.get(0).asBoolean()) return;
-		
-		item.removeMetadata("gen", WedBars.getInstance());
-		
 		ItemStack stack = e.getItem().getItemStack();
 		
 		if (stack.getType() != Material.IRON_INGOT && stack.getType() != Material.GOLD_INGOT) return;
+		
+		ItemMeta meta = stack.getItemMeta();
+		
+		
+		
+		if (!meta.hasDisplayName() || !meta.getDisplayName().endsWith(" *")) return;
+		
+		String newDisp = meta.getDisplayName().substring(0, meta.getDisplayName().length() - 2);
+		if (newDisp.length() == 0) {
+			
+			stack.setItemMeta(null);
+			
+			//stack = new ItemStack(stack.getType(), stack.getAmount());
+			
+		} else {
+			
+			meta.setDisplayName(newDisp);
+			stack.setItemMeta(meta);
+			
+		}
 		
 		Player player = e.getPlayer();
 		Arena arena = WedBars.arena;
@@ -141,7 +154,7 @@ public class Listeners implements Listener {
 				if (gotce.isCancelled()) return;
 				
 				player.openInventory(team.getChest());
-				player.playSound(player.getLocation(), Sound.NOTE_PLING, 1, 1);
+				player.playSound(player.getLocation(), Sound.CHEST_OPEN, 1, 1);
 				
 				
 
@@ -149,6 +162,19 @@ public class Listeners implements Listener {
 
 		}
 
+	}
+	
+	@EventHandler
+	public void onInventoryClose(InventoryCloseEvent e) {
+		
+		if (e.getView().getTitle().contains("team chest")) {
+			
+			Player player = (Player) e.getPlayer();
+			
+			player.playSound(player.getLocation(), Sound.CHEST_CLOSE, 1, 1);
+			
+		}
+		
 	}
 
 	@EventHandler(priority = EventPriority.HIGH)
