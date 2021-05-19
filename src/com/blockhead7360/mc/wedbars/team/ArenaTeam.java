@@ -1,9 +1,13 @@
 package com.blockhead7360.mc.wedbars.team;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.inventory.Inventory;
 
+import com.blockhead7360.mc.wedbars.WedBars;
 import com.blockhead7360.mc.wedbars.game.Generator;
 import com.blockhead7360.mc.wedbars.player.Gamer;
 import com.blockhead7360.mc.wedbars.team.traps.TeamTrap;
@@ -193,6 +197,26 @@ public class ArenaTeam {
 	
 	public Inventory getChest() {
 		return chest;
+	}
+	
+	public List<Gamer> getTeamMembersAtBase() {
+		
+		List<Gamer> gamerList = new ArrayList<>();
+		
+		int radius = WedBars.TRAP_DISTANCE * WedBars.TRAP_DISTANCE;
+		
+		for (Gamer g : gamers) {
+			
+			if (g.getPlayer().getLocation().distanceSquared(bedLoc[0]) <= radius) {
+				
+				gamerList.add(g);
+				
+			}
+			
+		}
+		
+		return gamerList;
+		
 	}
 	
 }
