@@ -13,8 +13,8 @@ import org.bukkit.potion.PotionEffectType;
 public class TrapCounterOffensive extends TeamTrap {
 
     public void activate(Gamer gamer, ArenaTeam team) {
-        gamer.getPlayer().addPotionEffect(new PotionEffect(PotionEffectType.JUMP, 100, 1));
-        gamer.getPlayer().addPotionEffect(new PotionEffect(PotionEffectType.SPEED, 100, 0));
+        gamer.getPlayer().addPotionEffect(new PotionEffect(PotionEffectType.JUMP, 200, 1));
+        gamer.getPlayer().addPotionEffect(new PotionEffect(PotionEffectType.SPEED, 200, 0));
     }
 
     public ItemStack icon() {

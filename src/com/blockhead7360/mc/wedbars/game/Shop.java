@@ -2,6 +2,8 @@ package com.blockhead7360.mc.wedbars.game;
 
 import java.util.List;
 
+import com.blockhead7360.mc.wedbars.team.traps.TrapCounterOffensive;
+import com.blockhead7360.mc.wedbars.team.traps.TrapInfestation;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.GameMode;
@@ -54,10 +56,18 @@ public class Shop implements Listener {
 
 		traps = new ItemStack[] {
 
-				Utility.createIconItemStack(Material.IRON_PICKAXE, 1, ChatColor.YELLOW + "Miner Fatigue", "",
+				Utility.createIconItemStack(Material.IRON_PICKAXE, 1, ChatColor.YELLOW + "Miner Fatigue",
+						ChatColor.GRAY + "Gives the enemy that triggers it Mining Fatigue for 10 seconds.",
 						ChatColor.GRAY + "Price: " + ChatColor.AQUA + "1 diamond"),
-				Utility.createIconItemStack(Material.EYE_OF_ENDER, 1, ChatColor.YELLOW + "Blindness", "",
+				Utility.createIconItemStack(Material.EYE_OF_ENDER, 1, ChatColor.YELLOW + "It's a Trap!",
+						ChatColor.GRAY + "Gives the enemy that triggers it Blindness and Slowness for 8 seconds.",
 						ChatColor.GRAY + "Price: " + ChatColor.AQUA + "1 diamond"),
+				Utility.createIconItemStack(Material.FEATHER, 1, ChatColor.YELLOW + "Counter-Offensive",
+						ChatColor.GRAY + "Gives the defending team Speed I and Jump Boost II for 10 seconds.",
+						ChatColor.GRAY + "Price: " + ChatColor.AQUA + "1 diamond"),
+				Utility.createIconItemStack(Material.MONSTER_EGG, 1, ChatColor.YELLOW + "Infestation",
+						ChatColor.GRAY + "Spawns 2 bugs on enemy players that trigger it",
+						ChatColor.GRAY + "Price: " + ChatColor.AQUA + "2 diamond"),
 
 		};
 
@@ -786,10 +796,22 @@ public class Shop implements Listener {
 
 		}
 		
-		else if (purch.contains("blindness")) {
+		else if (purch.contains("it's a trap!")) {
 			
 			team.setTrap(new TrapBlindness());
 			
+		}
+
+		else if (purch.contains("counter-offensive")) {
+
+			team.setTrap(new TrapCounterOffensive());
+
+		}
+
+		else if (purch.contains("infestation")) {
+
+			team.setTrap(new TrapInfestation());
+
 		}
 
 		else {

@@ -2,6 +2,7 @@ package com.blockhead7360.mc.wedbars.game;
 
 import java.util.List;
 
+import com.blockhead7360.mc.wedbars.team.ArenaTeam;
 import org.bukkit.Effect;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -176,12 +177,10 @@ public class Powerups implements Listener {
 
 	}
 
-	public static void spawnSilverfish(Gamer gamer, Location spawnLoc) {
+	public static void spawnSilverfish(ArenaTeam ateam, Location spawnLoc) {
 
-		Team team = gamer.getTeam();
-		Player player = gamer.getPlayer();
-
-		Silverfish bug = (Silverfish) player.getWorld().spawnEntity(spawnLoc, EntityType.SILVERFISH);
+		Team team = ateam.getTeam();
+		Silverfish bug = (Silverfish) spawnLoc.getWorld().spawnEntity(spawnLoc, EntityType.SILVERFISH);
 		bug.setTarget(null);
 		bug.setMaxHealth(WedBars.BUG_HEALTH);
 
@@ -411,7 +410,10 @@ public class Powerups implements Listener {
 	public void onProjectileHit(ProjectileHitEvent e) {
 		if (!WedBars.running) return;
 		if (e.getEntityType() == EntityType.SNOWBALL && e.getEntity().getShooter() instanceof Player) {
-			spawnSilverfish(WedBars.arena.getGamer(((Player) e.getEntity().getShooter()).getName()), e.getEntity().getLocation());
+			spawnSilverfish(WedBars.arena.getTeam(
+					WedBars.arena.getGamer(
+							((Player) e.getEntity().getShooter()).getName()).getTeam()),
+					e.getEntity().getLocation());
 		}
 
 	}
