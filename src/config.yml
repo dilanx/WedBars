@@ -3,7 +3,7 @@
 # the plugin will generate a new one on startup. For help with WedBars, see our
 # documentation: https://github.com/dilanx/WedBars/blob/main/DOCUMENTATION.md
 
-# Sets the fuse time for tnt once placed (int, in ticks) default: 60
+# Sets the fuse time for tnt once placed (int, in ticks) default: 60 (3 seconds)
 tntFuse: 60
 
 # The y-level where any player at it or below will be considered "in the void"
@@ -18,13 +18,25 @@ maxDiamondsInGen: 4
 # (int, number of emeralds) default: 2
 maxEmeraldsInGen: 2
 
+# How many blocks from each island spawn should be unmodifiable by players.
+# (int, radius in blocks) default: 5
+spawnProtection: 5
+
+# Half of box centered around bed where enemy players trigger traps.
+# (int, radius in blocks) default: 7
+trapDistance: 7
+
 # How long the player will have to wait before being respawned if their bed is
-# not broken. (int, seconds * 10) default: 50 (5 seconds)
-respawnTime: 50
+# not broken. (int, seconds) default: 5
+respawnTime: 5
 
 # How long the game will wait after the end of a game before starting the arena
 # reset process. (int, seconds) default: 10
 timeBeforeReset: 10
+
+# How long the game should count down in the lobby before the game begins (int, seconds)
+# default: 10
+lobbyStartTime: 10
 
 # Powerup: Golems
 # You can set how much time golems live for (int,seconds), their targeting range
@@ -43,9 +55,9 @@ bugTargetDistance: 4
 bugHealth: 8
 
 # Powerup: Bridge Eggs
-# Set the max time eggs will be live for. (int, seconds * 10)
-# Default: 30
-eggTime: 30
+# Set the max time eggs will be live for. (int, seconds)
+# Default: 3
+eggTime: 3
 
 # MySQL database information (required for stats)
 # More info on this can be found at https://github.com/dilanx/WedBars/blob/main/DOCUMENTATION.md#player-statistics

@@ -2,6 +2,7 @@ package com.blockhead7360.mc.wedbars.arena;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -27,11 +28,32 @@ public class ArenaAutoStart implements Listener {
 	private static Inventory ts;
 	private static ArenaData data;
 
+	private static Team[] teams;
+
+	private static final Team[] allTeamsInOrder = {Team.RED, Team.BLUE, Team.GREEN, Team.YELLOW, Team.AQUA, Team.WHITE, Team.PINK, Team.GRAY};
+
 	public static void begin(ArenaData data, boolean openInv) {
 
 		ArenaAutoStart.data = data;
 
 		ts = Bukkit.createInventory(null, 9, ChatColor.BOLD + "Select a team");
+
+		Set<Team> availTeams = data.getAllTeams();
+
+		teams = new Team[availTeams.size()];
+
+		int i = 0;
+
+		for (Team team : allTeamsInOrder) {
+
+			if (availTeams.contains(team)) {
+
+				teams[i] = team;
+				i++;
+
+			}
+
+		}
 
 		updateTeams();
 
@@ -40,13 +62,31 @@ public class ArenaAutoStart implements Listener {
 			player.closeInventory();
 			player.teleport(data.getLobby());
 			player.setGameMode(GameMode.ADVENTURE);
-			if (openInv) player.openInventory(ts);
-			
+
 			player.sendMessage(" ");
 			player.sendMessage(ChatColor.WHITE + "" + ChatColor.BOLD + "Select your teams!" + ChatColor.GREEN + " /team");
 			player.sendMessage(" ");
 
 		}
+
+		if (openInv) {
+
+			new BukkitRunnable() {
+
+				public void run() {
+
+					for (Player player : Bukkit.getOnlinePlayers()) {
+						
+						player.openInventory(ts);
+						
+					}
+
+				}
+
+			}.runTaskLater(WedBars.getInstance(), 60L);
+
+		}
+
 
 	}
 
@@ -56,7 +96,11 @@ public class ArenaAutoStart implements Listener {
 
 		List<String> allPlayers = new ArrayList<>();
 
-		for (Team team : data.getAllTeams()) {
+
+
+		for (Team team : teams) {
+
+
 
 			ItemStack stack = new ItemStack(Material.STAINED_GLASS_PANE, 1, team.getStackColor());
 			ItemMeta meta = stack.getItemMeta();
@@ -93,9 +137,9 @@ public class ArenaAutoStart implements Listener {
 			}
 
 			Bukkit.broadcastMessage(ChatColor.GREEN + "All players have selected a team!" + ChatColor.GRAY + " Team selection has ended and the game will begin soon.");
-			
+
 			Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "team show");
-			
+
 			startCountdown();
 			return;
 
@@ -117,11 +161,11 @@ public class ArenaAutoStart implements Listener {
 
 			Player player = (Player) e.getWhoClicked();
 			player.playSound(player.getLocation(), Sound.NOTE_PLING, 1, 1);
-			
+
 			Team selected = Team.getByLabel(ChatColor.stripColor(e.getCurrentItem().getItemMeta().getDisplayName()));
 
 			WedBars.teamAssignments.assign(player, selected);
-			
+
 			updateTeams();
 			return;
 
