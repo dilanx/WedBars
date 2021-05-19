@@ -28,6 +28,7 @@ import com.blockhead7360.mc.wedbars.api.events.GamerPurchaseTrapEvent;
 import com.blockhead7360.mc.wedbars.player.Gamer;
 import com.blockhead7360.mc.wedbars.team.ArenaTeam;
 import com.blockhead7360.mc.wedbars.team.TeamUpgrade;
+import com.blockhead7360.mc.wedbars.team.traps.TrapBlindness;
 import com.blockhead7360.mc.wedbars.team.traps.TrapFatigue;
 
 public class Shop implements Listener {
@@ -54,7 +55,9 @@ public class Shop implements Listener {
 		traps = new ItemStack[] {
 
 				Utility.createIconItemStack(Material.IRON_PICKAXE, 1, ChatColor.YELLOW + "Miner Fatigue", "",
-						ChatColor.GRAY + "Price: " + ChatColor.AQUA + "1 diamond")
+						ChatColor.GRAY + "Price: " + ChatColor.AQUA + "1 diamond"),
+				Utility.createIconItemStack(Material.EYE_OF_ENDER, 1, ChatColor.YELLOW + "Blindness", "",
+						ChatColor.GRAY + "Price: " + ChatColor.AQUA + "1 diamond"),
 
 		};
 
@@ -781,6 +784,12 @@ public class Shop implements Listener {
 
 			team.setTrap(new TrapFatigue());
 
+		}
+		
+		else if (purch.contains("blindness")) {
+			
+			team.setTrap(new TrapBlindness());
+			
 		}
 
 		else {

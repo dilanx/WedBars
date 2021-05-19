@@ -324,7 +324,7 @@ public class Arena {
 										}
 										
 										p.sendMessage(ChatColor.RED + "You activated a trap!");
-										at.getTrap().activate(p);
+										at.getTrap().activate(g, at);
 										at.removeTrap();
 										hasTrap = false;
 										
