@@ -107,7 +107,6 @@ public class WedBars extends JavaPlugin {
 		
 		l.info("Initializing item shop...");
 		Shop.init();
-
 		
 		instance = this;
 

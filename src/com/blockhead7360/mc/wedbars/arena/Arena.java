@@ -387,14 +387,14 @@ public class Arena {
 
 					Generator i = at.getIronGenerator();
 
-					if (i.passTime()) i.spawnItem(new ItemStack(Material.IRON_INGOT, 1), false);
+					if (i.passTime()) i.spawnItem(new ItemStack(Material.IRON_INGOT, 1), false, true);
 
 
 					// Gold gen
 
 					Generator g = at.getGoldGenerator();
 
-					if (g.passTime()) g.spawnItem(new ItemStack(Material.GOLD_INGOT, 1), false);
+					if (g.passTime()) g.spawnItem(new ItemStack(Material.GOLD_INGOT, 1), false, true);
 
 
 					// Emerald gen if unlocked
@@ -403,7 +403,7 @@ public class Arena {
 
 					if (e != null) {
 
-						if (e.passTime()) e.spawnItem(new ItemStack(Material.EMERALD, 1), false);
+						if (e.passTime()) e.spawnItem(new ItemStack(Material.EMERALD, 1), false, false);
 
 					}
 
@@ -434,7 +434,7 @@ public class Arena {
 
 						}
 
-						if (alreadyThere < WedBars.MAX_DIAMONDS_IN_GEN) d.spawnItem(new ItemStack(Material.DIAMOND, 1), false);
+						if (alreadyThere < WedBars.MAX_DIAMONDS_IN_GEN) d.spawnItem(new ItemStack(Material.DIAMOND, 1), false, false);
 
 					}
 
@@ -465,7 +465,7 @@ public class Arena {
 
 						}
 
-						if (alreadyThere < WedBars.MAX_EMERALDS_IN_GEN) e.spawnItem(new ItemStack(Material.EMERALD, 1), false);
+						if (alreadyThere < WedBars.MAX_EMERALDS_IN_GEN) e.spawnItem(new ItemStack(Material.EMERALD, 1), false, false);
 
 					}
 
