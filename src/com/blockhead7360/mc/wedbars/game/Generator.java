@@ -1,30 +1,13 @@
 package com.blockhead7360.mc.wedbars.game;
 
 import org.bukkit.Location;
-<<<<<<< Updated upstream
-=======
 import org.bukkit.Material;
->>>>>>> Stashed changes
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
 import com.blockhead7360.mc.wedbars.api.events.GeneratorSpawnItemEvent;
 
 public class Generator {
-<<<<<<< Updated upstream
-
-	private Location location;
-	private int speed;
-
-	private int curTimeLeft;
-
-	public Generator(Location location, int speed) {
-
-		this.location = location;
-		this.speed = speed;
-		this.curTimeLeft = 1;
-
-=======
 	
 	private Location location;
 	private int speed;
@@ -37,7 +20,6 @@ public class Generator {
 		this.speed = speed;
 		this.curTimeLeft = 1;
 		
->>>>>>> Stashed changes
 	}
 
 	public Location getLocation() {
@@ -60,47 +42,6 @@ public class Generator {
 	}
 
 	public boolean passTime() {
-<<<<<<< Updated upstream
-
-		curTimeLeft--;
-
-		if (curTimeLeft <= 0) {
-
-			curTimeLeft = speed;
-			return true;
-
-		}
-
-		return false;
-	}
-
-	public void spawnItem(ItemStack item, boolean hasItemMeta, boolean asterisk) {
-
-		GeneratorSpawnItemEvent gsie = new GeneratorSpawnItemEvent(this, item);
-
-		if (gsie.isCancelled()) return;
-
-		if (asterisk) {
-			ItemMeta meta = item.getItemMeta();
-
-			if (hasItemMeta) {
-
-				meta.setDisplayName(meta.getDisplayName() + " *");
-
-			} else {
-
-				meta.setDisplayName(" *");
-
-			}
-
-			item.setItemMeta(meta);
-		}
-
-		location.getWorld().dropItem(location, item);
-
-
-
-=======
 		
 		curTimeLeft--;
 				
@@ -149,7 +90,6 @@ public class Generator {
 		
 		
 		
->>>>>>> Stashed changes
 	}
 
 	public int getCurTimeLeft() {
@@ -160,13 +100,7 @@ public class Generator {
 	public void setCurTimeLeft(int curTimeLeft) {
 		this.curTimeLeft = curTimeLeft;
 	}
-<<<<<<< Updated upstream
-
-
-
-=======
 	
 	
 	
->>>>>>> Stashed changes
 }

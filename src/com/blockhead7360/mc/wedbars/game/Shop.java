@@ -44,21 +44,12 @@ public class Shop implements Listener {
 		categories = new ItemStack[] {
 
 				Utility.createIconItemStack(Material.NETHER_STAR, 1, ChatColor.GREEN + "Quick Buy"),
-<<<<<<< Updated upstream
-				Utility.createIconItemStack(Material.HARD_CLAY, 1, ChatColor.GREEN + "Blocks"),
-				Utility.createIconItemStack(Material.GOLD_SWORD, 1, ChatColor.GREEN + "Melee"),
-				Utility.createIconItemStack(Material.CHAINMAIL_BOOTS, 1, ChatColor.GREEN + "Armor"),
-				Utility.createIconItemStack(Material.STONE_PICKAXE, 1, ChatColor.GREEN + "Tools"),
-				Utility.createIconItemStack(Material.BOW, 1, ChatColor.GREEN + "Range"),
-				Utility.createIconItemStack(Material.BREWING_STAND_ITEM, 1, ChatColor.GREEN + "Potions"),
-=======
 				Utility.createIconItemStack(Material.CYAN_CONCRETE, 1, ChatColor.GREEN + "Blocks"),
 				Utility.createIconItemStack(Material.GOLDEN_SWORD, 1, ChatColor.GREEN + "Melee"),
 				Utility.createIconItemStack(Material.CHAINMAIL_BOOTS, 1, ChatColor.GREEN + "Armor"),
 				Utility.createIconItemStack(Material.STONE_PICKAXE, 1, ChatColor.GREEN + "Tools"),
 				Utility.createIconItemStack(Material.BOW, 1, ChatColor.GREEN + "Range"),
 				Utility.createIconItemStack(Material.BREWING_STAND, 1, ChatColor.GREEN + "Potions"),
->>>>>>> Stashed changes
 				Utility.createIconItemStack(Material.TNT, 1, ChatColor.GREEN + "Utility")
 
 		};
@@ -68,33 +59,20 @@ public class Shop implements Listener {
 				Utility.createIconItemStack(Material.IRON_PICKAXE, 1, ChatColor.YELLOW + "Miner Fatigue",
 						ChatColor.GRAY + "Gives the enemy that triggers it Mining Fatigue for 10 seconds.",
 						ChatColor.GRAY + "Price: " + ChatColor.AQUA + "1 diamond"),
-<<<<<<< Updated upstream
-				Utility.createIconItemStack(Material.EYE_OF_ENDER, 1, ChatColor.YELLOW + "It's a Trap!",
-=======
 				Utility.createIconItemStack(Material.ENDER_EYE, 1, ChatColor.YELLOW + "It's a Trap!",
->>>>>>> Stashed changes
 						ChatColor.GRAY + "Gives the enemy that triggers it Blindness and Slowness for 8 seconds.",
 						ChatColor.GRAY + "Price: " + ChatColor.AQUA + "1 diamond"),
 				Utility.createIconItemStack(Material.FEATHER, 1, ChatColor.YELLOW + "Counter-Offensive",
 						ChatColor.GRAY + "Gives the defending team Speed I and Jump Boost II for 10 seconds.",
 						ChatColor.GRAY + "Price: " + ChatColor.AQUA + "1 diamond"),
-<<<<<<< Updated upstream
-				Utility.createIconItemStack(Material.MONSTER_EGG, 1, ChatColor.YELLOW + "Infestation",
-=======
 				Utility.createIconItemStack(Material.SNOWBALL, 1, ChatColor.YELLOW + "Infestation",
->>>>>>> Stashed changes
 						ChatColor.GRAY + "Spawns 2 bugs on enemy players that trigger it",
 						ChatColor.GRAY + "Price: " + ChatColor.AQUA + "2 diamond"),
 
 		};
 
-<<<<<<< Updated upstream
-		selected = Utility.createIconItemStack(Material.STAINED_GLASS_PANE, 1, (short) 14, ChatColor.GRAY + "Selected");
-		unselected = Utility.createIconItemStack(Material.STAINED_GLASS_PANE, 1, (short) 15, " ");
-=======
 		selected = Utility.createIconItemStack(Material.RED_STAINED_GLASS_PANE, 1, ChatColor.GRAY + "Selected");
 		unselected = Utility.createIconItemStack(Material.BLACK_STAINED_GLASS_PANE, 1, " ");
->>>>>>> Stashed changes
 
 	}
 
@@ -126,11 +104,7 @@ public class Shop implements Listener {
 
 		teamUpgrades_inv(player, inv);
 
-<<<<<<< Updated upstream
-		player.playSound(player.getLocation(), Sound.NOTE_PLING, 1, 1);
-=======
 		player.playSound(player.getLocation(), Sound.BLOCK_NOTE_BLOCK_PLING, 1, 1);
->>>>>>> Stashed changes
 
 		player.openInventory(inv);
 
@@ -179,11 +153,7 @@ public class Shop implements Listener {
 			inv.setItem(12, locked);
 
 		if (has[TeamUpgrade.ARMOR2])
-<<<<<<< Updated upstream
-			inv.setItem(21, Utility.createHiddenEnchantedItemStack(Material.GOLD_CHESTPLATE, 1, ChatColor.YELLOW + "Gamer Armor (cool kids only)",
-=======
 			inv.setItem(21, Utility.createHiddenEnchantedItemStack(Material.GOLDEN_CHESTPLATE, 1, ChatColor.YELLOW + "Gamer Armor (cool kids only)",
->>>>>>> Stashed changes
 					(has[TeamUpgrade.ARMOR3] ? sel : unsel),
 					ChatColor.GRAY + "Receive permanent Protection III", ChatColor.GRAY + "on all armor pieces.", "",
 					ChatColor.GRAY + "Price: " + ChatColor.AQUA + "8 diamond", (has[TeamUpgrade.ARMOR3] ? ChatColor.GREEN + "ACTIVE" : "")));
@@ -206,11 +176,7 @@ public class Shop implements Listener {
 				ChatColor.GRAY + "Price: " + ChatColor.AQUA + "2 diamond", (has[TeamUpgrade.MINE1] ? ChatColor.GREEN + "ACTIVE" : "")));
 
 		if (has[TeamUpgrade.MINE1])
-<<<<<<< Updated upstream
-			inv.setItem(23, Utility.createHiddenEnchantedItemStack(Material.GOLD_PICKAXE, 1, ChatColor.YELLOW + "Pog Miner 2",
-=======
 			inv.setItem(23, Utility.createHiddenEnchantedItemStack(Material.GOLDEN_PICKAXE, 1, ChatColor.YELLOW + "Pog Miner 2",
->>>>>>> Stashed changes
 					(has[TeamUpgrade.MINE2] ? sel : unsel),
 					ChatColor.GRAY + "Receive permanent Haste II", ChatColor.GRAY + "", "",
 					ChatColor.GRAY + "Price: " + ChatColor.AQUA + "4 diamond", (has[TeamUpgrade.MINE2] ? ChatColor.GREEN + "ACTIVE" : "")));
@@ -256,11 +222,7 @@ public class Shop implements Listener {
 
 		} else {
 
-<<<<<<< Updated upstream
-			inv.setItem(49, Utility.createIconItemStack(Material.STAINED_GLASS, 1, (short) 7, ChatColor.WHITE + "No active trap", "", ChatColor.GRAY + "Click to purchase one."));
-=======
 			inv.setItem(49, Utility.createIconItemStack(Material.LIGHT_GRAY_STAINED_GLASS, 1, ChatColor.WHITE + "No active trap", "", ChatColor.GRAY + "Click to purchase one."));
->>>>>>> Stashed changes
 
 		}
 
@@ -281,11 +243,7 @@ public class Shop implements Listener {
 
 		itemShop_inv(player, inv, ShopPage.QUICK_BUY);
 
-<<<<<<< Updated upstream
-		player.playSound(player.getLocation(), Sound.NOTE_PLING, 1, 1);
-=======
 		player.playSound(player.getLocation(), Sound.BLOCK_NOTE_BLOCK_PLING, 1, 1);
->>>>>>> Stashed changes
 
 		player.openInventory(inv);
 
@@ -313,11 +271,7 @@ public class Shop implements Listener {
 
 			ItemStack[] qb = {
 
-<<<<<<< Updated upstream
-					Utility.createIconItemStack(Material.WOOL, 16, ChatColor.YELLOW + "Wool", "",
-=======
 					Utility.createIconItemStack(Material.WHITE_WOOL, 16, ChatColor.YELLOW + "Wool", "",
->>>>>>> Stashed changes
 							ChatColor.GRAY + "Price: " + ChatColor.WHITE + "4 iron"),
 					Utility.createIconItemStack(Material.STONE_SWORD, 1, ChatColor.YELLOW + "Stone Sword", "",
 							ChatColor.GRAY + "Price: " + ChatColor.WHITE + "10 iron"),
@@ -331,11 +285,7 @@ public class Shop implements Listener {
 							ChatColor.GRAY + "Price: " + ChatColor.GREEN + "1 emerald"),
 					Utility.createIconItemStack(Material.GOLDEN_APPLE, 1, ChatColor.YELLOW + "Golden Apple", "",
 							ChatColor.GRAY + "Price: " + ChatColor.GOLD + "3 gold"),
-<<<<<<< Updated upstream
-					Utility.createIconItemStack(Material.WOOD, 16, ChatColor.YELLOW + "Wood", "",
-=======
 					Utility.createIconItemStack(Material.OAK_PLANKS, 16, ChatColor.YELLOW + "Wood", "",
->>>>>>> Stashed changes
 							ChatColor.GRAY + "Price: " + ChatColor.GOLD + "4 gold"),
 					Utility.createIconItemStack(Material.IRON_SWORD, 1, ChatColor.YELLOW + "Iron Sword", "",
 							ChatColor.GRAY + "Price: " + ChatColor.GOLD + "7 gold"),
@@ -348,15 +298,9 @@ public class Shop implements Listener {
 					Utility.createPotionItemStack(ChatColor.YELLOW + "Jump Boost Potion" + ChatColor.GRAY + ChatColor.ITALIC + " 30s",
 							new PotionEffect(PotionEffectType.JUMP, 600, 4), "",
 							ChatColor.GRAY + "Price: " + ChatColor.GREEN + "1 emerald"),
-<<<<<<< Updated upstream
-					Utility.createIconItemStack(Material.FIREBALL, 1, ChatColor.YELLOW + "Fireball", "",
-							ChatColor.GRAY + "Price: " + ChatColor.WHITE + "40 iron"),
-					Utility.createIconItemStack(Material.ENDER_STONE, 12, ChatColor.YELLOW + "End Stone", "",
-=======
 					Utility.createIconItemStack(Material.FIRE_CHARGE, 1, ChatColor.YELLOW + "Fireball", "",
 							ChatColor.GRAY + "Price: " + ChatColor.WHITE + "40 iron"),
 					Utility.createIconItemStack(Material.END_STONE, 12, ChatColor.YELLOW + "End Stone", "",
->>>>>>> Stashed changes
 							ChatColor.GRAY + "Price: " + ChatColor.WHITE + "24 iron"),
 					Utility.createIconItemStack(Material.DIAMOND_SWORD, 1, ChatColor.YELLOW + "Diamond Sword", "",
 							ChatColor.GRAY + "Price: " + ChatColor.GREEN + "4 emerald"),
@@ -398,19 +342,6 @@ public class Shop implements Listener {
 
 			ItemStack[] b = {
 
-<<<<<<< Updated upstream
-					Utility.createIconItemStack(Material.WOOL, 16, ChatColor.YELLOW + "Wool", "",
-							ChatColor.GRAY + "Price: " + ChatColor.WHITE + "4 iron"),
-					Utility.createIconItemStack(Material.HARD_CLAY, 16, ChatColor.YELLOW + "Hardened Clay", "",
-							ChatColor.GRAY + "Price: " + ChatColor.WHITE + "12 iron"),
-					Utility.createIconItemStack(Material.GLASS, 4, ChatColor.YELLOW + "Glass", "",
-							ChatColor.GRAY + "Price: " + ChatColor.WHITE + "12 iron"),
-					Utility.createIconItemStack(Material.ENDER_STONE, 12, ChatColor.YELLOW + "End Stone", "",
-							ChatColor.GRAY + "Price: " + ChatColor.WHITE + "24 iron"),
-					Utility.createIconItemStack(Material.LADDER, 16, ChatColor.YELLOW + "Ladder", "",
-							ChatColor.GRAY + "Price: " + ChatColor.WHITE + "4 iron"),
-					Utility.createIconItemStack(Material.WOOD, 16, ChatColor.YELLOW + "Wood", "",
-=======
 					Utility.createIconItemStack(Material.WHITE_WOOL, 16, ChatColor.YELLOW + "Wool", "",
 							ChatColor.GRAY + "Price: " + ChatColor.WHITE + "4 iron"),
 					Utility.createIconItemStack(Material.CYAN_CONCRETE, 16, ChatColor.YELLOW + "Hardened Clay", "",
@@ -422,7 +353,6 @@ public class Shop implements Listener {
 					Utility.createIconItemStack(Material.LADDER, 16, ChatColor.YELLOW + "Ladder", "",
 							ChatColor.GRAY + "Price: " + ChatColor.WHITE + "4 iron"),
 					Utility.createIconItemStack(Material.OAK_PLANKS, 16, ChatColor.YELLOW + "Wood", "",
->>>>>>> Stashed changes
 							ChatColor.GRAY + "Price: " + ChatColor.GOLD + "4 gold"),
 					Utility.createIconItemStack(Material.OBSIDIAN, 4, ChatColor.YELLOW + "Obby :)", "",
 							ChatColor.GRAY + "Price: " + ChatColor.GREEN + "4 emerald")
@@ -556,19 +486,11 @@ public class Shop implements Listener {
 
 					Utility.createIconItemStack(Material.GOLDEN_APPLE, 1, ChatColor.YELLOW + "Golden Apple", "",
 							ChatColor.GRAY + "Price: " + ChatColor.GOLD + "3 gold"),
-<<<<<<< Updated upstream
-					Utility.createIconItemStack(Material.SNOW_BALL, 1, ChatColor.YELLOW + "Silverfish", "",
-							ChatColor.GRAY + "Price: " + ChatColor.WHITE + "40 iron"),
-					Utility.createIconItemStack(Material.MONSTER_EGG, 1, ChatColor.YELLOW + "Gamer Golem", "",
-							ChatColor.GRAY + "Price: " + ChatColor.WHITE + "120 iron"),
-					Utility.createIconItemStack(Material.FIREBALL, 1, ChatColor.YELLOW + "Fireball", "",
-=======
 					Utility.createIconItemStack(Material.SNOWBALL, 1, ChatColor.YELLOW + "Silverfish", "",
 							ChatColor.GRAY + "Price: " + ChatColor.WHITE + "40 iron"),
 					Utility.createIconItemStack(Material.SHEEP_SPAWN_EGG, 1, ChatColor.YELLOW + "Gamer Golem", "",
 							ChatColor.GRAY + "Price: " + ChatColor.WHITE + "120 iron"),
 					Utility.createIconItemStack(Material.FIRE_CHARGE, 1, ChatColor.YELLOW + "Fireball", "",
->>>>>>> Stashed changes
 							ChatColor.GRAY + "Price: " + ChatColor.WHITE + "40 iron"),
 					Utility.createIconItemStack(Material.TNT, 1, ChatColor.YELLOW + "TNT", "",
 							ChatColor.GRAY + "Price: " + ChatColor.GOLD + "4 gold"),
@@ -638,11 +560,7 @@ public class Shop implements Listener {
 
 					if (success) {
 
-<<<<<<< Updated upstream
-						player.playSound(player.getLocation(), Sound.NOTE_PLING, 1, 2);
-=======
 						player.playSound(player.getLocation(), Sound.BLOCK_NOTE_BLOCK_PLING, 1, 2);
->>>>>>> Stashed changes
 						openTeamUpgrades(player);
 						return;
 
@@ -654,11 +572,7 @@ public class Shop implements Listener {
 
 			}
 
-<<<<<<< Updated upstream
-			player.playSound(player.getLocation(), Sound.ANVIL_LAND, 1, 1);
-=======
 			player.playSound(player.getLocation(), Sound.BLOCK_ANVIL_LAND, 1, 1);
->>>>>>> Stashed changes
 			return;
 
 		}
@@ -675,12 +589,8 @@ public class Shop implements Listener {
 
 			ItemStack item = e.getCurrentItem();
 
-<<<<<<< Updated upstream
-			if (e.getRawSlot() == 49 && item.getType() == Material.STAINED_GLASS) {
-=======
 			// TODO: THIS IS WRONG! FIX GLASS COLOR (maybe fix now?)
 			if (e.getRawSlot() == 49 && item.getType() == Material.LIGHT_GRAY_STAINED_GLASS) {
->>>>>>> Stashed changes
 
 				openTrapMenu(player);
 
@@ -722,11 +632,7 @@ public class Shop implements Listener {
 								upgrade = TeamUpgrade.ARMOR2;
 								break;
 
-<<<<<<< Updated upstream
-							case GOLD_CHESTPLATE:
-=======
 							case GOLDEN_CHESTPLATE:
->>>>>>> Stashed changes
 								upgrade = TeamUpgrade.ARMOR3;
 								break;
 
@@ -738,11 +644,7 @@ public class Shop implements Listener {
 								upgrade = TeamUpgrade.MINE1;
 								break;
 
-<<<<<<< Updated upstream
-							case GOLD_PICKAXE:
-=======
 							case GOLDEN_PICKAXE:
->>>>>>> Stashed changes
 								upgrade = TeamUpgrade.MINE2;
 								break;
 
@@ -779,11 +681,7 @@ public class Shop implements Listener {
 
 								if (success) {
 
-<<<<<<< Updated upstream
-									player.playSound(player.getLocation(), Sound.NOTE_PLING, 1, 2);
-=======
 									player.playSound(player.getLocation(), Sound.BLOCK_NOTE_BLOCK_PLING, 1, 2);
->>>>>>> Stashed changes
 									teamUpgrades_inv(player, e.getInventory());
 									return;
 
@@ -800,11 +698,7 @@ public class Shop implements Listener {
 
 			}
 
-<<<<<<< Updated upstream
-			player.playSound(player.getLocation(), Sound.ANVIL_LAND, 1, 1);
-=======
 			player.playSound(player.getLocation(), Sound.BLOCK_ANVIL_LAND, 1, 1);
->>>>>>> Stashed changes
 			return;
 
 
@@ -824,11 +718,7 @@ public class Shop implements Listener {
 
 			if (slot < 8) {
 
-<<<<<<< Updated upstream
-				player.playSound(player.getLocation(), Sound.NOTE_PLING, 1, 1.5f);
-=======
 				player.playSound(player.getLocation(), Sound.BLOCK_NOTE_BLOCK_PLING, 1, 1.5f);
->>>>>>> Stashed changes
 				itemShop_inv(player, e.getInventory(), slot);
 				return;
 
@@ -854,11 +744,7 @@ public class Shop implements Listener {
 
 						if (success) {
 
-<<<<<<< Updated upstream
-							player.playSound(player.getLocation(), Sound.NOTE_PLING, 1, 2);
-=======
 							player.playSound(player.getLocation(), Sound.BLOCK_NOTE_BLOCK_PLING, 1, 2);
->>>>>>> Stashed changes
 
 							int page = 0;
 
@@ -881,11 +767,7 @@ public class Shop implements Listener {
 
 				}
 
-<<<<<<< Updated upstream
-				player.playSound(player.getLocation(), Sound.ANVIL_LAND, 1, 1);
-=======
 				player.playSound(player.getLocation(), Sound.BLOCK_ANVIL_LAND, 1, 1);
->>>>>>> Stashed changes
 
 			}
 
@@ -1111,25 +993,15 @@ public class Shop implements Listener {
 
 		boolean isNotArmor = true;
 
-<<<<<<< Updated upstream
-		if (stack.getType() == Material.WOOL && WedBars.arena != null) {
-
-			stack = new ItemStack(Material.WOOL, stack.getAmount(), WedBars.arena.getGamer(player.getName()).getTeam().getStackColor());
-=======
 		if (stack.getType() == Material.WHITE_WOOL && WedBars.arena != null) {
 
 			stack = new ItemStack(WedBars.arena.getGamer(player.getName()).getTeam().getColoredWool(), stack.getAmount());
->>>>>>> Stashed changes
 
 		}
 		
 		else if (stack.getType() == Material.GLASS && WedBars.arena != null) {
 			
-<<<<<<< Updated upstream
-			stack = new ItemStack(Material.STAINED_GLASS, stack.getAmount(), WedBars.arena.getGamer(player.getName()).getTeam().getStackColor());
-=======
 			stack = new ItemStack(WedBars.arena.getGamer(player.getName()).getTeam().getColoredGlassPane(), stack.getAmount());
->>>>>>> Stashed changes
 			
 		}
 
@@ -1246,26 +1118,16 @@ public class Shop implements Listener {
 
 		else if (stack.getType().toString().endsWith("_PICKAXE")) {
 
-<<<<<<< Updated upstream
-			player.getInventory().remove(Material.WOOD_PICKAXE);
-			player.getInventory().remove(Material.IRON_PICKAXE);
-			player.getInventory().remove(Material.GOLD_PICKAXE);
-=======
 			player.getInventory().remove(Material.WOODEN_PICKAXE);
 			player.getInventory().remove(Material.IRON_PICKAXE);
 			player.getInventory().remove(Material.GOLDEN_PICKAXE);
->>>>>>> Stashed changes
 			player.getInventory().remove(Material.DIAMOND_PICKAXE);
 
 		}
 
 		else if (stack.getType().toString().endsWith("_AXE")) {
 
-<<<<<<< Updated upstream
-			player.getInventory().remove(Material.WOOD_AXE);
-=======
 			player.getInventory().remove(Material.WOODEN_AXE);
->>>>>>> Stashed changes
 			player.getInventory().remove(Material.STONE_AXE);
 			player.getInventory().remove(Material.IRON_AXE);
 			player.getInventory().remove(Material.DIAMOND_AXE);
@@ -1292,11 +1154,7 @@ public class Shop implements Listener {
 
 				}
 				
-<<<<<<< Updated upstream
-				player.getInventory().remove(Material.WOOD_SWORD);
-=======
 				player.getInventory().remove(Material.WOODEN_SWORD);
->>>>>>> Stashed changes
 
 			}
 
@@ -1350,11 +1208,7 @@ public class Shop implements Listener {
 
 		ItemStack nextPick = null;
 
-<<<<<<< Updated upstream
-		if (player.getInventory().contains(Material.WOOD_PICKAXE)) {
-=======
 		if (player.getInventory().contains(Material.WOODEN_PICKAXE)) {
->>>>>>> Stashed changes
 
 			nextPick = Utility.createEnchantedItemStack(Material.IRON_PICKAXE, 1, ChatColor.YELLOW + "Iron Pickaxe",
 					new EnchantmentSet[] {new EnchantmentSet(Enchantment.DIG_SPEED, 2)}, "",
@@ -1362,20 +1216,12 @@ public class Shop implements Listener {
 
 		} else if (player.getInventory().contains(Material.IRON_PICKAXE)) {
 
-<<<<<<< Updated upstream
-			nextPick = Utility.createEnchantedItemStack(Material.GOLD_PICKAXE, 1, ChatColor.YELLOW + "Gold Pickaxe",
-=======
 			nextPick = Utility.createEnchantedItemStack(Material.GOLDEN_PICKAXE, 1, ChatColor.YELLOW + "Gold Pickaxe",
->>>>>>> Stashed changes
 					new EnchantmentSet[] {new EnchantmentSet(Enchantment.DIG_SPEED, 3),
 							new EnchantmentSet(Enchantment.DAMAGE_ALL, 2)}, "",
 					ChatColor.GRAY + "Price: " + ChatColor.GOLD + "3 gold");
 
-<<<<<<< Updated upstream
-		} else if (player.getInventory().contains(Material.GOLD_PICKAXE)) {
-=======
 		} else if (player.getInventory().contains(Material.GOLDEN_PICKAXE)) {
->>>>>>> Stashed changes
 
 			nextPick = Utility.createEnchantedItemStack(Material.DIAMOND_PICKAXE, 1, ChatColor.YELLOW + "Diamond Pickaxe",
 					new EnchantmentSet[] {new EnchantmentSet(Enchantment.DIG_SPEED, 1)}, "",
@@ -1388,11 +1234,7 @@ public class Shop implements Listener {
 
 		} else {
 
-<<<<<<< Updated upstream
-			nextPick = Utility.createEnchantedItemStack(Material.WOOD_PICKAXE, 1, ChatColor.YELLOW + "Wooden Pickaxe",
-=======
 			nextPick = Utility.createEnchantedItemStack(Material.WOODEN_PICKAXE, 1, ChatColor.YELLOW + "Wooden Pickaxe",
->>>>>>> Stashed changes
 					new EnchantmentSet[] {new EnchantmentSet(Enchantment.DIG_SPEED, 1)}, "",
 					ChatColor.GRAY + "Price: " + ChatColor.WHITE + "10 iron");
 
@@ -1406,11 +1248,7 @@ public class Shop implements Listener {
 
 		ItemStack nextAxe = null;
 
-<<<<<<< Updated upstream
-		if (player.getInventory().contains(Material.WOOD_AXE)) {
-=======
 		if (player.getInventory().contains(Material.WOODEN_AXE)) {
->>>>>>> Stashed changes
 
 			nextAxe = Utility.createEnchantedItemStack(Material.STONE_AXE, 1, ChatColor.YELLOW + "Stone Axe",
 					new EnchantmentSet[] {new EnchantmentSet(Enchantment.DIG_SPEED, 1)}, "",
@@ -1435,11 +1273,7 @@ public class Shop implements Listener {
 
 		}else {
 
-<<<<<<< Updated upstream
-			nextAxe = Utility.createEnchantedItemStack(Material.WOOD_AXE, 1, ChatColor.YELLOW + "Wooden Axe",
-=======
 			nextAxe = Utility.createEnchantedItemStack(Material.WOODEN_AXE, 1, ChatColor.YELLOW + "Wooden Axe",
->>>>>>> Stashed changes
 					new EnchantmentSet[] {new EnchantmentSet(Enchantment.DIG_SPEED, 1)}, "",
 					ChatColor.GRAY + "Price: " + ChatColor.WHITE + "10 iron");
 

@@ -154,11 +154,7 @@ public class Listeners implements Listener {
 				if (gotce.isCancelled()) return;
 				
 				player.openInventory(team.getChest());
-<<<<<<< Updated upstream
-				player.playSound(player.getLocation(), Sound.CHEST_OPEN, 1, 1);
-=======
 				player.playSound(player.getLocation(), Sound.BLOCK_CHEST_OPEN, 1, 1);
->>>>>>> Stashed changes
 				
 				
 
@@ -175,11 +171,7 @@ public class Listeners implements Listener {
 			
 			Player player = (Player) e.getPlayer();
 			
-<<<<<<< Updated upstream
-			player.playSound(player.getLocation(), Sound.CHEST_CLOSE, 1, 1);
-=======
 			player.playSound(player.getLocation(), Sound.BLOCK_CHEST_CLOSE, 1, 1);
->>>>>>> Stashed changes
 			
 		}
 		
@@ -318,11 +310,7 @@ public class Listeners implements Listener {
 
 		// TODO switch this to bed when ready
 
-<<<<<<< Updated upstream
-		if (e.getBlock().getType() == Material.BED_BLOCK) {
-=======
 		if (e.getBlock().getType() == Material.RED_BED) {
->>>>>>> Stashed changes
 
 			e.setCancelled(true);
 

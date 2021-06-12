@@ -179,22 +179,14 @@ public class Arena {
 			p.removePotionEffect(PotionEffectType.FAST_DIGGING);
 
 			p.teleport(at.getSpawnLoc());
-<<<<<<< Updated upstream
-			p.playSound(p.getLocation(), Sound.NOTE_PLING, 1, 1);
-=======
 			p.playSound(p.getLocation(), Sound.BLOCK_NOTE_BLOCK_PLING, 1, 1);
->>>>>>> Stashed changes
 			Titles.start(p, team);
 
 			p.getInventory().setHelmet(Utility.createLeatherArmorPiece(Material.LEATHER_HELMET, team.getColor(), ChatColor.YELLOW + "Leather Helmet"));
 			p.getInventory().setChestplate(Utility.createLeatherArmorPiece(Material.LEATHER_CHESTPLATE, team.getColor(), ChatColor.YELLOW + "Leather Chestplate"));
 			p.getInventory().setLeggings(Utility.createLeatherArmorPiece(Material.LEATHER_LEGGINGS, team.getColor(), ChatColor.YELLOW + "Leather Leggings"));
 			p.getInventory().setBoots(Utility.createLeatherArmorPiece(Material.LEATHER_BOOTS, team.getColor(), ChatColor.YELLOW + "Leather Boots"));
-<<<<<<< Updated upstream
-			p.getInventory().setItem(0, Utility.createUnbreakableItemStack(Material.WOOD_SWORD, 1, ChatColor.YELLOW + "Wooden Sword"));
-=======
 			p.getInventory().setItem(0, Utility.createUnbreakableItemStack(Material.WOODEN_SWORD, 1, ChatColor.YELLOW + "Wooden Sword"));
->>>>>>> Stashed changes
 
 		}
 
@@ -208,12 +200,8 @@ public class Arena {
 
 		for (ArenaTeam at : teams.values()) {
 
-<<<<<<< Updated upstream
-			ArenaBed.placeBed(at.getBedLoc());
-=======
 
 			ArenaBed.placeBed(at.getBedLoc(), at.getTeam().getColoredBed());
->>>>>>> Stashed changes
 
 		}
 
@@ -332,11 +320,7 @@ public class Arena {
 
 											Player player = gamer.getPlayer();
 											Titles.trapTriggered(player);
-<<<<<<< Updated upstream
-											player.playSound(player.getLocation(), Sound.WITHER_SPAWN, 1, 1);
-=======
 											player.playSound(player.getLocation(), Sound.ENTITY_WITHER_SPAWN, 1, 1);
->>>>>>> Stashed changes
 
 										}
 										
@@ -404,22 +388,14 @@ public class Arena {
 
 					Generator i = at.getIronGenerator();
 
-<<<<<<< Updated upstream
-					if (i.passTime()) i.spawnItem(new ItemStack(Material.IRON_INGOT, 1), false, true);
-=======
 					if (i.passTime()) i.spawnItem(new ItemStack(Material.IRON_INGOT, 1), false);
->>>>>>> Stashed changes
 
 
 					// Gold gen
 
 					Generator g = at.getGoldGenerator();
 
-<<<<<<< Updated upstream
-					if (g.passTime()) g.spawnItem(new ItemStack(Material.GOLD_INGOT, 1), false, true);
-=======
 					if (g.passTime()) g.spawnItem(new ItemStack(Material.GOLD_INGOT, 1), false);
->>>>>>> Stashed changes
 
 
 					// Emerald gen if unlocked
@@ -428,11 +404,7 @@ public class Arena {
 
 					if (e != null) {
 
-<<<<<<< Updated upstream
-						if (e.passTime()) e.spawnItem(new ItemStack(Material.EMERALD, 1), false, false);
-=======
 						if (e.passTime()) e.spawnItem(new ItemStack(Material.EMERALD, 1), false);
->>>>>>> Stashed changes
 
 					}
 
@@ -463,11 +435,7 @@ public class Arena {
 
 						}
 
-<<<<<<< Updated upstream
-						if (alreadyThere < WedBars.MAX_DIAMONDS_IN_GEN) d.spawnItem(new ItemStack(Material.DIAMOND, 1), false, false);
-=======
 						if (alreadyThere < WedBars.MAX_DIAMONDS_IN_GEN) d.spawnItem(new ItemStack(Material.DIAMOND, 1), false);
->>>>>>> Stashed changes
 
 					}
 
@@ -498,11 +466,7 @@ public class Arena {
 
 						}
 
-<<<<<<< Updated upstream
-						if (alreadyThere < WedBars.MAX_EMERALDS_IN_GEN) e.spawnItem(new ItemStack(Material.EMERALD, 1), false, false);
-=======
 						if (alreadyThere < WedBars.MAX_EMERALDS_IN_GEN) e.spawnItem(new ItemStack(Material.EMERALD, 1), false);
->>>>>>> Stashed changes
 
 					}
 
@@ -668,11 +632,7 @@ public class Arena {
 
 			for (Player player : Bukkit.getOnlinePlayers()) {
 
-<<<<<<< Updated upstream
-				player.playSound(player.getLocation(), Sound.ENDERDRAGON_GROWL, 1, 1);
-=======
 				player.playSound(player.getLocation(), Sound.ENTITY_ENDER_DRAGON_GROWL, 1, 1);
->>>>>>> Stashed changes
 
 			}
 
@@ -743,20 +703,12 @@ public class Arena {
 					for (Gamer gamer : team.getGamers()) {
 
 						Player player = gamer.getPlayer();
-<<<<<<< Updated upstream
-
-						Titles.win(player);
-						gamer.addOneToStatistic(Statistic.WINS);
-
-						player.playSound(player.getLocation(), Sound.ENDERDRAGON_DEATH, 1, 1);
-=======
 						Team pteam = gamer.getTeam();
 
 						Titles.win(player, pteam);
 						gamer.addOneToStatistic(Statistic.WINS);
 
 						player.playSound(player.getLocation(), Sound.ENTITY_ENDER_DRAGON_DEATH, 1, 1);
->>>>>>> Stashed changes
 						player.setGameMode(GameMode.SPECTATOR);
 
 					}
@@ -766,18 +718,11 @@ public class Arena {
 					for (Gamer gamer : team.getGamers()) {
 
 						Player player = gamer.getPlayer();
-<<<<<<< Updated upstream
-
-						Titles.loss(player);
-
-						player.playSound(player.getLocation(), Sound.ENDERDRAGON_DEATH, 1, 1);
-=======
 						Team pteam = gamer.getTeam();
 
 						Titles.loss(player, pteam);
 
 						player.playSound(player.getLocation(), Sound.ENTITY_ENDER_DRAGON_DEATH, 1, 1);
->>>>>>> Stashed changes
 						player.setGameMode(GameMode.SPECTATOR);
 
 					}

@@ -102,11 +102,7 @@ public class ArenaAutoStart implements Listener {
 
 
 
-<<<<<<< Updated upstream
-			ItemStack stack = new ItemStack(Material.STAINED_GLASS_PANE, 1, team.getStackColor());
-=======
 			ItemStack stack = new ItemStack(team.getColoredGlassPane(), 1);
->>>>>>> Stashed changes
 			ItemMeta meta = stack.getItemMeta();
 			meta.setDisplayName(team.getChatColor() + team.getLabel());
 
@@ -164,11 +160,7 @@ public class ArenaAutoStart implements Listener {
 			e.setCancelled(true);
 
 			Player player = (Player) e.getWhoClicked();
-<<<<<<< Updated upstream
-			player.playSound(player.getLocation(), Sound.NOTE_PLING, 1, 1);
-=======
 			player.playSound(player.getLocation(), Sound.BLOCK_NOTE_BLOCK_PLING, 1, 1);
->>>>>>> Stashed changes
 
 			Team selected = Team.getByLabel(ChatColor.stripColor(e.getCurrentItem().getItemMeta().getDisplayName()));
 

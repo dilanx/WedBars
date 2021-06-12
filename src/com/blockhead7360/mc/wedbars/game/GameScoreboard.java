@@ -26,12 +26,8 @@ public class GameScoreboard {
 	private static String status;
 	
 	private static Map<Team, TeamScoreboardData> teamData;
-<<<<<<< Updated upstream
-	
-=======
 
 	// TODO: fix time update system to eliminate/reduce scoreboard flickering
->>>>>>> Stashed changes
 	public static class TeamScoreboardData {
 		
 		private String teamData;
@@ -66,11 +62,7 @@ public class GameScoreboard {
 		
 		sb = Bukkit.getScoreboardManager().getNewScoreboard();
 		Objective o = sb.registerNewObjective("health", "health");
-<<<<<<< Updated upstream
-		o.setDisplayName(ChatColor.RED + "HP");
-=======
 		o.setDisplayName(ChatColor.RED + "♥");
->>>>>>> Stashed changes
 		o.setDisplaySlot(DisplaySlot.BELOW_NAME);
 		
 		Objective o1 = sb.registerNewObjective("health1", "health");

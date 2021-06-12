@@ -23,11 +23,7 @@ public class Utility {
 		ItemMeta meta = stack.getItemMeta();
 		meta.setDisplayName(displayName);
 		if (lore != null) meta.setLore(Arrays.asList(lore));
-<<<<<<< Updated upstream
-		meta.spigot().setUnbreakable(true);
-=======
 		meta.setUnbreakable(true);
->>>>>>> Stashed changes
 		meta.addItemFlags(ItemFlag.HIDE_UNBREAKABLE);
 		stack.setItemMeta(meta);
 		return stack;
@@ -40,11 +36,7 @@ public class Utility {
 		ItemMeta meta = stack.getItemMeta();
 		meta.setDisplayName(displayName);
 		if (lore != null) meta.setLore(Arrays.asList(lore));
-<<<<<<< Updated upstream
-		meta.spigot().setUnbreakable(true);
-=======
 		meta.setUnbreakable(true);
->>>>>>> Stashed changes
 		meta.addItemFlags(ItemFlag.HIDE_UNBREAKABLE);
 		stack.setItemMeta(meta);
 		return stack;
@@ -60,11 +52,7 @@ public class Utility {
 		for (EnchantmentSet e : enchants) {
 			meta.addEnchant(e.getEnchantment(), e.getLevel(), true);
 		}
-<<<<<<< Updated upstream
-		meta.spigot().setUnbreakable(true);
-=======
 		meta.setUnbreakable(true);
->>>>>>> Stashed changes
 		meta.addItemFlags(ItemFlag.HIDE_UNBREAKABLE);
 		stack.setItemMeta(meta);
 		return stack;
@@ -80,11 +68,7 @@ public class Utility {
 		for (EnchantmentSet e : enchants) {
 			meta.addEnchant(e.getEnchantment(), e.getLevel(), true);
 		}
-<<<<<<< Updated upstream
-		meta.spigot().setUnbreakable(true);
-=======
 		meta.setUnbreakable(true);
->>>>>>> Stashed changes
 		meta.addItemFlags(ItemFlag.HIDE_UNBREAKABLE, ItemFlag.HIDE_ENCHANTS);
 		stack.setItemMeta(meta);
 		return stack;
@@ -131,11 +115,7 @@ public class Utility {
 		LeatherArmorMeta meta = (LeatherArmorMeta) stack.getItemMeta();
 		meta.setDisplayName(displayName);
 		meta.setColor(color);
-<<<<<<< Updated upstream
-		meta.spigot().setUnbreakable(true);
-=======
 		meta.setUnbreakable(true);
->>>>>>> Stashed changes
 		meta.addItemFlags(ItemFlag.HIDE_UNBREAKABLE);
 		stack.setItemMeta(meta);
 
@@ -148,11 +128,7 @@ public class Utility {
 		ItemStack stack = new ItemStack(mat, amount);
 		ItemMeta meta = stack.getItemMeta();
 		meta.setDisplayName(displayName);
-<<<<<<< Updated upstream
-		meta.spigot().setUnbreakable(true);
-=======
 		meta.setUnbreakable(true);
->>>>>>> Stashed changes
 		meta.addItemFlags(ItemFlag.HIDE_UNBREAKABLE);
 		stack.setItemMeta(meta);
 
@@ -165,11 +141,7 @@ public class Utility {
 		ItemStack stack = new ItemStack(mat, amount, data);
 		ItemMeta meta = stack.getItemMeta();
 		meta.setDisplayName(displayName);
-<<<<<<< Updated upstream
-		meta.spigot().setUnbreakable(true);
-=======
 		meta.setUnbreakable(true);
->>>>>>> Stashed changes
 		meta.addItemFlags(ItemFlag.HIDE_UNBREAKABLE);
 		stack.setItemMeta(meta);
 

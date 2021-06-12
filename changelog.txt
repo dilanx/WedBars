@@ -45,9 +45,6 @@ may 6 21 (am)
 
 may 6 21 (pm)
 - chest open and close sound implemented
-<<<<<<< Updated upstream
-- random arena selection on new game
-=======
 - random arena selection on new game
 
 0.1.0
@@ -56,4 +53,3 @@ may 6 21 (pm)
 - items no on respawn bug still exists
 - Fixed some visual bugs
 - Beds are now colored by team color
->>>>>>> Stashed changes

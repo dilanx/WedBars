@@ -107,10 +107,7 @@ public class WedBars extends JavaPlugin {
 		
 		l.info("Initializing item shop...");
 		Shop.init();
-<<<<<<< Updated upstream
-=======
 
->>>>>>> Stashed changes
 		
 		instance = this;
 
@@ -172,11 +169,7 @@ public class WedBars extends JavaPlugin {
 
 			sender.sendMessage(" ");
 			sender.sendMessage(ChatColor.GRAY + "---[ " + ChatColor.GREEN + "Wed Bars Command Help" + ChatColor.GRAY + " ]---");
-<<<<<<< Updated upstream
-			sender.sendMessage(ChatColor.WHITE + "/team" + ChatColor.GRAY + " - Select a team or assign teams manually.");
-=======
 			sender.sendMessage(ChatColor.RED + "/team" + ChatColor.GRAY + " - Select a team or assign teams manually.");
->>>>>>> Stashed changes
 			sender.sendMessage(ChatColor.RED + "/setup" + ChatColor.GRAY + " - Setup a new arena.");
 			sender.sendMessage(ChatColor.RED + "/load" + ChatColor.GRAY + " - Load an arena.");
 			sender.sendMessage(ChatColor.RED + "/autoteam" + ChatColor.GRAY + " - Automatically randomly assign teams.");
