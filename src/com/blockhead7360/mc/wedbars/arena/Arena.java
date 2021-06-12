@@ -7,13 +7,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Random;
 
-import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
-import org.bukkit.GameMode;
-import org.bukkit.Location;
-import org.bukkit.Material;
-import org.bukkit.Sound;
-import org.bukkit.World;
+import org.bukkit.*;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.IronGolem;
 import org.bukkit.entity.Item;
@@ -195,6 +189,9 @@ public class Arena {
 		GameScoreboard.start(data.getName(), teams.values().toArray(new ArenaTeam[0]));
 		GameScoreboard.updateStatus(ChatColor.AQUA + "" + ChatColor.BOLD + "Diamond 2");
 		time = 3000;
+
+		// auto-set gamerules
+		world.setGameRule(GameRule.KEEP_INVENTORY, true);
 
 		// reset team stuff
 
@@ -388,14 +385,14 @@ public class Arena {
 
 					Generator i = at.getIronGenerator();
 
-					if (i.passTime()) i.spawnItem(new ItemStack(Material.IRON_INGOT, 1), false);
+					if (i.passTime()) i.spawnItem(new ItemStack(Material.IRON_INGOT, 1), false, true);
 
 
 					// Gold gen
 
 					Generator g = at.getGoldGenerator();
 
-					if (g.passTime()) g.spawnItem(new ItemStack(Material.GOLD_INGOT, 1), false);
+					if (g.passTime()) g.spawnItem(new ItemStack(Material.GOLD_INGOT, 1), false, true);
 
 
 					// Emerald gen if unlocked
@@ -404,7 +401,7 @@ public class Arena {
 
 					if (e != null) {
 
-						if (e.passTime()) e.spawnItem(new ItemStack(Material.EMERALD, 1), false);
+						if (e.passTime()) e.spawnItem(new ItemStack(Material.EMERALD, 1), false, false);
 
 					}
 
@@ -435,7 +432,7 @@ public class Arena {
 
 						}
 
-						if (alreadyThere < WedBars.MAX_DIAMONDS_IN_GEN) d.spawnItem(new ItemStack(Material.DIAMOND, 1), false);
+						if (alreadyThere < WedBars.MAX_DIAMONDS_IN_GEN) d.spawnItem(new ItemStack(Material.DIAMOND, 1), false, false);
 
 					}
 
@@ -466,7 +463,7 @@ public class Arena {
 
 						}
 
-						if (alreadyThere < WedBars.MAX_EMERALDS_IN_GEN) e.spawnItem(new ItemStack(Material.EMERALD, 1), false);
+						if (alreadyThere < WedBars.MAX_EMERALDS_IN_GEN) e.spawnItem(new ItemStack(Material.EMERALD, 1), false, false);
 
 					}
 

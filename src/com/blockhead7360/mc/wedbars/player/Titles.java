@@ -8,13 +8,13 @@ import com.blockhead7360.mc.wedbars.team.Team;
 
 public class Titles {
 
-	// This has all now been updated to use the new Title API. The old ones are commented out for reference,
+	// This has all now been updated to use the new Titles API. The old ones are commented out for reference,
 	// but may be removed in the future.
 
 	public static void start(Player player, Team team) {
 
 		player.sendTitle("" + ChatColor.YELLOW + ChatColor.BOLD + "WED BARS", "" + team.getChatColor() + ChatColor.BOLD +
-				team.getLabel() + " TEAM", 0,100, 20);
+				team.getLabel() + " Team", 0,100, 20);
 
 //		Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "title " + player.getName() +
 //				" times 0 100 20");
@@ -29,7 +29,7 @@ public class Titles {
 	public static void win(Player player, Team team) {
 
 		player.sendTitle("" + ChatColor.GREEN + ChatColor.BOLD + "VICTORY!", "" + team.getChatColor() + ChatColor.BOLD +
-				team.getLabel() + " TEAM", 0,100, 20);
+				team.getLabel() + " Team", 0,100, 20);
 
 //		Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "title " + player.getName() +
 //				" times 0 100 20");
@@ -43,7 +43,7 @@ public class Titles {
 	public static void loss(Player player, Team team) {
 
 		player.sendTitle("" + ChatColor.RED + ChatColor.BOLD + "DEFEAT!", "" + team.getChatColor() + ChatColor.BOLD +
-				team.getLabel() + " TEAM", 0,100, 20);
+				team.getLabel() + " Team", 0,100, 20);
 
 //		Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "title " + player.getName() +
 //				" times 0 100 20");

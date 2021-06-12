@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.bukkit.Bukkit;
+import org.bukkit.GameRule;
 import org.bukkit.Location;
 import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.configuration.file.FileConfiguration;
@@ -67,6 +68,7 @@ public class ArenaLoader {
 		}
 
 		Location lobby = (Location) config.get("lobby");
+		lobby.getWorld().setGameRule(GameRule.DO_MOB_SPAWNING, false);
 
 		int ds = config.getInt("diamondspeed");
 		int es = config.getInt("emeraldspeed");

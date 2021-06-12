@@ -140,6 +140,7 @@ public class WedBars extends JavaPlugin {
 
 	}
 
+	// TODO: implement a TabCommand system and also move this mess out of the main class
 	public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
 
 		if (cmd.getName().equalsIgnoreCase("wedbars")) {

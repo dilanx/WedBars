@@ -12,3 +12,7 @@ WedBars 1.16.5 Changelog
 - Tuned fireball and TNT damage to be a bit more reasonable
 - Fixed a bug causing lobbies to autostart instantly
 - Fixed some scoreboard flickering with the updating timer
+- Fixed a metadata bug with diamond and emerald gens
+- Added automatic setting of game rules
+- Disabled hunger
+- Added shields to the item shop (10 iron)
