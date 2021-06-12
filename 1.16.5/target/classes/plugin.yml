@@ -1,0 +1,36 @@
+name: WedBars
+version: 0.1.0
+api-version: 1.16
+main: com.blockhead7360.mc.wedbars.WedBars
+authors: [Blockhead7360, TwelvePointFive]
+description: It's like Bed Wars on Hypixel but better I swear
+website: https://github.com/dilanx/WedBars
+depend: [HolographicDisplays]
+
+commands:
+  wedbars:
+    description: Information about Wed Bars
+    aliases: [wb]
+  load:
+    description: Loads a given arena.
+  setup:
+    description: Enter the arena setup wizard.
+  team:
+    description: Assign a player to a team.
+  autoteam:
+    description: Automatically randomly assign players to teams.
+  start:
+    description: Start the game.
+  end:
+    description: End the game.
+  reset:
+    description: Manually reset an arena.
+  itemshop:
+    description: Opens the item shop, for use with NPCs.
+  teamshop:
+    description: Opens the team shop, for use with NPCs.
+permissions:
+  wedbars.itemshop:
+    default: false
+  wedbars.admin:
+    default: op

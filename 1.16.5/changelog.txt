@@ -1,0 +1,55 @@
+WedBars Changelog 
+
+
+- added traps
+- added heal pool functionality
+- generator is less jank
+- added game stages
+- increased fireball damage
+- added potions to shop
+- added invisibility functionality
+- added golems
+- added magic milk
+- added silverfish
+- added bridge egg
+- added team chest (test this)
+- added stats (mysql)
+
+apr 23 21 (am)
+- game can start automatically now (pog)
+- cakes replaced with beds
+- fixed some issues (like wood swords disappear when purchasing other type of sword)
+- (jack) realized i forgot about changelogs
+- added info about the documentation page to the config
+- glass is now blast proof, though tnt can glitch through if placed right (will fix)
+- bridge eggs will not generate over build limit
+- build limit changed to be per-arena
+- restricted players to only open shops if at a team base (if using commands vs npcs)
+
+april 23 21 (pm)
+- fireball behavior changed. will now spawn an explosion (not primedtnt) so that we can
+control how it will explode. they still go fast though.
+- changed spawning of primed tnt from tnt placement to spawn in the same block that the
+tnt would be rather than other location idk
+
+may 1 21 (pm)
+- fixed invis armor disappearing on death
+- fireball behavior should work now
+- generator split
+- all gens start with 1 item
+
+may 6 21 (am)
+- notifies the player that triggered a trap (not just the team whose trap it is)
+- drop ender chest items in team gen on final death
+- drop team chest items in team gen on elimination
+
+may 6 21 (pm)
+- chest open and close sound implemented
+- random arena selection on new game
+
+0.1.0
+- Formal port to 1.17
+- Changed spawn eggs from shops to no longer be generic
+- items no on respawn bug still exists
+- Fixed some visual bugs
+- Beds are now colored by team color
