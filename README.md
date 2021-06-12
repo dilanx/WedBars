@@ -5,6 +5,6 @@ Interested in setting this up for yourself? You can find all that information in
 
 You can download builds from Jenkins:
 - 1.8.8: http://builds.jackburkhardt.com/job/WedBars-1.8.8
-- 1.16.5: http://builds.jackburkhardt.com/job/WedBars-1.16.5
+- 1.16.5 (unstable): http://builds.jackburkhardt.com/job/WedBars-1.16.5
 
 Created by [Dilan](https://dilanxd.com) and [Jack](https://jackburkhardt.com).
