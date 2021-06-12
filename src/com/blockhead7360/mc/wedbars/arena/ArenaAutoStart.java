@@ -194,8 +194,6 @@ public class ArenaAutoStart implements Listener {
 	public static void startCountdown() {
 
 		WedBars.starting = true;
-
-		// TODO: (BUG) game starts with no pause, The message below gets sent but is the only one.
 		Bukkit.broadcastMessage(ChatColor.GRAY + "The game is starting in " + ChatColor.WHITE + WedBars.LOBBY_START + " seconds" + ChatColor.GRAY + ".");
 
 		new BukkitRunnable() {

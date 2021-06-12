@@ -27,7 +27,6 @@ public class GameScoreboard {
 	
 	private static Map<Team, TeamScoreboardData> teamData;
 
-	// TODO: fix time update system to eliminate/reduce scoreboard flickering
 	public static class TeamScoreboardData {
 		
 		private String teamData;

@@ -222,7 +222,7 @@ public class Shop implements Listener {
 
 		} else {
 
-			inv.setItem(49, Utility.createIconItemStack(Material.LIGHT_GRAY_STAINED_GLASS, 1, ChatColor.WHITE + "No active trap", "", ChatColor.GRAY + "Click to purchase one."));
+			inv.setItem(49, Utility.createIconItemStack(Material.LIGHT_GRAY_STAINED_GLASS_PANE, 1, ChatColor.WHITE + "No active trap", "", ChatColor.GRAY + "Click to purchase one."));
 
 		}
 
@@ -589,8 +589,7 @@ public class Shop implements Listener {
 
 			ItemStack item = e.getCurrentItem();
 
-			// TODO: THIS IS WRONG! FIX GLASS COLOR (maybe fix now?)
-			if (e.getRawSlot() == 49 && item.getType() == Material.LIGHT_GRAY_STAINED_GLASS) {
+			if (e.getRawSlot() == 49 && item.getType() == Material.LIGHT_GRAY_STAINED_GLASS_PANE) {
 
 				openTrapMenu(player);
 
