@@ -1,11 +1,13 @@
 package com.blockhead7360.mc.wedbars.team.traps;
 
-import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
+
+import com.blockhead7360.mc.wedbars.player.Gamer;
+import com.blockhead7360.mc.wedbars.team.ArenaTeam;
 
 public abstract class TeamTrap {
 	
-	public abstract void activate(Player player);
+	public abstract void activate(Gamer gamer, ArenaTeam team);
 	
 	public abstract ItemStack icon();
 	

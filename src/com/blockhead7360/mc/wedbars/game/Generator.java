@@ -7,18 +7,18 @@ import org.bukkit.inventory.meta.ItemMeta;
 import com.blockhead7360.mc.wedbars.api.events.GeneratorSpawnItemEvent;
 
 public class Generator {
-	
+
 	private Location location;
 	private int speed;
-	
+
 	private int curTimeLeft;
-	
+
 	public Generator(Location location, int speed) {
-		
+
 		this.location = location;
 		this.speed = speed;
 		this.curTimeLeft = 1;
-		
+
 	}
 
 	public Location getLocation() {
@@ -41,43 +41,45 @@ public class Generator {
 	}
 
 	public boolean passTime() {
-		
+
 		curTimeLeft--;
-				
+
 		if (curTimeLeft <= 0) {
-			
+
 			curTimeLeft = speed;
 			return true;
-			
+
 		}
-		
+
 		return false;
 	}
-	
-	public void spawnItem(ItemStack item, boolean hasItemMeta) {
-		
+
+	public void spawnItem(ItemStack item, boolean hasItemMeta, boolean asterisk) {
+
 		GeneratorSpawnItemEvent gsie = new GeneratorSpawnItemEvent(this, item);
-		
+
 		if (gsie.isCancelled()) return;
-		
-		ItemMeta meta = item.getItemMeta();
-		
-		if (hasItemMeta) {
-			
-			meta.setDisplayName(meta.getDisplayName() + " *");
-			
-		} else {
-			
-			meta.setDisplayName(" *");
-			
+
+		if (asterisk) {
+			ItemMeta meta = item.getItemMeta();
+
+			if (hasItemMeta) {
+
+				meta.setDisplayName(meta.getDisplayName() + " *");
+
+			} else {
+
+				meta.setDisplayName(" *");
+
+			}
+
+			item.setItemMeta(meta);
 		}
-		
-		item.setItemMeta(meta);
-		
+
 		location.getWorld().dropItem(location, item);
-		
-		
-		
+
+
+
 	}
 
 	public int getCurTimeLeft() {
@@ -88,7 +90,7 @@ public class Generator {
 	public void setCurTimeLeft(int curTimeLeft) {
 		this.curTimeLeft = curTimeLeft;
 	}
-	
-	
-	
+
+
+
 }
