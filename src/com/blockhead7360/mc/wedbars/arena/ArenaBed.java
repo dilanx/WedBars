@@ -6,6 +6,7 @@ import org.bukkit.block.BlockState;
 
 public class ArenaBed {
 	
+<<<<<<< Updated upstream
 	@SuppressWarnings("deprecation")
 	public static void placeBed(Location[] locs) {
 		
@@ -21,6 +22,24 @@ public class ArenaBed {
 		bh.setRawData(data[1]);
 		bf.update(true, false);
 		bh.update(true, true);
+=======
+
+	public static void placeBed(Location[] locs, Material bed) {
+		
+		BlockState b = locs[0].getBlock().getState();
+		BlockState bh = locs[1].getBlock().getState();
+		
+		b.setType(bed);
+		bh.setType(bed);
+//		bh.setType(Material.BED_BLOCK);
+//
+//		byte[] data = bedDirectionData(locs[0], locs[1]);
+//
+//		bf.setRawData(data[0]);
+//		bh.setRawData(data[1]);
+//		bf.update(true, false);
+//		bh.update(true, true);
+>>>>>>> Stashed changes
 		
 	}
 	

@@ -46,7 +46,11 @@ public class GameActions {
 
 		for (Player player : Bukkit.getOnlinePlayers()) {
 
+<<<<<<< Updated upstream
 			player.playSound(player.getLocation(), Sound.ENDERDRAGON_GROWL, 1, 1);
+=======
+			player.playSound(player.getLocation(), Sound.ENTITY_ENDER_DRAGON_GROWL, 1, 1);
+>>>>>>> Stashed changes
 
 		}
 
@@ -109,23 +113,40 @@ public class GameActions {
 			
 
 			if (WedBars.arena.getTeam(gamer.getTeam()).hasUpgrade(TeamUpgrade.SWORDS))
+<<<<<<< Updated upstream
 				player.getInventory().setItem(0, Utility.createEnchantedItemStack(Material.WOOD_SWORD, 1, ChatColor.YELLOW + "Wooden Sword",
 						new EnchantmentSet[] {new EnchantmentSet(Enchantment.DAMAGE_ALL, 1)}));
 			else
 				player.getInventory().setItem(0, Utility.createUnbreakableItemStack(Material.WOOD_SWORD, 1, ChatColor.YELLOW + "Wooden Sword"));
+=======
+				player.getInventory().setItem(0, Utility.createEnchantedItemStack(Material.WOODEN_SWORD, 1, ChatColor.YELLOW + "Wooden Sword",
+						new EnchantmentSet[] {new EnchantmentSet(Enchantment.DAMAGE_ALL, 1)}));
+			else
+				player.getInventory().setItem(0, Utility.createUnbreakableItemStack(Material.WOODEN_SWORD, 1, ChatColor.YELLOW + "Wooden Sword"));
+>>>>>>> Stashed changes
 
 			for (int i = 0; i < contents.length; i++) {
 
 				if (contents[i] == null) continue;
 
+<<<<<<< Updated upstream
 				if (contents[i].getType() == Material.WOOD_PICKAXE || contents[i].getType() == Material.IRON_PICKAXE) {
 
 					player.getInventory().addItem(Utility.createEnchantedItemStack(Material.WOOD_PICKAXE, 1, ChatColor.YELLOW + "Wooden Pickaxe",
+=======
+				if (contents[i].getType() == Material.WOODEN_PICKAXE || contents[i].getType() == Material.IRON_PICKAXE) {
+
+					player.getInventory().addItem(Utility.createEnchantedItemStack(Material.WOODEN_PICKAXE, 1, ChatColor.YELLOW + "Wooden Pickaxe",
+>>>>>>> Stashed changes
 							new EnchantmentSet[] {new EnchantmentSet(Enchantment.DIG_SPEED, 1)}));
 
 				}
 
+<<<<<<< Updated upstream
 				else if (contents[i].getType() == Material.GOLD_PICKAXE) {
+=======
+				else if (contents[i].getType() == Material.GOLDEN_PICKAXE) {
+>>>>>>> Stashed changes
 
 					player.getInventory().addItem(Utility.createEnchantedItemStack(Material.IRON_PICKAXE, 1, ChatColor.YELLOW + "Iron Pickaxe",
 							new EnchantmentSet[] {new EnchantmentSet(Enchantment.DIG_SPEED, 2)}));
@@ -135,15 +156,25 @@ public class GameActions {
 
 				else if (contents[i].getType() == Material.DIAMOND_PICKAXE) {
 
+<<<<<<< Updated upstream
 					player.getInventory().addItem(Utility.createEnchantedItemStack(Material.GOLD_PICKAXE, 1, ChatColor.YELLOW + "Gold Pickaxe",
+=======
+					player.getInventory().addItem(Utility.createEnchantedItemStack(Material.GOLDEN_PICKAXE, 1, ChatColor.YELLOW + "Gold Pickaxe",
+>>>>>>> Stashed changes
 							new EnchantmentSet[] {new EnchantmentSet(Enchantment.DIG_SPEED, 3),
 									new EnchantmentSet(Enchantment.DAMAGE_ALL, 2)}));
 
 				}
 
+<<<<<<< Updated upstream
 				else if (contents[i].getType() == Material.WOOD_AXE || contents[i].getType() == Material.STONE_AXE) {
 
 					player.getInventory().addItem(Utility.createEnchantedItemStack(Material.WOOD_AXE, 1, ChatColor.YELLOW + "Wooden Axe",
+=======
+				else if (contents[i].getType() == Material.WOODEN_AXE || contents[i].getType() == Material.STONE_AXE) {
+
+					player.getInventory().addItem(Utility.createEnchantedItemStack(Material.WOODEN_AXE, 1, ChatColor.YELLOW + "Wooden Axe",
+>>>>>>> Stashed changes
 							new EnchantmentSet[] {new EnchantmentSet(Enchantment.DIG_SPEED, 1)}));
 
 				}
@@ -189,7 +220,11 @@ public class GameActions {
 
 			} else {
 
+<<<<<<< Updated upstream
 				killer.playSound(killer.getLocation(), Sound.ORB_PICKUP, 1, 1);
+=======
+				killer.playSound(killer.getLocation(), Sound.ENTITY_EXPERIENCE_ORB_PICKUP, 1, 1);
+>>>>>>> Stashed changes
 
 				Gamer kGamer = WedBars.arena.getGamer(killer.getName());
 
@@ -242,7 +277,11 @@ public class GameActions {
 			gamer.addOneToStatistic(Statistic.FDEATHS);
 			for (Player p : Bukkit.getOnlinePlayers()) {
 
+<<<<<<< Updated upstream
 				p.playSound(p.getLocation(), Sound.AMBIENCE_THUNDER, 1, 1);
+=======
+				p.playSound(p.getLocation(), Sound.ENTITY_LIGHTNING_BOLT_THUNDER, 1, 1);
+>>>>>>> Stashed changes
 
 			}
 			ArenaTeam team = WedBars.arena.getTeam(gamer.getTeam());

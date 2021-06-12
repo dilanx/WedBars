@@ -45,4 +45,15 @@ may 6 21 (am)
 
 may 6 21 (pm)
 - chest open and close sound implemented
+<<<<<<< Updated upstream
 - random arena selection on new game
+=======
+- random arena selection on new game
+
+0.1.0
+- Formal port to 1.17
+- Changed spawn eggs from shops to no longer be generic
+- items no on respawn bug still exists
+- Fixed some visual bugs
+- Beds are now colored by team color
+>>>>>>> Stashed changes

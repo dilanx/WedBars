@@ -3,11 +3,15 @@ package com.blockhead7360.mc.wedbars.game;
 import java.util.List;
 
 import com.blockhead7360.mc.wedbars.team.ArenaTeam;
+<<<<<<< Updated upstream
 import org.bukkit.Effect;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.World;
+=======
+import org.bukkit.*;
+>>>>>>> Stashed changes
 import org.bukkit.block.Block;
 import org.bukkit.entity.Egg;
 import org.bukkit.entity.Entity;
@@ -49,7 +53,10 @@ public class Powerups implements Listener {
 
 	public static void createBridge(Egg egg) {
 		Team team = WedBars.arena.getGamer(((Player) egg.getShooter()).getName()).getTeam();
+<<<<<<< Updated upstream
 		short stackColor = team.getStackColor();
+=======
+>>>>>>> Stashed changes
 		World w = egg.getWorld();
 
 		new BukkitRunnable() {
@@ -58,7 +65,10 @@ public class Powerups implements Listener {
 			Location previousLocation;
 			int time = WedBars.BRIDGE_EGG_TIME;
 
+<<<<<<< Updated upstream
 			@SuppressWarnings("deprecation")
+=======
+>>>>>>> Stashed changes
 			public void run() {
 
 				//currentLocation = egg.getLocation();
@@ -86,8 +96,12 @@ public class Powerups implements Listener {
 						
 						if (b.getType() == Material.AIR && y <= max) {
 
+<<<<<<< Updated upstream
 							b.setType(Material.WOOL);
 							b.setData((byte) stackColor);
+=======
+							b.setType(team.getColoredWool());
+>>>>>>> Stashed changes
 							
 							WedBars.getListeners().getPlacedBlocks().add(l);
 
@@ -289,7 +303,11 @@ public class Powerups implements Listener {
 
 			if (hand != null) {
 
+<<<<<<< Updated upstream
 				if (hand.getType() == Material.FIREBALL) {
+=======
+				if (hand.getType() == Material.FIRE_CHARGE) {
+>>>>>>> Stashed changes
 
 					e.setCancelled(true);
 
@@ -298,11 +316,19 @@ public class Powerups implements Listener {
 					if (hand.getAmount() > 1) hand.setAmount(hand.getAmount() - 1);
 					else e.getPlayer().setItemInHand(null);
 
+<<<<<<< Updated upstream
+=======
+
+>>>>>>> Stashed changes
 				}
 
 				if (WedBars.running) {
 
+<<<<<<< Updated upstream
 					if (hand.getType() == Material.MONSTER_EGG) {
+=======
+					if (hand.getType() == Material.SHEEP_SPAWN_EGG) {
+>>>>>>> Stashed changes
 
 						e.setCancelled(true);
 
@@ -354,12 +380,21 @@ public class Powerups implements Listener {
 	@EventHandler
 	public void onEntityExplode(EntityExplodeEvent e) {
 
+<<<<<<< Updated upstream
 		if (e.getEntity() instanceof Fireball) {
 
 			e.setCancelled(true);
 			e.getEntity().getWorld().createExplosion(e.getEntity().getLocation(), 3);
 			return;
 		}
+=======
+//		if (e.getEntity() instanceof Fireball) {
+//
+//			e.setCancelled(true);
+//			e.getEntity().getWorld().createExplosion(e.getEntity().getLocation(), 3);
+//			return;
+//		}
+>>>>>>> Stashed changes
 
 		//So the idea here is that we replace the fireball with an explosion and then return, that explosion
 		//would create another EntityExplodeEVent which will then behave like tnt below
@@ -367,11 +402,20 @@ public class Powerups implements Listener {
 		
 		// lmao actually jack it turns out an explosion isn't a separate entity in bukkit
 		
+<<<<<<< Updated upstream
 		if (e.getEntity() == null || e.getEntity() instanceof TNTPrimed) {
 
 			e.setCancelled(true);
 
 			e.getLocation().getWorld().playEffect(e.getLocation(), Effect.EXPLOSION_LARGE, 1);
+=======
+		if (e.getEntity() == null || e.getEntity() instanceof TNTPrimed || e.getEntity() instanceof Fireball) {
+
+			e.setCancelled(true);
+
+			// TODO: this may need to be tweaked
+			e.getLocation().getWorld().spawnParticle(Particle.EXPLOSION_LARGE, e.getLocation(), 1);
+>>>>>>> Stashed changes
 
 			List<Block> blocks = e.blockList();
 			for (Block b : blocks) {
@@ -399,7 +443,11 @@ public class Powerups implements Listener {
 	public void onPlayerTeleport(PlayerTeleportEvent e) {
 		if (e.getCause() == PlayerTeleportEvent.TeleportCause.ENDER_PEARL) {
 			Location l = e.getTo();
+<<<<<<< Updated upstream
 			l.getWorld().playSound(l, Sound.ENDERMAN_TELEPORT, 2, 1);
+=======
+			l.getWorld().playSound(l, Sound.ENTITY_ENDERMAN_TELEPORT, 2, 1);
+>>>>>>> Stashed changes
 			l.getWorld().playEffect(l, Effect.ENDER_SIGNAL, 3);
 		}
 	}

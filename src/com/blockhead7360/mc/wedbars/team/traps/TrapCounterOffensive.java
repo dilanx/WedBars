@@ -1,15 +1,27 @@
 package com.blockhead7360.mc.wedbars.team.traps;
 
+<<<<<<< Updated upstream
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
+=======
+import com.blockhead7360.mc.wedbars.Utility;
+import com.blockhead7360.mc.wedbars.player.Gamer;
+import com.blockhead7360.mc.wedbars.team.ArenaTeam;
+import org.bukkit.ChatColor;
+import org.bukkit.Material;
+import org.bukkit.entity.Player;
+>>>>>>> Stashed changes
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
+<<<<<<< Updated upstream
 import com.blockhead7360.mc.wedbars.Utility;
 import com.blockhead7360.mc.wedbars.player.Gamer;
 import com.blockhead7360.mc.wedbars.team.ArenaTeam;
 
+=======
+>>>>>>> Stashed changes
 public class TrapCounterOffensive extends TeamTrap {
 
     public void activate(Gamer gamer, ArenaTeam team) {

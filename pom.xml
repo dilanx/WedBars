@@ -2,7 +2,11 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>WedBars</groupId>
   <artifactId>WedBars</artifactId>
+<<<<<<< Updated upstream
   <version>0.0.maven-build</version>
+=======
+  <version>0.1.0</version>
+>>>>>>> Stashed changes
   <name>WedBars</name>
   <repositories>
   	<repository>
@@ -31,8 +35,13 @@
             <artifactId>maven-compiler-plugin</artifactId>
             <version>3.8.1</version>
             <configuration>
+<<<<<<< Updated upstream
                 <source>1.8</source>
                 <target>1.8</target>
+=======
+                <source>16</source>
+                <target>16</target>
+>>>>>>> Stashed changes
             </configuration>
         </plugin>
     </plugins>
@@ -41,7 +50,11 @@
   	<dependency>
            <groupId>org.spigotmc</groupId>
            <artifactId>spigot-api</artifactId>
+<<<<<<< Updated upstream
            <version>1.8.8-R0.1-SNAPSHOT</version>
+=======
+           <version>1.16.5-R0.1-SNAPSHOT</version>
+>>>>>>> Stashed changes
            <scope>provided</scope>
     </dependency>
   	<dependency>

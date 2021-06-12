@@ -15,6 +15,10 @@ public class TrapInfestation extends TeamTrap {
     }
 
     public ItemStack icon() {
+<<<<<<< Updated upstream
         return Utility.createIconItemStack(Material.MONSTER_EGG, 1, ChatColor.YELLOW + "Infestation Trap");
+=======
+        return Utility.createIconItemStack(Material.SNOWBALL, 1, ChatColor.YELLOW + "Infestation Trap");
+>>>>>>> Stashed changes
     }
 }
