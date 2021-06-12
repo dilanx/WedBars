@@ -679,6 +679,7 @@ public class WedBars extends JavaPlugin {
 		GOLEM_HEALTH = getConfig().getInt("golemHealth");
 		BUG_HEALTH = getConfig().getInt("bugHealth");
 		BRIDGE_EGG_TIME = getConfig().getInt("eggTime") * 10;
+		LOBBY_START = getConfig().getInt("lobbyStartTime");
 	}
 
 	public static WedBars getInstance() {

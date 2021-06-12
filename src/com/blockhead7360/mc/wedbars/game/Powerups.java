@@ -354,12 +354,12 @@ public class Powerups implements Listener {
 	@EventHandler
 	public void onEntityExplode(EntityExplodeEvent e) {
 
-		if (e.getEntity() instanceof Fireball) {
-
-			e.setCancelled(true);
-			e.getEntity().getWorld().createExplosion(e.getEntity().getLocation(), 3);
-			return;
-		}
+//		if (e.getEntity() instanceof Fireball) {
+//
+//			e.setCancelled(true);
+//			e.getEntity().getWorld().createExplosion(e.getEntity().getLocation(), 3);
+//			return;
+//		}
 
 		//So the idea here is that we replace the fireball with an explosion and then return, that explosion
 		//would create another EntityExplodeEVent which will then behave like tnt below
@@ -367,7 +367,7 @@ public class Powerups implements Listener {
 		
 		// lmao actually jack it turns out an explosion isn't a separate entity in bukkit
 		
-		if (e.getEntity() == null || e.getEntity() instanceof TNTPrimed) {
+		if (e.getEntity() == null || e.getEntity() instanceof TNTPrimed || e.getEntity() instanceof Fireball) {
 
 			e.setCancelled(true);
 

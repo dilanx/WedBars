@@ -196,6 +196,9 @@ public class Arena {
 		GameScoreboard.updateStatus(ChatColor.AQUA + "" + ChatColor.BOLD + "Diamond 2");
 		time = 3000;
 
+		// auto-set gamerules
+		world.setGameRuleValue("keepInventory", "true");
+
 		// reset team stuff
 
 		for (ArenaTeam at : teams.values()) {

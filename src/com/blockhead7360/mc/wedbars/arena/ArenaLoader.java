@@ -67,6 +67,7 @@ public class ArenaLoader {
 		}
 
 		Location lobby = (Location) config.get("lobby");
+		lobby.getWorld().setGameRuleValue("doMobSpawning", "false");
 
 		int ds = config.getInt("diamondspeed");
 		int es = config.getInt("emeraldspeed");
