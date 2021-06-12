@@ -668,8 +668,6 @@ public class WedBars extends JavaPlugin {
 		MAX_DIAMONDS_IN_GEN = getConfig().getInt("maxDiamondsInGen");
 		MAX_EMERALDS_IN_GEN = getConfig().getInt("maxEmeraldsInGen");
 		VOID_LEVEL = getConfig().getInt("voidLevel");
-		//TODO: check this out, i chose this since i thought it would be simplest and ints squared are always ints
-		// so casting should not be an issue. there could be a batter way tho idk i just took ap csa
 		SPAWN_PROTECTION_DISTANCE_SQUARED = (int) Math.pow(getConfig().getInt("spawnProtection"), 2);
 		TRAP_DISTANCE = getConfig().getInt("trapDistance");
 		RESPAWN_TIME = getConfig().getInt("respawnTime") * 10;
@@ -680,6 +678,7 @@ public class WedBars extends JavaPlugin {
 		GOLEM_HEALTH = getConfig().getInt("golemHealth");
 		BUG_HEALTH = getConfig().getInt("bugHealth");
 		BRIDGE_EGG_TIME = getConfig().getInt("eggTime") * 10;
+		LOBBY_START = getConfig().getInt("lobbyStartTime");
 	}
 
 	public static WedBars getInstance() {

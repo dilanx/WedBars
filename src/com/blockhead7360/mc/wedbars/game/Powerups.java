@@ -365,11 +365,13 @@ public class Powerups implements Listener {
 
 			e.setCancelled(true);
 
+
 			// TODO: this may need to be tweaked
 			e.getLocation().getWorld().spawnParticle(Particle.EXPLOSION_LARGE, e.getLocation(), 1);
 
 			List<Block> blocks = e.blockList();
 			for (Block b : blocks) {
+				// TODO: unbreakable glass implementation
 
 				List<Location> locs = WedBars.getListeners().getPlacedBlocks();
 

@@ -103,8 +103,8 @@ public class GameActions {
 
 			ItemStack[] contents = player.getInventory().getContents();
 
+			// TODO: armor does not get replaced if player killed by PVP
 			player.getInventory().clear();
-
 			player.getInventory().setArmorContents(armor);
 			
 

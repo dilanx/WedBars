@@ -22,7 +22,7 @@ public class GameScoreboard {
 	private static Scoreboard sb;
 	private static Objective obj;
 	
-	private static String time;
+	private static org.bukkit.scoreboard.Team timer;
 	private static String status;
 	
 	private static Map<Team, TeamScoreboardData> teamData;
@@ -62,7 +62,7 @@ public class GameScoreboard {
 		
 		sb = Bukkit.getScoreboardManager().getNewScoreboard();
 		Objective o = sb.registerNewObjective("health", "health");
-		o.setDisplayName(ChatColor.RED + "♥");
+		o.setDisplayName(""+ ChatColor.RED + "♥");
 		o.setDisplaySlot(DisplaySlot.BELOW_NAME);
 		
 		Objective o1 = sb.registerNewObjective("health1", "health");
@@ -82,7 +82,8 @@ public class GameScoreboard {
 				+ " | " + arenaName).setScore(15);
 		obj.getScore(" ").setScore(14);
 		status = "None1";
-		time = "None2";
+		timer = sb.registerNewTeam("None2");
+		timer.addEntry(ChatColor.BLACK + "");
 		obj.getScore("  ").setScore(11);
 		
 		teamData = new HashMap<>();
@@ -101,14 +102,21 @@ public class GameScoreboard {
 	}
 	
 	public static void updateTime(String time) {
-		
-		sb.resetScores(GameScoreboard.time);
-		
-		String text = ChatColor.WHITE + "" + time + ChatColor.GRAY + " until";
-		Score score = obj.getScore(text);
+
+		// Switched to using standard Scoreboard times to eliminate flickering
+		// Technically it still flickers once as the statuses/teams change, but that's a smaller issue
+
+//		sb.resetScores(GameScoreboard.time);
+//
+//		String text = ChatColor.WHITE + "" + time + ChatColor.GRAY + " until";
+//		Score score = obj.getScore(text);
+//		score.setScore(13);
+//		GameScoreboard.time = text;
+
+		timer.setPrefix(ChatColor.WHITE + "" + time + ChatColor.GRAY + " until");
+		Score score = obj.getScore(ChatColor.BLACK + "");
 		score.setScore(13);
-		GameScoreboard.time = text;
-		
+
 	}
 	
 	public static void updateStatus(String status) {

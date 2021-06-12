@@ -840,8 +840,9 @@ public class Arena {
 		arenas.remove(WedBars.loadedArena.getName());
 		
 		Random r = new Random();
-		
-		String nextArena = arenas.get(r.nextInt(arenas.size()));
+		String nextArena;
+
+		nextArena = arenas.get(r.nextInt(arenas.size() - 1));
 		
 		WedBars.loadedArena = ArenaLoader.loadArena(WedBars.getInstance(), nextArena, "Auto Starter");
 		

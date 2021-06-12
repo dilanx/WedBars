@@ -375,7 +375,6 @@ public class Listeners implements Listener {
 		if (event.getPlayer().getLocation().getY() <= WedBars.VOID_LEVEL) {
 
 			if (event.getPlayer().getHealth() != 0 && event.getPlayer().getGameMode() == GameMode.SURVIVAL) {
-
 				GameActions.death(event.getPlayer(), false);
 
 			}

@@ -8,12 +8,13 @@ public class ArenaBed {
 	
 
 	public static void placeBed(Location[] locs, Material bed) {
-		
+
+		//TODO: beds not working period now?? for no reason lmao
 		BlockState b = locs[0].getBlock().getState();
-		BlockState bh = locs[1].getBlock().getState();
+		//BlockState bh = locs[1].getBlock().getState();
 		
 		b.setType(bed);
-		bh.setType(bed);
+		//bh.setType(bed);
 //		bh.setType(Material.BED_BLOCK);
 //
 //		byte[] data = bedDirectionData(locs[0], locs[1]);
