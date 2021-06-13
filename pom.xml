@@ -2,7 +2,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>WedBars</groupId>
   <artifactId>WedBars</artifactId>
-  <version>0.0.maven-build</version>
+  <version>0.0.70</version>
   <name>WedBars</name>
   <repositories>
   	<repository>
