@@ -2,7 +2,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>WedBars</groupId>
   <artifactId>WedBars</artifactId>
-  <version>1.16.5-0.01</version>
+  <version>0.1.0</version>
   <name>WedBars</name>
   <repositories>
   	<repository>

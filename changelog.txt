@@ -1,7 +1,7 @@
-WedBars 1.16.5 Changelog
+WedBars 1.13+ Changelog
 
-1.16.5-0.01
-- Formal port to 1.16.5
+0.1.0
+- Formal port to 1.13+ API, tested on 1.16.5
 - Changed versioning system to better accommodate different game versions
 - Changed spawn eggs from shops to no longer be generic
 - Glass is no longer blastproof (temporary until new solution is found)
@@ -16,3 +16,4 @@ WedBars 1.16.5 Changelog
 - Added automatic setting of game rules
 - Disabled hunger
 - Added shields to the item shop (10 iron)
+- Added in-game stats checking system
